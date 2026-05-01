@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Draft extends Model
 {
+    protected $fillable = [
+        'mechanism_id',
+        'user_id',
+        'status_id',
+        'agency_id',
+        'file_name',
+        'file_path',
+        'period',
+    ];
+    
     public function mechanism(){
         return $this->belongsTo(Mechanism::class);
     }
