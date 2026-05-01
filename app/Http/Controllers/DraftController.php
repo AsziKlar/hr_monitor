@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Draft;
+use App\Models\Status;
+use App\Models\User;
 
 class DraftController extends Controller
 {
@@ -14,7 +18,9 @@ class DraftController extends Controller
 
     }
 
-    public function store(){
+    public function store(Request $request){
+        $user = Auth::user();
+
         $request->validate([
             'mechanism_id' => 'required|exists:mechanisms,id',
             'file' => 'required|file|mimes:pdf|max:10240',
@@ -28,8 +34,8 @@ class DraftController extends Controller
 
         Draft::create([
             'mechanism_id' => $request->mechanism_id,
-            'user_id' => $auth()->id(),
-            'agency_id' => auth()->user()->agency_id,
+            'user_id' => $user->id,
+            'agency_id' => $user->agency_id,
             'status_id' => $status->id,
             'file_name' => $file->getClientOriginalName(),
             'file_path' => $filePath,
