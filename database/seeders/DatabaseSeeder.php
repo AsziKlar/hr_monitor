@@ -21,12 +21,16 @@ class DatabaseSeeder extends Seeder
             StatusSeeder::class,
         ]);
 
+        $this->call([
+            MechanismSeeder::class,
+        ]);
+
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
 
     }
 }
