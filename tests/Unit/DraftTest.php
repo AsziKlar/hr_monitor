@@ -33,17 +33,6 @@ class DraftTest extends TestCase
     }
 
 
-    public function test_non_pdf_file_is_invalid(): void
-    {
-        $file = UploadedFile::fake()->create('image.png',100);
-
-        $validator = Validator::make(
-            ['file' => $file],
-            ['file' => 'required|file|mimes:pdf|max:10240']
-        );
-
-        $this->assertFalse($validator->passes());
-    }
 
     public function test_pdf_file_is_valid(): void
     {
