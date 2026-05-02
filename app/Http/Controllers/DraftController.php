@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Draft;
 use App\Models\Status;
-use App\Models\User;
 
 class DraftController extends Controller
 {
