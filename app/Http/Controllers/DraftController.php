@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Draft;
 use App\Models\Status;
@@ -10,8 +9,19 @@ use App\Models\User;
 
 class DraftController extends Controller
 {
-    public function index(){
 
+    public function index($mechanism_id){
+        $user = auth()->user();
+
+        $drafts = Draft::where('mechanism_id', $mechanism_id);
+
+        if ($user->role->name === 'HRMO') {
+            $drafts = $drafts->where('agency_id', $user->agency_id)->get();
+        } else {
+            $drafts = $drafts->get();
+        }
+
+        return view('drafts.index', compact('drafts'));
     }
 
     public function create(){
@@ -19,7 +29,7 @@ class DraftController extends Controller
     }
 
     public function store(Request $request){
-        $user = Auth::user();
+        $user = auth()->user();
 
         $request->validate([
             'mechanism_id' => 'required|exists:mechanisms,id',
