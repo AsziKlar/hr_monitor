@@ -5,12 +5,41 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Validator;
+use Mockery;
+use App\Models\Draft;
+use App\Models\Role;
+use App\Models\User;
 
 class DraftTest extends TestCase
 {
     /**
      * A basic unit test example.
      */
+    public function test_non_hrmo_should_view_all_regardless_of_agency(){
+        $role = new Role(['name' => 'Admin']);
+
+        $user = new User(['agency_id' => 1]);
+
+        $user->setRelation('role', $role);
+
+        $shouldFilterByAgency = $user->role->name === 'HRMO';
+
+        $this->assertFalse($shouldFilterByAgency);
+    }
+
+    public function test_hrmo_should_filter_by_agency(){
+        $role = new Role(['name'=>'HRMO']);
+
+        $user = new User(['agency_id' => 1]);
+
+        $user->setRelation('role', $role);
+
+        $shouldFilterByAgency = $user->role->name === 'HRMO';
+
+        $this->assertTrue($shouldFilterByAgency);
+
+    }
+
 
     public function test_file_is_required_false(): void{
 
