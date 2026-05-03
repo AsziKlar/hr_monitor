@@ -34,7 +34,7 @@ class DraftController extends Controller
         return view('drafts.index', compact('drafts'));
     }
 
-    public function create(){
+    public function create(Mechanism $mechanism){
         return view('drafts.create', compact('mechanism'));
     }
 
