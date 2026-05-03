@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
+    protected $fillable = [
+        'draft_id',
+        'user_id',
+        'comment'
+    ];
     public function draft(){
 
         return $this->belongsTo(Draft::class);

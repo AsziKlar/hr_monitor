@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class FieldOffice extends Model
 {
+    protected $fillable = [
+        'name',
+        'description'
+    ];
     public function agencies(){
         return $this->hasMany(Agency::class);
     }
