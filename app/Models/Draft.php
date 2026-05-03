@@ -2,20 +2,23 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Status;
 
 class Draft extends Model
 {
+
     protected $fillable = [
         'mechanism_id',
         'user_id',
-        'status_id',
         'agency_id',
-        'file_name',
-        'file_path',
+        'status_id',
         'period',
+        'file_name',
+        'file_path'
     ];
-    
+
     public function mechanism(){
         return $this->belongsTo(Mechanism::class);
     }

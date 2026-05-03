@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('agencies', function (Blueprint $table) {
+        Schema::create('agency_mechanism_periods', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
 
-            $table->foreignId('field_office_id')->nullable()->constrained()->cascadeOnDelete();
-            
-            $table->string('email_address')->unique();
-            $table->string('head')->nullable();
+            $table->foreignId('agency_id')->constrained()->cascadeOnDelete();
+
+            $table->foreignId('mechanism_id')->constrained()->cascadeOnDelete();
+
+            $table->unsignedInteger('current_period')->default(1);
 
             $table->timestamps();
+
+            $table->unique(['agency_id', 'mechanism_id']);
         });
     }
 
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('agencies');
+        Schema::dropIfExists('agency_mechanism_periods');
     }
 };

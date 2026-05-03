@@ -2,20 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
+use App\Models\AgencyMechanismPeriod;
 use Illuminate\Http\Request;
 use App\Models\Draft;
 use App\Models\Status;
-<<<<<<< Updated upstream
 use App\Models\User;
-=======
 use App\Models\Mechanism;
->>>>>>> Stashed changes
+
 
 class DraftController extends Controller
 {
-    public function index(){
 
+    public function index($mechanism_id){
+        $user = auth()->user();
+
+        $drafts = Draft::where('mechanism_id', $mechanism_id);
+
+        if ($user->role->name === 'HRMO') {
+            $drafts = $drafts->where('agency_id', $user->agency_id)->get();
+        } else {
+            $drafts = $drafts->get();
+        }
+
+        return view('drafts.index', compact('drafts'));
     }
 
     public function create(){
@@ -23,12 +32,11 @@ class DraftController extends Controller
     }
 
     public function store(Request $request){
-        $user = Auth::user();
+        $user = auth()->user();
 
         $request->validate([
             'mechanism_id' => 'required|exists:mechanisms,id',
             'file' => 'required|file|mimes:pdf|max:10240',
-            'period' => 'nullable|string|max:50'
         ]);
 
         $file = $request->file('file');
@@ -36,8 +44,6 @@ class DraftController extends Controller
 
         $status = Status::where('name', 'To be Reviewed')->first();
 
-<<<<<<< Updated upstream
-=======
         $period = AgencyMechanismPeriod::where('agency_id', $user->agency_id)
                     ->where('mechanism_id', $request->mechanism_id)
                     ->first();
@@ -46,7 +52,6 @@ class DraftController extends Controller
             return back()->with('error', 'No period has been opened for this mechanism yet.');
         }
 
->>>>>>> Stashed changes
         Draft::create([
             'mechanism_id' => $request->mechanism_id,
             'user_id' => $user->id,
@@ -54,7 +59,7 @@ class DraftController extends Controller
             'status_id' => $status->id,
             'file_name' => $file->getClientOriginalName(),
             'file_path' => $filePath,
-            'period' => $request->period,
+            'period' => $request->current_period,
         ]);
 
         return redirect()   ->route('drafts.index')

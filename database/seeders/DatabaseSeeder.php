@@ -21,12 +21,29 @@ class DatabaseSeeder extends Seeder
             StatusSeeder::class,
         ]);
 
+        $this->call([
+            MechanismSeeder::class,
+        ]);
+        $this->call([
+           FieldOfficeSeeder::class,
+        ]);
+        $this->call([
+           AgencySeeder::class,
+        ]);
+
+        $this->call([
+           RoleSeeder::class,
+        ]);
+
+
+
+
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
 
     }
 }
