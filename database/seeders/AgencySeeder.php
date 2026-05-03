@@ -12,11 +12,22 @@ class AgencySeeder extends Seeder
     {
         Agency::create([
             'name' => 'Department of Health',
-            'email' => 'doh@mail.com'
+            'email_address' => 'doh@mail.com',
+            'head' => 'Christina Pioquinto',
+            'field_office_id' => 1
         ]);
         Agency::create([
             'name' => 'Philippine Science High School - NMC',
-            'email' => 'pshs-nmc@mail.com'
+            'email_address' => 'pshs-nmc@mail.com',
+            'head' => 'Paul Alarde',
+            'field_office_id' => 1
+        ]);
+        Agency::create([
+            'name' => 'Northern Mindanao Medical Center',
+            'email_address' => 'nmmc@mail.com',
+            'head' => 'Lucian Cagata',
+            'field_office_id' => 2
+
         ]);
     }
 }

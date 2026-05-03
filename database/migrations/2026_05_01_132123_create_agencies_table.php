@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('field_office_id')->nullable()->constrained()->cascadeOnDelete();
             
             $table->string('email_address')->unique();
-            $table->string('head');
+            $table->string('head')->nullable();
 
             $table->timestamps();
         });
