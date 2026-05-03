@@ -6,7 +6,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Draft;
 use App\Models\Status;
+<<<<<<< Updated upstream
 use App\Models\User;
+=======
+use App\Models\Mechanism;
+>>>>>>> Stashed changes
 
 class DraftController extends Controller
 {
@@ -15,7 +19,7 @@ class DraftController extends Controller
     }
 
     public function create(){
-
+        return view('drafts.create', compact('mechanism'));
     }
 
     public function store(Request $request){
@@ -32,6 +36,17 @@ class DraftController extends Controller
 
         $status = Status::where('name', 'To be Reviewed')->first();
 
+<<<<<<< Updated upstream
+=======
+        $period = AgencyMechanismPeriod::where('agency_id', $user->agency_id)
+                    ->where('mechanism_id', $request->mechanism_id)
+                    ->first();
+
+        if (!$period) {
+            return back()->with('error', 'No period has been opened for this mechanism yet.');
+        }
+
+>>>>>>> Stashed changes
         Draft::create([
             'mechanism_id' => $request->mechanism_id,
             'user_id' => $user->id,
