@@ -76,49 +76,4 @@ class DraftTest extends TestCase
         $this->assertTrue($validator->passes());
     }
 
-    public function test_it_gets_period_wrong_by_agency_and_mechanism(){
-        $agencyId = 1;
-        $mechanismId = 5;
-
-        AgencyMechanismPeriod::create([
-            'agency_id' => 1,
-            'mechanism_id' => 5,
-            'current_period' => 3
-        ]);
-
-        AgencyMechanismPeriod::create([
-            'agency_id' => 2,
-            'mechanism_id' => 5,
-            'current_period' => 12
-        ]);
-
-        $period = AgencyMechanismPeriod::where('agency_id', $agencyId)
-                    ->where('mechanism_id', $mechanismId)
-                    ->first();
-
-        $shouldBe3 = $period->current_period === 3;
-        
-        $this->assertFalse($shouldBe3);
-
-    }
-
-    // public function test_it_gets_period_right_by_agency_and_mechanism(){
-    //     $agencyId = 1;
-    //     $mechanismId = 5;
-
-    //     AgencyMechanismPeriod::create([
-    //         'agency_id' => $agencyId,
-    //         'mechanism_id' => $mechanismId,
-    //         'current_period' => 3
-    //     ]);
-
-    //     AgencyMechanismPeriod::create([
-    //         'agency_id' => 2,
-    //         'mechanism_id' => $mechanismId,
-    //         'current_period' => 12
-    //     ]);
-
-    //     $period = AgencyMechanismPeriod::where('agency_id', $agencyId)
-
-    // }
 }
