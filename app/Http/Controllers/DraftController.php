@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AgencyMechanismPeriod;
 use Illuminate\Http\Request;
 use App\Models\Draft;
 use App\Models\Status;
@@ -33,13 +34,20 @@ class DraftController extends Controller
         $request->validate([
             'mechanism_id' => 'required|exists:mechanisms,id',
             'file' => 'required|file|mimes:pdf|max:10240',
-            'period' => 'nullable|string|max:50'
         ]);
 
         $file = $request->file('file');
         $filePath = $file->store('drafts', 'public');
 
         $status = Status::where('name', 'To be Reviewed')->first();
+
+        $period = AgencyMechanismPeriod::where('agency_id', 'mechanism_id')
+                    ->where('mechanism_id', $request->mechanism_id)
+                    ->first();
+
+        if (!$period) {
+            return back()->with('error', 'No period has been opened for this mechanism yet.');
+        }
 
         Draft::create([
             'mechanism_id' => $request->mechanism_id,
@@ -48,7 +56,7 @@ class DraftController extends Controller
             'status_id' => $status->id,
             'file_name' => $file->getClientOriginalName(),
             'file_path' => $filePath,
-            'period' => $request->period,
+            'period' => $request->current_period,
         ]);
 
         return redirect()   ->route('drafts.index')

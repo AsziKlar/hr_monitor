@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Status extends Model
 {
     public function drafts(){
-        return this->hasMany(Draft::class);
+        return $this->hasMany(Draft::class);
     }
 }

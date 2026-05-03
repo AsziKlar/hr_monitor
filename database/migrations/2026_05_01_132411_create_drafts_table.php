@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('file_name');
             $table->string('file_path');
 
-            $table->string('period')->nullable();
+            $table->integer('period')->nullable();
 
             $table->timestamps();
         });

@@ -24,10 +24,19 @@ class DatabaseSeeder extends Seeder
         $this->call([
             MechanismSeeder::class,
         ]);
+        $this->call([
+           FieldOfficeSeeder::class,
+        ]);
+        $this->call([
+           AgencySeeder::class,
+        ]);
 
         $this->call([
            RoleSeeder::class,
         ]);
+
+
+
 
         // User::factory(10)->create();
 
