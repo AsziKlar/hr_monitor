@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agency;
 use App\Models\AgencyMechanismPeriod;
 use Illuminate\Http\Request;
 use App\Models\Draft;
@@ -19,9 +20,15 @@ class DraftController extends Controller
         $drafts = Draft::where('mechanism_id', $mechanism_id);
 
         if ($user->role->name === 'HRMO') {
-            $drafts = $drafts->where('agency_id', $user->agency_id)->get();
+
+            $period = AgencyMechanismPeriod::where('agency_id', $user->agency_id)
+                        ->where('mechanism_id', $mechanism_id)
+                        ->first();
+
+            $drafts = $drafts   ->where('agency_id', $user->agency_id)
+                                ->where('period', $period->current_period)->latest()->get();
         } else {
-            $drafts = $drafts->get();
+            $drafts = $drafts->latest()->get();
         }
 
         return view('drafts.index', compact('drafts'));
@@ -64,6 +71,26 @@ class DraftController extends Controller
 
         return redirect()   ->route('drafts.index')
                             ->with('success', 'Draft submitted successfully!');
+    }
+
+    public function show($id) {
+        $user = auth()->user();
+
+        $draft = Draft::with('status')->findOrFail($id);
+
+        $latestDraft = Draft::where('agency_id', $draft->agency->agency_id)
+                        ->where('mechanism_id', $draft->mechanism_id)
+                        ->where('period', $draft->period)
+                        ->latest('id')
+                        ->first();
+
+        //for the frontend either to show Edit button or not.
+        $canEdit =  $latestDraft && 
+                    $latestDraft->id === $draft->id &&
+                    $draft->status->name === 'To be Reviewed' &&
+                    $draft->agency_id === $user->agency_id;
+
+        return view('drafts.show', compact('draft', 'canEdit'));
     }
 
 }
