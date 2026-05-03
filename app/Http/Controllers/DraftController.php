@@ -84,6 +84,7 @@ class DraftController extends Controller
                         ->latest('id')
                         ->first();
 
+        //for the frontend either to show Edit button or not.
         $canEdit =  $latestDraft && 
                     $latestDraft->id === $draft->id &&
                     $draft->status->name === 'To be Reviewed' &&
