@@ -62,4 +62,5 @@ class DraftController extends Controller
         return redirect()   ->route('drafts.index')
                             ->with('success', 'Draft submitted successfully!');
     }
+
 }
