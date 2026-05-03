@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DraftController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DraftController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/drafts', [DraftController::class, 'index'])->name('drafts.index');
 Route::get('/drafts/create', [DraftController::class, 'create']);
 Route::post('/drafts', [DraftController::class, 'store']);
+
 Route::get('/drafts/{id}', [DraftController::class, 'show'])->name('drafts.show');
 
 

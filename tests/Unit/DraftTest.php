@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\AgencyMechanismPeriod;
 use Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Validator;
@@ -74,4 +75,5 @@ class DraftTest extends TestCase
 
         $this->assertTrue($validator->passes());
     }
+
 }

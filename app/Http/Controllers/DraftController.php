@@ -7,6 +7,9 @@ use App\Models\AgencyMechanismPeriod;
 use Illuminate\Http\Request;
 use App\Models\Draft;
 use App\Models\Status;
+use App\Models\User;
+use App\Models\Mechanism;
+
 
 class DraftController extends Controller
 {
@@ -32,7 +35,7 @@ class DraftController extends Controller
     }
 
     public function create(){
-
+        return view('drafts.create', compact('mechanism'));
     }
 
     public function store(Request $request){
@@ -48,7 +51,7 @@ class DraftController extends Controller
 
         $status = Status::where('name', 'To be Reviewed')->first();
 
-        $period = AgencyMechanismPeriod::where('agency_id', 'mechanism_id')
+        $period = AgencyMechanismPeriod::where('agency_id', $user->agency_id)
                     ->where('mechanism_id', $request->mechanism_id)
                     ->first();
 
