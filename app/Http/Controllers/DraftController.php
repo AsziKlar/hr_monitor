@@ -34,7 +34,7 @@ class DraftController extends Controller
         return view('drafts.index', compact('drafts'));
     }
 
-    public function create(){
+    public function create(Mechanism $mechanism){
         return view('drafts.create', compact('mechanism'));
     }
 
@@ -66,7 +66,7 @@ class DraftController extends Controller
             'status_id' => $status->id,
             'file_name' => $file->getClientOriginalName(),
             'file_path' => $filePath,
-            'period' => $request->current_period,
+            'period' => $period->current_period,
         ]);
 
         return redirect()   ->route('drafts.index')
@@ -78,7 +78,7 @@ class DraftController extends Controller
 
         $draft = Draft::with('status')->findOrFail($id);
 
-        $latestDraft = Draft::where('agency_id', $draft->agency->agency_id)
+        $latestDraft = Draft::where('agency_id', $draft->agency_id)
                         ->where('mechanism_id', $draft->mechanism_id)
                         ->where('period', $draft->period)
                         ->latest('id')
