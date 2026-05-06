@@ -9,10 +9,11 @@ use App\Models\Draft;
 use App\Models\Status;
 use App\Models\User;
 use App\Models\Mechanism;
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DraftController extends Controller
 {
+   
 
     public function index($mechanism_id){
         $user = auth()->user();
@@ -76,7 +77,7 @@ class DraftController extends Controller
     public function show($id) {
         $user = auth()->user();
 
-        $draft = Draft::with('status')->findOrFail($id);
+        $draft = Draft::with('status')->find($id);
 
         $latestDraft = Draft::where('agency_id', $draft->agency_id)
                         ->where('mechanism_id', $draft->mechanism_id)
