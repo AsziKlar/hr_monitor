@@ -9,9 +9,17 @@ class MechanismFactory extends Factory
 {
     public function definition(): array
     {
+        static $mechanisms = [
+            'MSP',
+            'SPMS',
+            'PRAISE',
+            'GM',
+            'LDP'
+        ];
+
         return [
-            'name' => 'Merit Selection Plan',
-            'is_active' => true,
+            'name' => array_shift($mechanisms),
+            'is_active' => true
         ];
     }
 }
