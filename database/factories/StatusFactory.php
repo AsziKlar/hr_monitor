@@ -10,8 +10,14 @@ class StatusFactory extends Factory
     
     public function definition(): array
     {
+        static $statuses = [
+            'To be Reviewed',
+            'Needs Revision',
+            'Approved'
+        ];
+
         return [
-            'name' => 'To be Reviewed'
+            'name' => array_shift($statuses)
         ];
     }
 }

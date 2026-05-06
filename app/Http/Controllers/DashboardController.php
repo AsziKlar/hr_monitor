@@ -35,4 +35,8 @@ class DashboardController extends Controller
         return view('index_hrmo', compact('drafts_per_mechanism'));
 
     }
+    
+    public function admin_index(){
+        
+    }
 }
