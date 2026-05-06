@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\DraftController;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -10,17 +11,21 @@ use App\Models\Role;
 use App\Models\Agency;
 use App\Models\AgencyMechanismPeriod;
 use App\Models\Mechanism;
+use App\Models\Draft;
 use App\Models\FieldOffice;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Status;
-
+use Database\Factories\MechanismFactory;
+use Database\Factories\AgencyFactory;
+use Database\Factories\DraftFactory;
 
 class DraftTest extends TestCase
 {
     
     use RefreshDatabase;
 
+    //---------  FAILING test for DraftController store() ----------------
     public function test_error_when_no_period(){
         Storage::fake('public');
 
@@ -63,6 +68,7 @@ class DraftTest extends TestCase
 
     }
     
+//------------    PASSING test for DraftController store() ------------
    public function test_passes_with_period(){
         Storage::fake('public');
 
@@ -106,7 +112,7 @@ class DraftTest extends TestCase
                         'file' => UploadedFile::fake()->create('draft.pdf', 100, 'application/pdf')
                     ]);
 
-        //$response->dumpSession();
+        // $response->dumpSession();
                     
         $response->assertRedirect(route('drafts.index'));
 
@@ -116,6 +122,139 @@ class DraftTest extends TestCase
         );
 
     }
+    
+    //---------FAILING test for DraftController index()-----------
 
+    public function test_draft_and_user_agency_mismatch() {
+        $role = Role::create([
+            'name' => 'HRMO'
+        ]);
+
+        $agency = Agency::create([
+            'name' => 'XU',
+            'email_address' => 'xu@mail.com'
+        ]);
+
+        $otherAgency = Agency::create([
+            'name' => 'LDCU',
+            'email_address' => 'ldcu@mail.com'
+        ]);
+
+        $user = User::create([
+            'name' => 'Christina',
+            'email' =>'christina@mail.com',
+            'password' => bcrypt('password'),
+            'role_id' => $role->id,
+            'agency_id' => $agency->id
+        ]);
+
+        $mechanism = Mechanism::create([
+            'name' => 'MSP',
+            'is_active' => true
+        ]);
+
+        $draft = Draft::create([
+            'agency_id' => $otherAgency->id,
+            'mechanism_id' => $mechanism->id,
+            'file_name'=>'sample.pdf',
+            'file_path' => 'drafts/sample.pdf'
+        ]);
+
+        $searchDrafts = Draft::where('agency_id', $user->agency_id)
+                            ->where('mechanism_id', $mechanism->id)
+                            ->get();
+
+    
+        $this->assertFalse($searchDrafts->contains($draft));
+    }
+
+    //----------PASSING test for DraftController index()--------------
+    public function test_draft_and_user_agency_matched() {
+        $role = Role::create([
+            'name' => 'HRMO'
+        ]);
+
+        $agency = Agency::create([
+            'name' => 'XU',
+            'email_address' => 'xu@mail.com'
+        ]);
+
+        $otherAgency = Agency::create([
+            'name' => 'LDCU',
+            'email_address' => 'ldcu@mail.com'
+        ]);
+
+        $user = User::create([
+            'name' => 'Christina',
+            'email' =>'christina@mail.com',
+            'password' => bcrypt('password'),
+            'role_id' => $role->id,
+            'agency_id' => $agency->id
+        ]);
+
+        $mechanism = Mechanism::create([
+            'name' => 'MSP',
+            'is_active' => true
+        ]);
+
+        $draft = Draft::create([
+            'agency_id' => $agency->id,
+            'mechanism_id' => $mechanism->id,
+            'file_name'=>'sample.pdf',
+            'file_path' => 'drafts/sample.pdf'
+        ]);
+
+        $searchDrafts = Draft::where('agency_id', $user->agency_id)
+                            ->where('mechanism_id', $mechanism->id)
+                            ->get();
+
+
+        // dd($searchDrafts->toArray());
+
+        $this->assertTrue($searchDrafts->contains('id', $draft->id));
+    }
+
+    //-------------FAILING test for DraftController show()-------------
+    public function test_fail_where_query_cannot_be_found(){
+        $role = Role::create([
+            'name' => 'HRMO',
+        ]);
+        $agency = Agency::factory()->create();
+       
+        $mechanism = Mechanism::factory()->create();
+
+        $draft = Draft::factory()->count(2)->create();
+
+        $searchDrafts = Draft::find(3);
+
+        $this->assertNull($searchDrafts);
+    }
+    
+    //PASSING test for DraftController show()
+    public function test_passing_where_query_is_found(){
+        $role = Role::create(['name'=>'HRMO']);
+
+        $agency = Agency::factory()->create();
+
+        $mechnanism = Mechanism::factory()->create();
+
+        $draft = Draft::factory()->count(1)->create();
+
+        $searchDrafts = Draft::find(1);
+        
+        $this->assertNotNull($searchDrafts);
+    }
+
+    public function test_refactor_where_query_is_found_with_status(){
+        $role = Role::create(['name'=>'HRMO']);
+        $status = Status::factory()->create();
+        $agency = Agency::factory()->create();
+        $mechanism = Mechanism::factory()->create();
+        $draft = Draft::factory()->create(['status_id' => $status->id]);
+        
+        $searchDrafts = Draft::with('status')->find(1);
+
+        $this->assertEquals('To be Reviewed',$searchDrafts->status->name);
+    }
 
 }

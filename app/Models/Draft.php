@@ -5,10 +5,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Status;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Draft extends Model
 {
 
+    use HasFactory;
+    
     protected $fillable = [
         'mechanism_id',
         'user_id',
