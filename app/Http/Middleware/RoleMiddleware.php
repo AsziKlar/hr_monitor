@@ -11,8 +11,9 @@ class RoleMiddleware
     public function handle($request, Closure $next, ...$roles){
         if (! auth()->check()) {
             //change this when the routes is ararnged
+             return redirect('/login');
         }
-            return redirect('/login');
+           
 
         if (! in_array(auth()->user()->role->name, $roles)) {
             abort(403);
