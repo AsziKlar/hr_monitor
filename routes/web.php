@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DraftController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -18,11 +19,24 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/drafts', [DraftController::class, 'index'])->name('drafts.index');
-Route::get('/drafts/create/{mechanism}', [DraftController::class, 'create'])->name('drafts.create');
-Route::post('/drafts', [DraftController::class, 'store'])->name('drafts.store');
+Route::middleware(['auth', 'role:Admin,Processor,Reviewer'])->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'index_admin'])->name('admin.dashboard');
 
-Route::get('/drafts/{id}', [DraftController::class, 'show'])->name('drafts.show');
+});
+
+Route::middleware(['auth', 'role:HRMO'])->group( function () {
+    Route::get('/drafts', [DraftController::class, 'index'])->name('drafts.index');
+    Route::get('/drafts/create/{mechanism}', [DraftController::class, 'create'])->name('drafts.create');
+    Route::post('/drafts', [DraftController::class, 'store'])->name('drafts.store');
+    Route::get('/drafts/{id}', [DraftController::class, 'show'])->name('drafts.show');
+});
+
+
+
+
+
+
+
 
 
 require __DIR__.'/auth.php';
