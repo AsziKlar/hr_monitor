@@ -36,7 +36,18 @@ class DashboardController extends Controller
 
     }
     
-    public function admin_index(){
+    public function index_admin(){
+        $mechanisms = Mechanism::all();
         
+        $drafts_to_be_reviewed = [];
+
+        foreach ($mechanisms as $mechanism) {
+            $drafts = Draft::where('status_id', 1)
+                                ->where('mechanism_id', $mechanism->id)
+                                ->get();
+            $drafts_to_be_reviewed[$mechanism->name] = $drafts;
+        }
+
+        return view('index_admin', compact('drafts_to_be_reviewed'));
     }
 }
