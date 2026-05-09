@@ -13,27 +13,33 @@ class DashboardController extends Controller
 {
     public function index_hrmo(Request $request){
         $user = auth()->user();
-        
         $agency_id = $user->agency_id;
-
         $mechanisms = Mechanism::all();
+        $latest_draft_per_mechanism = [];
+        $period = AgencyMechanismPeriod::where('agency_id', $agency_id) //for the recent submissions
+                                        ->value('current_period'); 
 
-        $drafts_per_mechanism = [];
-
-        foreach ($mechanisms as $mechanism) {
+        foreach ($mechanisms as $mechanism) { //for the overview cards
             $period = AgencyMechanismPeriod::where('agency_id', $agency_id)
                                             ->where('mechanism_id', $mechanism->id)
                                             ->value('current_period');
 
-            $drafts = Draft::where('agency_id', $agency_id)
+            $latestDraft = Draft::where('agency_id', $agency_id)
                             ->where('mechanism_id', $mechanism->id)
                             ->where('period', $period)
-                            ->get();
+                            ->latest()
+                            ->first();
 
-            $drafts_per_mechanism[$mechanism->name] = $drafts;
+            $latest_draft_per_mechanism[$mechanism->id] = $latestDraft;
         }
+        
+        $latestSubmissions = Draft::where('agency_id', $agency_id) //for the recent submission
+                                ->where('period', $period)
+                                ->where('created_at', '>=', now()->subMonth())
+                                ->latest()
+                                ->get();
 
-        return view('index_hrmo', compact('drafts_per_mechanism'));
+        return view('dashboard', compact('mechanisms','latest_draft_per_mechanism', 'latestSubmissions'));
 
     }
     

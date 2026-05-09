@@ -1,23 +1,20 @@
 <aside id="sidebar" class="fixed w-64 h-screen text-white top-0 left-0 bg-blue-950/95 px-5 py-5 rounded-r-2xl overflow-hidden transition-all duration-300 ease-in-out transition-none z-50">
     <div class="min-w-[14rem] flex h-full flex-col">
-    <!-- logo and staff details  -->
-    <!--<div class="mb-8 flex items-center gap-1 px-1">
-        <img class="h-12 w-12 object-contain rounded-xl bg-white/5 p-1" src="csc_logo.png" alt="logo">
-        
-        <div>
-        <h2 class="text-xl font-bold leading-tight">CSC REGION X</h2>
-        <p class="text-sm text-gray-400 leading-tight">HR Mechanism Tracker</p>
-        </div>
-    </div>-->
-    <!-- staff details  -->
     <div class="rounded-3xl bg-white/10 mt-4 px-4 py-3 shawdow-inner ring-1 ring-white/10">
         <div class="flex items-center gap-3">
         <div class="flex h-12 w-12 items-center justify-center rounded-full bg-radial-[at_25%_25%] from-red-800 to-red-900 to-75% text-sm font-bold text-white shadow-lg">
-            LC
+            {{ strtoupper(
+                collect(explode(' ', auth()->user()->name))->first()[0] .
+                collect(explode(' ', auth()->user()->name))->last()[0]
+            ) }}
         </div>
         <div>
-            <p class="text-base font-bold leading-tight">Lucian Cagata</p>
-            <p class="text-xs text-white/70">CSC Admin</p>
+            <p class="text-base font-bold leading-tight">{{ collect(explode(' ', auth()->user()->name))->first() . ' ' . collect(explode(' ', auth()->user()->name))->last() }} </p>
+            @if (auth()->user()->role->id == 4)
+                <p class="text-xs text-white/70">{{ auth()->user()->agency?->abbreviation }} (HRMO)</p>
+            @else
+                <p class="text-xs text-white/70">{{ auth()->user()->role->name }} </p>
+            @endif
         </div>
         </div>
     </div>
@@ -31,7 +28,13 @@
         <a class="flex items-center gap-3 p-3 rounded-2xl font-bold transition hover:bg-white/10 " href="mechanisms.html">
             Mechanisms
         </a>
+        @if (auth()->user()->role->id == 4)
+         <a class="flex items-center gap-3 p-3 rounded-2xl font-bold transition hover:bg-white/10 " href="mechanisms.html">
+            Your Agency Details
+        </a>
+        @endif
 
+        @if (in_array(auth()->user()->role->id, [1, 2, 3]))
         <a class="flex items-center gap-3 p-3 rounded-2xl font-bold transition hover:bg-white/10 " href="agencies.html">
             Agencies Directory
         </a>
@@ -45,9 +48,10 @@
         <a class="flex items-center gap-3 p-3 rounded-2xl font-bold transition hover:bg-white/10 " href="announcement.html">
             Make Announcement
         </a>
+        @endif
     </nav>
     <div class="mt-auto pt-6">
-        <a class="flex items-center gap-3 p-3 rounded-2xl text-sm font-bold transition hover:bg-white/10 " href="login.html">
+
         
         <form method="POST" action="{{ route('logout') }}">
             @csrf
@@ -57,7 +61,7 @@
                 <span>Logout</span>
             </button>
         </form>
-        </a>
+
     </div>
     </div>
 </aside>

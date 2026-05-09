@@ -34,6 +34,7 @@ Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,
 
 
 Route::middleware(['auth', 'prevent-back-history', 'role:HRMO'])->group( function () {
+    Route::get('agency/dashboard', [DashboardController::class, 'index_hrmo'])->name('hrmo.dashboard');
     Route::get('/drafts', [DraftController::class, 'index'])->name('drafts.index');
     Route::get('/drafts/create/{mechanism}', [DraftController::class, 'create'])->name('drafts.create');
     Route::post('/drafts', [DraftController::class, 'store'])->name('drafts.store');

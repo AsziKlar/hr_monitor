@@ -1,11 +1,149 @@
- <x-app-layout>
+<x-app-layout>
+
+@if(auth()->user()->role->name === 'HRMO')
+<section>
+{{-- HRMO Dashboard --}}
+    <div class="min-h-screen bg-slate-100 p-4 md:p-6 lg:p-8 text-blue-950">
+
+        {{-- Top Section --}}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            {{-- Welcome Card --}}
+            <div class="lg:col-span-2 rounded-4xl bg-blue-200/60 p-8 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div>
+                    <h1 class="text-3xl font-bold">
+                        Hi, {{ auth()->user()->name }}
+                    </h1>
+                    <p class="mt-3 max-w-xl text-lg text-blue-900/80">
+                        Ready to submit your agency requirements and track their review progress?
+                    </p>
+                </div>
+
+                <div class="flex h-32 w-32 items-center justify-center rounded-3xl bg-white/40">
+                    <svg class="h-16 w-16 text-blue-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M9 12l2 2 4-4"/>
+                        <rect x="3" y="4" width="18" height="14" rx="2"/>
+                        <path d="M8 21h8M12 18v3"/>
+                    </svg>
+                </div>
+            </div>
+
+            {{-- for the quick reminder --}}
+            <div class="rounded-4xl bg-white p-8 shadow-sm ring-1 ring-slate-100">
+                <p class="font-semibold text-slate-500">Announcement</p>
+
+                <h2 class="mt-4 text-2xl font-bold">
+                    Template
+                </h2>
+
+                <p class="mt-4 text-blue-900/70 leading-relaxed">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                </p>
+
+                {{-- <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="rounded-3xl bg-slate-50 p-5">
+                        <p class="text-sm text-slate-500">Deadline</p>
+                        <p class="mt-2 font-bold">April 05, 2026</p>
+                    </div>
+
+                    <div class="rounded-3xl bg-slate-50 p-5">
+                        <p class="text-sm text-slate-500">Status</p>
+                        <p class="mt-2 font-bold text-red-700">Pending Upload</p>
+                    </div>
+                </div> --}}
+            </div>
+        </div>
+
+        {{-- Overview Cards --}}
+        <div class="mt-8">
+        <h2 class="mb-5 text-xl font-bold text-slate-500">
+            Overview
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+
+            @foreach ($mechanisms as $mechanism)
+                
+                @php
+                    $draft =  $latest_draft_per_mechanism[$mechanism->id] ?? null;
+                @endphp
+
+                <div class="rounded-3xl bg-blue-500 p-6 text-white shadow-sm" title="{{ $mechanism->name }}">
+
+                    <div class="flex items-center justify-between gap-3">
+
+                        <p class="text-xl font-bold text-right">
+                            {{ $draft?->mechanism?->name ?? $mechanism->description }}
+                        </p>
+                    </div>
+
+                    <p class="mt-2 text-right font-semibold">
+                        {{ $draft?->status?->name ?? 'No Submission Yet' }}
+                    </p>
+
+                </div>
+
+            @endforeach
+
+        </div>
+    </div>
+
+        {{-- Recent Submissions --}}
+        <div class="mt-8 rounded-4xl bg-white p-6 md:p-8 shadow-sm ring-1 ring-slate-100">
+            <div class="mb-6 flex items-center justify-between">
+                <h2 class="text-2xl font-bold">Recent Submissions</h2>
+
+                <a href="#" class="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-semibold hover:bg-slate-50">
+                    View All
+                </a>
+            </div>
+
+            <div class="space-y-5">
+
+                {{-- item submission --}}
+                @foreach ($latestSubmissions as $submission)
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 rounded-3xl border border-slate-100 p-5 md:p-6">
+                    <div class="flex flex-col sm:flex-row gap-5">
+
+                        <div>
+                            <h3 class="text-xl font-bold">{{ $submission->mechanism->name }}</h3>
+                            <p class="mt-3 font-bold">{{ $submission->file_name }}</p>
+                            <p class="mt-2 max-w-3xl text-blue-900/70 leading-relaxed">{{ $submission->description }}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between lg:justify-end gap-8">
+                        <div class="text-left lg:text-right">
+                            <p class="font-bold">{{ $submission->status->name}}</p>
+                            <p class="text-sm text-slate-500">{{ $submission->created_at->format('M d, Y') }}</p>
+                        </div>
+
+                        <div class="flex gap-3 text-slate-500">
+                            <button>✏️</button>
+                            <button>🗑</button>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+                
+
+
+            </div>
+        </div>
+
+    </div>
+</section>
+@else
+
+
+
  <!-- page content -->
     <section class="p-6">
         <!-- mechanism to be reviewed card -->
         
         <div class="text-blue-950 flex flex-row gap-2 justify-between">
         
-          <div class="flex-1 rounded-4xl bg-blue-200/40 p-6 shadow-sm ring-1 ring-blue-200">
+          <div class="flex-1 rounded-4xl bg-blue-200/40 p-6 shadow-sm">
               <p class="text-2xl font-bold text-blue-600 uppercase tracking-wider">MSP</p>
               <div class="mt-2">
               <div>
@@ -17,8 +155,8 @@
               </div>
           </div>
 
-          <div class="flex-1 rounded-4xl bg-fuchsia-200/40 p-6 shadow-sm ring-1 ring-fuchsia-200">
-              <p class="text-2xl font-bold text-fuchsia-600 uppercase tracking-wider">SPMS</p>
+          <div class="flex-1 rounded-4xl bg-blue-200/40 p-6 shadow-sm">
+              <p class="text-2xl font-bold text-blue-600 uppercase tracking-wider">SPMS</p>
               <div class="mt-2">
               <div>
                   <p class="text-4xl font-bold">{{ $drafts_to_be_reviewed[2]->count() }}</p>
@@ -29,8 +167,8 @@
               </div>
           </div>
 
-          <div class="flex-1 rounded-4xl bg-amber-200/20 p-6 shadow-sm ring-1 ring-amber-200">
-              <p class="text-2xl font-bold text-amber-600 uppercase tracking-wider">PRAISE</p>
+          <div class="flex-1 rounded-4xl bg-blue-200/40 p-6 shadow-sm">
+              <p class="text-2xl font-bold text-blue-600 uppercase tracking-wider">PRAISE</p>
               <div class="mt-2">
               <div>
                   <p class="text-4xl font-bold">{{ $drafts_to_be_reviewed[3]->count() }}</p>
@@ -41,8 +179,8 @@
               </div>
           </div>
 
-          <div class="flex-1 rounded-4xl bg-purple-200/20 p-6 shadow-sm ring-1 ring-purple-200">
-              <p class="text-2xl font-bold text-purple-600 uppercase tracking-wider">MSP</p>
+          <div class="flex-1 rounded-4xl bg-blue-200/40 p-6 shadow-sm">
+              <p class="text-2xl font-bold text-blue-600 uppercase tracking-wider">GM</p>
               <div class="mt-2">
               <div>
                   <p class="text-4xl font-bold">{{ $drafts_to_be_reviewed[4]->count() }}</p>
@@ -53,8 +191,8 @@
               </div>
           </div>
 
-          <div class="flex-1 rounded-4xl bg-emerald-200/20 p-6 shadow-sm ring-1 ring-emerald-200">
-              <p class="text-2xl font-bold text-emerald-600 uppercase tracking-wider">GM</p>
+          <div class="flex-1 rounded-4xl bg-blue-200/40 p-6 shadow-sm">
+              <p class="text-2xl font-bold text-blue-600 uppercase tracking-wider">L&D</p>
               <div class="mt-2">
               <div>
                   <p class="text-4xl font-bold">{{ $drafts_to_be_reviewed[5]->count() }}</p>
@@ -250,5 +388,6 @@
         );
       @endforeach
     </script>
+  @endif
  </x-app-layout>
     
