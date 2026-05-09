@@ -98,7 +98,7 @@
               <div>
                 <div class="mb-4">
                     <h2 class="text-xl font-bold">Field Office Compliance</h2>
-                    <p class="text-sm">Overview of mechanisms completed</p>
+                    <p class="text-sm">No. of agencies that completed all mechanisms</p>
                 </div>
 
                 <div class="h-75">
@@ -124,10 +124,10 @@
                           <thead class="sticky top-0 bg-white">
                               <tr class="border-b border-slate-300/50">
 
-                                  <th class="p-2 text-left text-slate-700/30">Agency</th>
-                                  <th class="p-2 text-left text-slate-700/30">Mechanism</th>
-                                  <th class="p-2 text-left text-slate-700/30">Date</th>
-                                  <th class="p-2 text-left text-slate-700/30">Period</th>
+                                  <th class="p-2 text-left text-slate-700/50">Agency</th>
+                                  <th class="p-2 text-left text-slate-700/50">Mechanism</th>
+                                  <th class="p-2 text-left text-slate-700/50">Date</th>
+                                  <th class="p-2 text-left text-slate-700/50">Period</th>
 
                               </tr>
                           </thead>
@@ -175,24 +175,26 @@
     <script>
       // bar chart
       const mechanismBarCtx = document.getElementById('mechanismBarChart').getContext('2d');
-      const mechanismBarChart = new Chart(mechanismBarCtx, {
+      new Chart(mechanismBarCtx, {
           type: 'bar',
           data: {
-              labels: ['Field Office 1', 'Field Office 2', 'Field Office 3', 'Field Office 4'],
+              labels: @json($field_office_names),
               datasets: [{
-                  label: '',
-                  data: [12, 19, 3, 5],
+                  label: 'Completed Agencies',
+                  data: @json($field_office_counts),
                   backgroundColor: [
                     '#3B5BDB',
                     '#E6C84F',
                     '#8B5CF6',
                     '#34B28A',
+                    '#10B981',
                   ], 
                   borderColor: [
                     '#3B5BDB',
                     '#E6C84F',
                     '#8B5CF6',
                     '#34B28A',
+                    '#10B981',
                   ],
                   borderWidth: 1,
                   borderRadius: 15
@@ -205,7 +207,15 @@
                 legend: {
                   display: false
                 }
-              }
+              },
+              scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
           } 
       });
 
@@ -228,7 +238,12 @@
             },
             options: {
               responsive: true,
-              maintainAspectRatio: false
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: false
+                }
+              }
             }
               
           }

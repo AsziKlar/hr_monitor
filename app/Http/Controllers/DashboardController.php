@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AgencyMechanismPeriod;
 use Illuminate\Http\Request;
 use App\Models\Draft;
+use App\Models\FieldOffice;
 use App\Models\Mechanism;
 use Illuminate\View\View;
 
@@ -72,8 +73,45 @@ class DashboardController extends Controller
                             ->oldest()
                             ->take(10)
                             ->get();
+
+
+        $field_office_names = [];
+        $field_office_counts = [];
+
+        $fieldOffices = FieldOffice::with('agencies')->get();
+
+        foreach ($fieldOffices as $fieldOffice) {
+            $field_office_names[] = $fieldOffice->name;
+            $completedAgenciesCount = 0;
+
+            foreach ($fieldOffice->agencies as $agency){
+                $approvedMechanismsCount = 0;
+
+                foreach ($mechanisms as $mechanism){
+                    $period = AgencyMechanismPeriod::where('agency_id', $agency->id)
+                                                        ->where('mechanism_id', $mechanism->id)
+                                                        ->value('current_period');
+
+                    $latestDraft = Draft::where('agency_id', $agency->id)
+                                            ->where('mechanism_id', $mechanism->id)
+                                            ->where('period', $period)
+                                            ->latest()
+                                            ->first();
+                    if ($latestDraft && $latestDraft->status == 3) {
+                        $approvedMechanismsCount++;
+                    }
+
+                }
+
+                if ($approvedMechanismsCount == $mechanisms->count()){
+                    $completedAgenciesCount++;
+                }
+                
+            }
+            $field_office_counts[] = $completedAgenciesCount;
+        }
         
 
-        return view('dashboard', compact('mechanisms', 'drafts_to_be_reviewed', 'drafts_approved', 'to_be_reviewed_count', 'approved_count','total_drafts_num', 'drafts'));
+        return view('dashboard', compact('mechanisms', 'drafts_to_be_reviewed', 'drafts_approved', 'to_be_reviewed_count', 'approved_count','total_drafts_num', 'drafts', 'field_office_names', 'field_office_counts'));
     }
 }
