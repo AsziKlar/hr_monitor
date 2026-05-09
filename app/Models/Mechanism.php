@@ -13,7 +13,7 @@ class Mechanism extends Model
     protected $fillable = [
         'name',
         'description',
-        'is_active'
+        'is_active',
     ];
     public function drafts(){
         return $this->hasMany(Draft::class);

@@ -27,8 +27,15 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        $user = auth()->user();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        if($user->role->id === 4){
+            return redirect()->intended(route('hrmo.dashboard', absolute: false));
+        } else if (in_array($user->role->id, [1, 2, 3])){
+            return redirect()->intended(route('admin.dashboard', absolute: false));
+        } else {
+            redirect('/');
+        }
     }
 
     /**
@@ -42,6 +49,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('login');
     }
 }
