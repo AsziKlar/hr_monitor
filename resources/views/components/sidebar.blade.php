@@ -21,11 +21,30 @@
 
     <nav class="space-y-2 text-sm">
         <p class="text-[11px] text-white/50 mt-6">NAVIGATION</p>
-        <a class="flex items-center gap-3 p-3 rounded-2xl bg-radial-[at_25%_25%] from-red-800 to-red-900 to-75% font-bold text-white shadow-lg shadow-red-900/20" href="">
+
+        @php
+            $active = 'flex items-center gap-3 p-3 rounded-2xl bg-radial-[at_25%_25%] from-red-800 to-red-900 to-75% font-bold text-white shadow-lg shadow-red-900/20';
+
+            $inactive = 'flex items-center gap-3 p-3 rounded-2xl font-bold transition hover:bg-white/10';
+
+            $mechanismRoute = auth()->user()->role->name === 'HRMO'
+                ? 'hrmo.mechanisms'
+                : 'mechanisms';
+
+            $dashboardRoute = auth()->user()->role->name === 'HRMO'
+                ? 'hrmo.dashboard'
+                : 'dashboard';
+            
+
+        @endphp
+
+        <a  class="{{ request()->routeIs($dashboardRoute) ? $active : $inactive }}"
+            href="{{ route($dashboardRoute) }}">
             Dashboard
         </a>
 
-        <a class="flex items-center gap-3 p-3 rounded-2xl font-bold transition hover:bg-white/10 " href="mechanisms.html">
+        <a  class="{{ request()->routeIs($mechanismRoute) ? $active : $inactive }}" 
+            href="{{ route($mechanismRoute) }}">
             Mechanisms
         </a>
         @if (auth()->user()->role->id == 4)
@@ -45,7 +64,8 @@
             Manage Account
         </a>
 
-        <a class="flex items-center gap-3 p-3 rounded-2xl font-bold transition hover:bg-white/10 " href="announcement.html">
+        <a  class="{{ request()->routeIs('store.announcements') ? $active : $inactive }}" 
+            href="{{ route('store.announcements') }}">
             Make Announcement
         </a>
         @endif

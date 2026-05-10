@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AgencyMechanismPeriod;
+use App\Models\Announcement;
 use Illuminate\Http\Request;
 use App\Models\Draft;
 use App\Models\FieldOffice;
@@ -39,7 +40,9 @@ class DashboardController extends Controller
                                 ->latest()
                                 ->get();
 
-        return view('dashboard', compact('mechanisms','latest_draft_per_mechanism', 'latestSubmissions'));
+        $latestAnnouncement = Announcement::latest()->first();
+
+        return view('dashboard', compact('mechanisms','latest_draft_per_mechanism', 'latestSubmissions','latestAnnouncement'));
 
     }
     

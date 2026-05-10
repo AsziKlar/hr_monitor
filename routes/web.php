@@ -3,11 +3,16 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DraftController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AnnouncementController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (auth()->check()) {
-        return redirect()->route('admin.dashboard');
+        if (auth()->user()->role->id === 4){
+            return redirect()->route('hrmo.dashboard');
+        }else {
+            return redirect()->route('dashboard');
+        }
     }
 
     return view('auth.login');
@@ -27,18 +32,24 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,Reviewer'])->group(function () {
    
-    Route::get('/admin/dashboard', [DashboardController::class, 'index_admin'])->name('admin.dashboard');
+    Route::get('/admin/dashboard', [DashboardController::class, 'index_admin'])->name('dashboard');
+    Route::get('/admin/mechanism', [DraftController::class, 'mechanism_filter'])->name('mechanisms');
+
+    Route::get('/admin/announcements', [AnnouncementController::class, 'index'])->name('announcements');
+    Route::post('/admin/announcements/store', [AnnouncementController::class, 'store'])->name('store.announcements');
     
 
 });
 
 
 Route::middleware(['auth', 'prevent-back-history', 'role:HRMO'])->group( function () {
-    Route::get('agency/dashboard', [DashboardController::class, 'index_hrmo'])->name('hrmo.dashboard');
-    Route::get('/drafts', [DraftController::class, 'index'])->name('drafts.index');
-    Route::get('/drafts/create/{mechanism}', [DraftController::class, 'create'])->name('drafts.create');
+    Route::get('/agency/mechanism', [DraftController::class, 'mechanism_filter'])->name('hrmo.mechanisms');
+    Route::get('/agency/dashboard', [DashboardController::class, 'index_hrmo'])->name('hrmo.dashboard');
+    Route::get('/drafts/index/{mechanism_id}', [DraftController::class, 'index'])->name('drafts.index');
+    Route::get('/drafts/create/{$mechanism}', [DraftController::class, 'create'])->name('drafts.create');
     Route::post('/drafts', [DraftController::class, 'store'])->name('drafts.store');
     Route::get('/drafts/{id}', [DraftController::class, 'show'])->name('drafts.show');
+    Route::post('/drafts/store', [DraftController::class, 'store'])->name('drafts.store');
 });
 
 
