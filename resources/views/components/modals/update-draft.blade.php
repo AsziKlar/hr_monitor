@@ -1,16 +1,17 @@
 
-<div id="createDraftModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40">
+<div id="updateDraftModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40">
 
     
     <div class="w-full max-w-3xl rounded-4xl bg-white shadow-2xl overflow-hidden">
 
         
         <div class="p-8">
-            <h2 class="text-3xl font-bold text-blue-950">Create Draft</h2>
+            <h2 class="text-3xl font-bold text-blue-950">Replace Draft</h2>
         </div>
 
-        <form method="POST" action="{{ route('drafts.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('draft.update', $draft->id) }}" enctype="multipart/form-data">
             @csrf
+            @method('PATCH')
 
             
             <div class="border-y border-slate-200 bg-slate-100/20 p-8">
@@ -23,7 +24,7 @@
                     <input 
                         type="hidden"
                         name="mechanism_id"
-                        value="{{ $mechanismId }}"
+                        value="{{ $draft }}"
                     >
 
                     <input 
@@ -47,11 +48,11 @@
 
             </div>
 
-            <!-- Footer -->
+            
             <div class="flex justify-end gap-4 p-6">
                 <button 
                     type="button"
-                    onclick="closeCreateDraftModal()"
+                    onclick="closeUpdateDraftModal()"
                     class="rounded-2xl border border-slate-300 px-6 py-3 font-bold text-blue-950 hover:bg-slate-100"
                 >
                     Cancel

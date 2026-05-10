@@ -287,7 +287,7 @@
                                           {{ $draft->created_at->format('m/d/y') }}
                                       </td>
                                       <td class="p-2">
-                                          {{ $draft->create_at->diffForHumans() }}
+                                          {{ $draft->created_at->diffForHumans() }}
                                       </td>
 
                                   </tr>

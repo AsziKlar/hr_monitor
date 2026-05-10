@@ -12,14 +12,25 @@
                 <option>Approved</option>
               </select>
               <x-modals.create-draft  :mechanism-id="$mechanism_id" />
-            <button 
-                onclick="openCreateAnnouncementModal()"
-                class="flex items-center justify-center rounded-4xl min-w-[240px] transition hover:scale-[1.05] hover:bg-red-700 bg-red-800"
-            >
-                <span class="text-1xl font-bold text-white p-3">
-                    + Add New Submission
-                </span>
-            </button>
+
+            @if (auth()->user()->role->name === 'HRMO')
+              @if ($latestDraft && ($latestDraft->status->name === 'To be Reviewed' || $latestDraft->status->name === 'Approved'))
+                <button disabled  title="You can only submit another draft once the recent draft has been reviewed." class="flex items-center justify-center rounded-4xl min-w-[240px] cursor-not-allowed bg-slate-300 opacity-70">
+                    <span class="text-1xl font-bold text-white p-3">
+                        + Add New Submission
+                    </span>
+                </button>
+
+              @else
+                <button onclick="openCreateDraftModal()"
+                        class="flex items-center justify-center rounded-4xl min-w-[240px] transition hover:scale-[1.05] hover:bg-red-700 bg-red-800">
+                    <span class="text-1xl font-bold text-white p-3">
+                        + Add New Submission
+                    </span>
+                </button>
+              @endif
+            @endif
+
           </div>
         </section>
 
@@ -88,19 +99,19 @@
         </section>
 
         <script>
-            function openCreateAnnouncementModal() {
-                document.getElementById('createAnnouncementModal')
+            function openCreateDraftModal() {
+                document.getElementById('createDraftModal')
                     .classList.remove('hidden');
 
-                document.getElementById('createAnnouncementModal')
+                document.getElementById('createDraftModal')
                     .classList.add('flex');
             }
 
-            function closeCreateAnnouncementModal() {
-                document.getElementById('createAnnouncementModal')
+            function closeCreateDraftModal() {
+                document.getElementById('createDraftModal')
                     .classList.add('hidden');
 
-                document.getElementById('createAnnouncementModal')
+                document.getElementById('createDraftModal')
                     .classList.remove('flex');
             }
         </script>

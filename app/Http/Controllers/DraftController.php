@@ -10,6 +10,7 @@ use App\Models\Status;
 use App\Models\User;
 use App\Models\Mechanism;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage; 
 
 class DraftController extends Controller
 {
@@ -24,6 +25,8 @@ class DraftController extends Controller
 
         $drafts = Draft::where('mechanism_id', $mechanism_id);
 
+        $latestDraft = null;
+
         if ($user->role->name === 'HRMO') {
 
             $period = AgencyMechanismPeriod::where('agency_id', $user->agency_id)
@@ -32,11 +35,19 @@ class DraftController extends Controller
 
             $drafts = $drafts   ->where('agency_id', $user->agency_id)
                                 ->where('period', $period->current_period)->latest()->get();
+            
+             $latestDraft = Draft::where('agency_id', $user->agency_id)
+                                ->where('mechanism_id', $mechanism_id)
+                                ->where('period', $period->current_period)
+                                ->latest('id')
+                                ->first();                   
+
+            
         } else {
             $drafts = $drafts->latest()->get();
         }
 
-        return view('drafts.index', compact('drafts', 'mechanism_id'));
+        return view('drafts.index', compact('drafts', 'mechanism_id', 'latestDraft'));
     }
 
     public function create($mechanism){
@@ -98,6 +109,38 @@ class DraftController extends Controller
                     $draft->agency_id === $user->agency_id;
 
         return view('drafts.show', compact('draft', 'canEdit'));
+    }
+
+    public function approve($id){
+        $draft = Draft::find($id);
+        $draft->status_id = 3;
+        $draft->save();
+        return back();
+    }
+    public function revision($id){
+        $draft = Draft::find($id);
+        $draft->status_id = 2;
+        $draft->save();
+        return back();
+    }
+
+    public function updateFile(Request $request, $id){
+        $request->validate([
+            'file' => 'required|mimes:pdf|max:10240'
+        ]);
+
+        $draft = Draft::find($id);
+
+        Storage::disk('public')->delete($draft->file_path);
+
+        $path = $request->file('file')->store('drafts', 'public');
+        $draft->file_path = $path;
+        $draft->file_name=$request->file('file')->getClientOriginalName();
+
+        $draft->save();
+
+        return back();
+
     }
 
 }
