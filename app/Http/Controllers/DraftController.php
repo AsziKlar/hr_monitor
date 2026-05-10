@@ -13,7 +13,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DraftController extends Controller
 {
-   
+    public function mechanism_filter(){
+        $mechanisms = Mechanism::All();
+
+        return view('mechanisms', compact('mechanisms'));
+    }
 
     public function index($mechanism_id){
         $user = auth()->user();
@@ -32,10 +36,11 @@ class DraftController extends Controller
             $drafts = $drafts->latest()->get();
         }
 
-        return view('drafts.index', compact('drafts'));
+        return view('drafts.index', compact('drafts', 'mechanism_id'));
     }
 
-    public function create(Mechanism $mechanism){
+    public function create($mechanism){
+        
         return view('drafts.create', compact('mechanism'));
     }
 
@@ -68,9 +73,10 @@ class DraftController extends Controller
             'file_name' => $file->getClientOriginalName(),
             'file_path' => $filePath,
             'period' => $period->current_period,
+            'description' => $request->description
         ]);
 
-        return redirect()   ->route('drafts.index')
+        return redirect()   ->back()
                             ->with('success', 'Draft submitted successfully!');
     }
 
