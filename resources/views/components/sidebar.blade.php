@@ -11,7 +11,7 @@
         <div>
             <p class="text-base font-bold leading-tight">{{ collect(explode(' ', auth()->user()->name))->first() . ' ' . collect(explode(' ', auth()->user()->name))->last() }} </p>
             @if (auth()->user()->role->id == 4)
-                <p class="text-xs text-white/70">{{ auth()->user()->agency?->abbreviation }} (HRMO)</p>
+                <p class="text-xs text-white/70">{{ auth()->user()->agency->abbreviation }} (HRMO)</p>
             @else
                 <p class="text-xs text-white/70">{{ auth()->user()->role->name }} </p>
             @endif

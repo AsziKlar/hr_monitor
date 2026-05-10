@@ -15,7 +15,7 @@
                         Hi, {{ auth()->user()->name }}
                     </h1>
                     <p class="mt-3 max-w-xl text-lg text-blue-900/80">
-                        Ready to submit your agency requirements and track their review progress?
+                        Ready to submit your requirements and track {{ auth()->user()->agency->name }}'s review progress?
                     </p>
                 </div>
 
