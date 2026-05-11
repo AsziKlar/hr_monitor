@@ -11,7 +11,8 @@
                 <option>Needs Revision</option>
                 <option>Approved</option>
               </select>
-              <x-modals.create-draft  :mechanism-id="$mechanism" />
+
+              <x-modals.create-draft  :mechanismId="$mechanism->id" />
 
             @if (auth()->user()->role->name === 'HRMO')
               @if ($latestDraft && ($latestDraft->status->name === 'To be Reviewed' || $latestDraft->status->name === 'Approved'))
