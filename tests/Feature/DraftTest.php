@@ -258,3 +258,32 @@ class DraftTest extends TestCase
     }
 
 }
+    public function test_index_by_status_gets_drafts_by_status_and_mechanism(){
+    $agency = Agency::factory()->create();
+
+    $mechanism = Mechanism::factory()->create();
+
+    $status = Status::factory()->create([
+        'name' => 'Approved',
+    ]);
+
+    $matchingDraft = Draft::factory()->create([
+        'agency_id' => $agency->id,
+        'mechanism_id' => $mechanism->id,
+        'status_id' => $status->id,
+    ]);
+
+    $nonMatchingDraft = Draft::factory()->create();
+
+    $drafts = Draft::where('mechanism_id', $mechanism->id)
+        ->where('status_id', $status->id)
+        ->get();
+
+    $this->assertTrue(
+        $drafts->contains($matchingDraft)
+    );
+
+    $this->assertFalse(
+        $drafts->contains($nonMatchingDraft)
+    );
+}
