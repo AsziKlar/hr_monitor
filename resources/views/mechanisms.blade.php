@@ -23,7 +23,12 @@
 
                 @foreach ($mechanisms as $mechanism)
 
-                <a class="block duration-300 ease-in-out hover:-translate-y-2 flex gap-4 items-center rounded-2xl bg-white p-6 shadow-lg shadow-gray-200 hover:shadow-gray-500 ring-1 ring-slate-100" href="{{ route('drafts.index', $mechanism->id) }}">
+                <a  class="block duration-300 ease-in-out hover:-translate-y-2 flex gap-4 items-center rounded-2xl bg-white p-6 shadow-lg shadow-gray-200 hover:shadow-gray-500 ring-1 ring-slate-100" 
+                    href="
+                    {{ auth()->user()->role->name === 'HRMO'
+                          ? route('hrmo.drafts.index', $mechanism) 
+                          : route('admin.drafts.index', $mechanism)}}">
+                
                         <div class="flex-1 ">
                         <p class="text-2xl font-bold ">{{ $mechanism->name}}</p>
                         <p class="text-1xl text-gray-400"></p>

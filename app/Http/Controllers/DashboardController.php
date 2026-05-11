@@ -106,7 +106,7 @@ class DashboardController extends Controller
                                             ->where('period', $period)
                                             ->latest()
                                             ->first();
-                    if ($latestDraft && $latestDraft->status == 3) {
+                    if ($latestDraft && $latestDraft->status->id == 3) {
                         $approvedMechanismsCount++;
                     }
 
