@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Agency;
 use App\Models\AgencyMechanismPeriod;
-use Illuminate\Http\Request;
 use App\Models\Draft;
+use App\Models\Mechanism;
 use App\Models\Status;
 use App\Models\User;
-use App\Models\Mechanism;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage; 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class DraftController extends Controller
 {
@@ -20,35 +21,67 @@ class DraftController extends Controller
         return view('mechanisms', compact('mechanisms'));
     }
 
-    public function index($mechanism_id){
+    public function status_filter($mechanism){
+        $statuses = Status::All();
+
+        return view('admin.statuses', compact('statuses','mechanism'));
+    }
+    // public function index_by_status(Status $status, Mechanism $mechanism){
+    //     $drafts = Draft::where('mechanism_id', $mechanism->id)
+    //                     ->where('status_id', $status->id)
+    //                     ->get();
+    //     return view('admin.index', compact('drafts'));
+        
+    // }
+
+    public function index_hrmo(Request $request, Mechanism $mechanism){
         $user = auth()->user();
 
-        $drafts = Draft::where('mechanism_id', $mechanism_id);
+        $drafts = Draft::where('mechanism_id', $mechanism->id);
 
         $latestDraft = null;
 
-        if ($user->role->name === 'HRMO') {
+       
+        $period = AgencyMechanismPeriod::where('agency_id', $user->agency_id)
+                    ->where('mechanism_id', $mechanism->id)
+                    ->first();
 
-            $period = AgencyMechanismPeriod::where('agency_id', $user->agency_id)
-                        ->where('mechanism_id', $mechanism_id)
-                        ->first();
+        $drafts = $drafts   ->where('agency_id', $user->agency_id)
+                            ->where('period', $period->current_period)->latest()->get();
+        
+        $latestDraft = Draft::where('agency_id', $user->agency_id)
+                        ->where('mechanism_id', $mechanism->id)
+                        ->where('period', $period->current_period)
+                        ->latest('id')
+                        ->first();                   
 
-            $drafts = $drafts   ->where('agency_id', $user->agency_id)
-                                ->where('period', $period->current_period)->latest()->get();
-            
-             $latestDraft = Draft::where('agency_id', $user->agency_id)
-                                ->where('mechanism_id', $mechanism_id)
-                                ->where('period', $period->current_period)
-                                ->latest('id')
-                                ->first();                   
+        return view('drafts.index', compact('drafts', 'mechanism', 'latestDraft'));
+    }
 
-            
-        } else {
-            $drafts = $drafts->latest()->get();
+    public function index_admin(Request $request, Mechanism $mechanism)
+{
+        $drafts = Draft::query()
+            ->select('drafts.*')
+            ->join('agency_mechanism_periods', function ($join) use ($mechanism) {
+                $join->on('drafts.agency_id', '=', 'agency_mechanism_periods.agency_id')
+                    ->where('agency_mechanism_periods.mechanism_id', $mechanism->id)
+                    ->whereColumn('drafts.period', 'agency_mechanism_periods.current_period');
+            })
+            ->where('drafts.mechanism_id', $mechanism->id);
+
+        if ($request->filled('status')) {
+            $drafts->where('drafts.status_id', $request->status);
         }
 
-        return view('drafts.index', compact('drafts', 'mechanism_id', 'latestDraft'));
+        $drafts = $drafts
+            ->latest('drafts.id')
+            ->get()
+            ->unique('agency_id')
+            ->values();
+
+        return view('admin.index', compact('drafts', 'mechanism'));
     }
+
 
     public function create($mechanism){
         
@@ -102,11 +135,11 @@ class DraftController extends Controller
                         ->latest('id')
                         ->first();
 
-        //for the frontend either to show Edit button or not.
-        $canEdit =  $latestDraft && 
-                    $latestDraft->id === $draft->id &&
-                    $draft->status->name === 'To be Reviewed' &&
-                    $draft->agency_id === $user->agency_id;
+        // //for the frontend either to show Edit button or not.
+        // $canEdit =  $latestDraft && 
+        //             $latestDraft->id === $draft->id &&
+        //             $draft->status->name === 'To be Reviewed' &&
+        //             $draft->agency_id === $user->agency_id;
 
         return view('drafts.show', compact('draft', 'canEdit'));
     }
@@ -124,23 +157,5 @@ class DraftController extends Controller
         return back();
     }
 
-    public function updateFile(Request $request, $id){
-        $request->validate([
-            'file' => 'required|mimes:pdf|max:10240'
-        ]);
-
-        $draft = Draft::find($id);
-
-        Storage::disk('public')->delete($draft->file_path);
-
-        $path = $request->file('file')->store('drafts', 'public');
-        $draft->file_path = $path;
-        $draft->file_name=$request->file('file')->getClientOriginalName();
-
-        $draft->save();
-
-        return back();
-
-    }
-
+   
 }

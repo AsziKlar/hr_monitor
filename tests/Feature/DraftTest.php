@@ -257,4 +257,5 @@ class DraftTest extends TestCase
         $this->assertEquals('To be Reviewed',$searchDrafts->status->name);
     }
 
+   
 }
