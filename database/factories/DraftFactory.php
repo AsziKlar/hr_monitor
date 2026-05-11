@@ -14,8 +14,10 @@ class DraftFactory extends Factory
             'agency_id' => 1,
             'mechanism_id' => 1,
             'period' => 1,
+            'status_id' => 1,
             'file_name' => fake()->word() . '.pdf',
             'file_path' => 'drafts/' . fake()->word() . '.pdf'
         ];
     }
+    
 }

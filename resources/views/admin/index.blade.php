@@ -2,34 +2,19 @@
     <section class="p-6">
           <div class="flex gap-4 items-center rounded-4xl bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">
             <div class="flex h-4 w-full items-center rounded-4xl bg-slate-100 p-6 shadow-gray-400 ring-1 ring-slate-200">
-              {{-- <svg class="lucide lucide-search text-slate-400" viewBox="0 0 24 24" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" height='24' width='24'/> --}}
               <input class="w-full outline-none type='text' placeholder" placeholder='Search submission...'/>
             </div>
-            <select class="select select-bordered rounded-[16px] bg-slate-100 text-1xl min-w-[170px] ring-2 ring-slate-200 p-3">
-                <option selected="" disabled="">Filter by Status</option>
-                <option>To be Reviewed</option>
-                <option>Needs Revision</option>
-                <option>Approved</option>
-              </select>
-              <x-modals.create-draft  :mechanism-id="$mechanism" />
 
-            @if (auth()->user()->role->name === 'HRMO')
-              @if ($latestDraft && ($latestDraft->status->name === 'To be Reviewed' || $latestDraft->status->name === 'Approved'))
-                <button disabled  title="You can only submit another draft once the recent draft has been reviewed." class="flex items-center justify-center rounded-4xl min-w-[240px] cursor-not-allowed bg-slate-300 opacity-70">
-                    <span class="text-1xl font-bold text-white p-3">
-                        + Add New Submission
-                    </span>
-                </button>
+            <form method="GET" action="{{ route('admin.drafts.index', $mechanism) }}">
+                <select name="status" onchange="this.form.submit()" class="select select-bordered rounded-[16px] bg-slate-100 text-1xl min-w-[170px] ring-2 ring-slate-200 p-3">
+                    <option disabled selected>Filter by Status</option>
+                    <option value="1" {{ request('status') == 1 ? 'selected' : ''}}>To be Reviewed</option>
+                    <option value="2" {{ request('status') == 2 ? 'selected' : ''}}>Needs Revision</option>
+                    <option value="3" {{ request('status') == 3 ? 'selected' : ''}}>Approved</option>
+                </select>
+            </form>
+             
 
-              @else
-                <button onclick="openCreateDraftModal()"
-                        class="flex items-center justify-center rounded-4xl min-w-[240px] transition hover:scale-[1.05] hover:bg-red-700 bg-red-800">
-                    <span class="text-1xl font-bold text-white p-3">
-                        + Add New Submission
-                    </span>
-                </button>
-              @endif
-            @endif
 
           </div>
         </section>
@@ -98,21 +83,5 @@
         </div>
         </section>
 
-        <script>
-            function openCreateDraftModal() {
-                document.getElementById('createDraftModal')
-                    .classList.remove('hidden');
-
-                document.getElementById('createDraftModal')
-                    .classList.add('flex');
-            }
-
-            function closeCreateDraftModal() {
-                document.getElementById('createDraftModal')
-                    .classList.add('hidden');
-
-                document.getElementById('createDraftModal')
-                    .classList.remove('flex');
-            }
-        </script>
+       
 </x-app-layout>
