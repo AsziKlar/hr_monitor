@@ -58,8 +58,7 @@ class DraftController extends Controller
         return view('drafts.index', compact('drafts', 'mechanism', 'latestDraft'));
     }
 
-    public function index_admin(Request $request, Mechanism $mechanism)
-{
+    public function index_admin(Request $request, Mechanism $mechanism){
         $drafts = Draft::query()
             ->select('drafts.*')
             ->join('agency_mechanism_periods', function ($join) use ($mechanism) {
