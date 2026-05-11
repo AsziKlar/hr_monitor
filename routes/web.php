@@ -31,7 +31,10 @@ Route::middleware(['auth','prevent-back-history'])->group(function () {
     Route::get('/mechanism', [DraftController::class, 'mechanism_filter'])->name('mechanisms');
 });
 
-
+Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group(function () {
+    Route::get('/admin/agencies', [AgencyController::class, 'index'])->name('agencies.index');
+    Route::post('/admin/agency/store', [AgencyController::class, 'store'])->name('agency.store');
+});
 
 Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,Reviewer'])->group(function () {
    
@@ -51,9 +54,6 @@ Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,
 
 });
 
-Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group(function () {
-    Route::get('/admin/agencies', [AgencyController::class, 'index'])->name('agencies.index');
-});
 
 
 Route::middleware(['auth', 'prevent-back-history', 'role:HRMO'])->group( function () {
