@@ -56,8 +56,8 @@
         </a>
         @endif
 
-        @if (in_array(auth()->user()->role->id, [1, 2, 3]))
-        <a class="flex items-center gap-3 p-3 rounded-2xl font-bold transition hover:bg-white/10 " href="agencies.html">
+        @if (in_array(auth()->user()->role->id, [1]))
+        <a class="{{ request()->routeIs('agencies.index') ? $active : $inactive }}"  href="{{ route('agencies.index') }}">
              <img src="{{ asset('images/folder-tree.svg') }}" />
             Agencies Directory
         </a>
