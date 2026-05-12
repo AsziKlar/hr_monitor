@@ -34,6 +34,7 @@ Route::middleware(['auth','prevent-back-history'])->group(function () {
 Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group(function () {
     Route::get('/admin/agencies', [AgencyController::class, 'index'])->name('agencies.index');
     Route::post('/admin/agency/store', [AgencyController::class, 'store'])->name('agency.store');
+    Route::get('/admin/agency/{agency}/show', [AgencyController::class, 'show'])->name('agency.show');
 });
 
 Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,Reviewer'])->group(function () {
@@ -60,9 +61,10 @@ Route::middleware(['auth', 'prevent-back-history', 'role:HRMO'])->group( functio
     Route::get('/agency/dashboard', [DashboardController::class, 'index_hrmo'])->name('hrmo.dashboard');
     Route::get('/drafts/index/{mechanism}', [DraftController::class, 'index_hrmo'])->name('hrmo.drafts.index');
     Route::get('/drafts/create/{mechanism}', [DraftController::class, 'create'])->name('drafts.create');
-    Route::post('/drafts', [DraftController::class, 'store'])->name('drafts.store');
     Route::get('/drafts/{id}', [DraftController::class, 'show'])->name('drafts.show');
+
     Route::post('/drafts/store', [DraftController::class, 'store'])->name('drafts.store');
+
     Route::patch('/drafts/update/{id}', [DraftController::class, 'updateFile'])->name('draft.update');
 });
 

@@ -58,8 +58,7 @@ class DraftController extends Controller
         return view('drafts.index', compact('drafts', 'mechanism', 'latestDraft'));
     }
 
-    public function index_admin(Request $request, Mechanism $mechanism)
-{
+    public function index_admin(Request $request, Mechanism $mechanism){
         $drafts = Draft::query()
             ->select('drafts.*')
             ->join('agency_mechanism_periods', function ($join) use ($mechanism) {
@@ -105,6 +104,7 @@ class DraftController extends Controller
                     ->where('mechanism_id', $request->mechanism_id)
                     ->first();
 
+
         if (!$period) {
             return back()->with('error', 'No period has been opened for this mechanism yet.');
         }
@@ -141,7 +141,7 @@ class DraftController extends Controller
         //             $draft->status->name === 'To be Reviewed' &&
         //             $draft->agency_id === $user->agency_id;
 
-        return view('drafts.show', compact('draft', 'canEdit'));
+        return view('drafts.show', compact('draft'));
     }
 
     public function approve($id){
