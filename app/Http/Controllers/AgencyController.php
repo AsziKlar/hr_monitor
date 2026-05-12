@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Agency;
 use App\Models\AgencyMechanismPeriod;
+use App\Models\Draft;
 use App\Models\FieldOffice;
 use App\Models\Mechanism;
 use Illuminate\Http\Request;
@@ -58,7 +59,26 @@ class AgencyController extends Controller
 
     public function show(Agency $agency){
         $fieldOffices = FieldOffice::All();
-        return view('admin.agency', compact('agency','fieldOffices'));
+        $mechanisms = Mechanism::All();
+        $drafts =  collect();
+
+        foreach($mechanisms as $mechanism){ 
+            $period = AgencyMechanismPeriod::where('agency_id', $agency->id)
+                                            ->where('mechanism_id', $mechanism->id)
+                                            ->first();
+
+            $latestDraft = Draft::where('agency_id', $agency->id)
+                                    ->where('mechanism_id', $mechanism->id)
+                                    ->where('period', $period->current_period)
+                                    ->latest()
+                                    ->first();
+            
+            $drafts->push($latestDraft);
+
+        }
+
+        
+        return view('admin.agency', compact('agency','fieldOffices', 'drafts'));
     }
 
     public function update(Request $request, Agency $agency){
