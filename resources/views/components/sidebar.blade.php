@@ -1,4 +1,4 @@
-<aside id="sidebar" class="fixed w-64 h-screen text-white top-0 left-0 bg-blue-950/95 px-5 py-5 rounded-r-2xl overflow-hidden transition-all duration-300 ease-in-out transition-none z-50">
+<aside id="sidebar" class="fixed w-64 h-screen text-white top-0 left-0 bg-blue-950/95 px-3 pb-5 rounded-r-2xl overflow-hidden transition-all duration-300 ease-in-out transition-none z-50">
     <div class="min-w-[14rem] flex h-full flex-col">
     <div class="rounded-3xl bg-white/10 mt-4 px-4 py-3 shawdow-inner ring-1 ring-white/10">
         <div class="flex items-center gap-3">
