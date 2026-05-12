@@ -257,5 +257,78 @@ class DraftTest extends TestCase
         $this->assertEquals('To be Reviewed',$searchDrafts->status->name);
     }
 
+    // FAILING test for DraftController update()
+    public function test_failing_user_can_update_draft_file(){
+        Storage::fake('public');
+
+        $agency = Agency::factory()->create();
+        $mechanism = Mechanism::factory()->create();
+
+        $status = Status::factory()->create([
+            'name' => 'To be Reviewed',
+        ]);
+
+        $draft = Draft::factory()->create([
+            'agency_id' => $agency->id,
+            'mechanism_id' => $mechanism->id,
+            'status_id' => $status->id,
+            'file_name' => 'old.pdf',
+            'file_path' => 'drafts/old.pdf',
+        ]);
+
+        $newFile = UploadedFile::fake()->create(
+            'newdraft.pdf',
+            100,
+            'application/pdf'
+        );
+
+        $path = $newFile->store('drafts', 'public');
+
+        $draft->file_path = $path;
+        $draft->file_name = $newFile->getClientOriginalName();
+
+        $draft->save();
+
+        $draft->refresh();
+
+        $this->assertNotEquals('old.pdf', $draft->file_name);
+    }
+
+    // PASSING test for DraftController update()
+     public function test_user_can_update_draft_file(){
+        Storage::fake('public');
+
+        $agency = Agency::factory()->create();
+        $mechanism = Mechanism::factory()->create();
+
+        $status = Status::factory()->create([
+            'name' => 'To be Reviewed',
+        ]);
+
+        $draft = Draft::factory()->create([
+            'agency_id' => $agency->id,
+            'mechanism_id' => $mechanism->id,
+            'status_id' => $status->id,
+            'file_name' => 'old.pdf',
+            'file_path' => 'drafts/old.pdf',
+        ]);
+
+        $newFile = UploadedFile::fake()->create(
+            'newdraft.pdf',
+            100,
+            'application/pdf'
+        );
+
+        $path = $newFile->store('drafts', 'public');
+
+        $draft->file_path = $path;
+        $draft->file_name = $newFile->getClientOriginalName();
+
+        $draft->save();
+
+        $draft->refresh();
+
+        $this->assertEquals('newdraft.pdf', $draft->file_name);
+    }
    
 }
