@@ -61,4 +61,23 @@ class AgencyController extends Controller
         return view('admin.agency', compact('agency','fieldOffices'));
     }
 
+    public function update(Request $request, Agency $agency){
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'abbreviation' => 'required|string|max:20',
+            'field_office_id' => 'required|exists:field_offices,id',
+            'email_address' => 'required|email',
+            'head' => 'required|string|max:255',
+        ]);
+
+        $agency->update([
+            'name' => $request->name,
+            'abbreviation' => $request->abbreviation,
+            'field_office_id' => $request->field_office_id,
+            'email_address' => $request->email_address,
+            'head' => $request->head,
+        ]);
+
+        return back()->with('success', 'Agency updated successfully!');
+    }
 }

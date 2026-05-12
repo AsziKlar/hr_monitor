@@ -1,5 +1,4 @@
 <x-app-layout>
-     <!-- seacrhchd bar -->
         <section class="p-6">
     <div class="rounded-4xl bg-white p-8 shadow-gray-400 ring-1 ring-slate-100">
 

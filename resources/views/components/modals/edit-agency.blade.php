@@ -8,8 +8,9 @@
             </h2>
         </div>
 
-        <form method="POST" action="{{ route('agency.store') }}">
+        <form method="POST" action="{{ route('agency.update', $agency) }}">
             @csrf
+            @method('PATCH')
             <div class="border-y border-slate-200 bg-slate-100/20 p-8">
                 <div>
                     <label class="font-bold text-blue-950">

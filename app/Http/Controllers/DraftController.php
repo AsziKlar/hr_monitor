@@ -157,5 +157,27 @@ class DraftController extends Controller
         return back();
     }
 
+   public function updateFile(Request $request, Draft $draft){
+
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+        ]);
+
+        if ($draft->file_path && Storage::disk('public')->exists($draft->file_path)) {
+            Storage::disk('public')->delete($draft->file_path);
+        }
+
+        $path = $request->file('file')->store('drafts', 'public');
+
+        $draft->update([
+            'file_name' => $request->file('file')->getClientOriginalName(),
+            'file_path' => $path,
+        ]);
+
+        return redirect()
+            ->back()
+            ->with('success', 'Draft file replaced successfully.');
+    }
+
    
 }
