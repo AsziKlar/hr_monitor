@@ -257,5 +257,51 @@ class DraftTest extends TestCase
         $this->assertEquals('To be Reviewed',$searchDrafts->status->name);
     }
 
-   
+    public function failing_test_photo_is_required_when_storing_agency(){
+        $role = Role::factory()->create([
+        'name' => 'Administrator'
+        ]);
+
+        $user = User::factory()->create([
+        'role_id' => $role->id
+        ]);
+
+        $fieldOffice = FieldOffice::factory()->create();
+
+        $response = $this->actingAs($user)->post(route('agencies.store'), [
+        'name' => 'CSC Region X',
+        'abbreviation' => 'CSC-X',
+        'head' => 'Maria Clara',
+        'email_address' => 'cscx@email.com',
+        'field_office_id' => $fieldOffice->id,
+        ]);
+
+        $response->assertSessionHasErrors('photo');
+    }
+
+    public function passing_test_admin_can_store_agency(){
+
+        Storage::fake('public');
+
+        $user = User::factory()->create();
+
+        $fieldOffice = FieldOffice::factory()->create();
+
+        $response = $this->actingAs($user)->post(route('agencies.store'), [
+        'name' => 'CSC Region X',
+        'abbreviation' => 'CSC-X',
+        'head' => 'Maria Clara',
+        'email_address' => 'csc@email.com',
+        'field_office_id' => $fieldOffice->id,
+        'photo' => UploadedFile::fake()->image('agency.jpg'),
+        ]);
+
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('agencies', [
+        'name' => 'CSC Region X',
+        'email_address' => 'csc@email.com',
+        ]);
+    }
+
 }
