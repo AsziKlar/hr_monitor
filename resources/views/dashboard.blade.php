@@ -4,7 +4,7 @@
 <section>
 {{-- HRMO Dashboard --}}
     <div class="min-h-screen bg-slate-100 p-4 md:p-6 lg:p-8 text-blue-950">
-
+    <h2 class="mb-5 text-2xl font-bold text-slate-500">Dashboard</h2>
         {{-- Top Section --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -30,14 +30,17 @@
 
             {{-- for the quick reminder --}}
             <div class="rounded-4xl bg-white p-8 shadow-sm ring-1 ring-slate-100">
-                <p class="font-semibold text-slate-500">Announcement</p>
+                <p class="flex items-center gap-2 font-semibold text-slate-500">
+                    <img src="{{ asset('images/megaphone.svg') }}" alt="Search Icon" class="h-5 w-5">
+                    Latest Announcement
+                </p>
 
                 <h2 class="mt-4 text-2xl font-bold">
-                    Template
+                    {{ $latestAnnouncement->title}}
                 </h2>
 
                 <p class="mt-4 text-blue-900/70 leading-relaxed">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                    {{ $latestAnnouncement->body }}
                 </p>
 
                 {{-- <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -56,9 +59,7 @@
 
         {{-- Overview Cards --}}
         <div class="mt-8">
-        <h2 class="mb-5 text-xl font-bold text-slate-500">
-            Overview
-        </h2>
+        
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
 
@@ -133,6 +134,8 @@
 
     </div>
 </section>
+
+
 @else
 
 
@@ -140,7 +143,7 @@
  <!-- page content -->
     <section class="p-6">
         <!-- mechanism to be reviewed card -->
-        
+        <h2 class="mb-5 text-2xl font-bold text-slate-500">Dashboard</h2>
         <div class="text-blue-950 flex flex-row gap-2 justify-between">
         
           <div class="flex-1 rounded-4xl bg-blue-200/40 p-6 shadow-sm">
@@ -284,7 +287,7 @@
                                           {{ $draft->created_at->format('m/d/y') }}
                                       </td>
                                       <td class="p-2">
-                                          {{ $draft->create_at->diffForHumans() }}
+                                          {{ $draft->created_at->diffForHumans() }}
                                       </td>
 
                                   </tr>

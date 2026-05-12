@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>tailwind-beginner</title>
   </head>
+  
 
 
   <body class="flex h-screen">

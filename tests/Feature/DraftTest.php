@@ -286,6 +286,7 @@ public function test_failing_index_by_status_gets_drafts_by_status_and_mechanism
         );
     }
 
+
     public function test_index_by_status_gets_drafts_by_status_and_mechanism(){
         $agency = Agency::factory()->create();
 
