@@ -8,7 +8,7 @@
             </h2>
         </div>
 
-        <form method="POST" action="{{ route('agency.update', $agency) }}">
+        <form method="POST" action="{{ route('agency.update', $agency) }}" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             <div class="border-y border-slate-200 bg-slate-100/20 p-8">
@@ -98,6 +98,23 @@
                             required
                         >
                     </div>
+                </div>
+                <div>
+                    <label class="font-bold text-blue-950">
+                        Choose an Agency Photo
+                    </label>
+
+                    <input 
+                        type="file"
+                        name="photo"
+                        accept="image/*"
+                        class="mt-2 block w-full rounded-2xl border border-slate-300 bg-white p-4 text-slate-700 file:mr-4 file:rounded-xl file:border-0 file:bg-red-800 file:px-4 file:py-2 file:font-bold file:text-white hover:file:bg-red-700"
+                    >
+                    @error('photo')
+                        <p class="mt-2 text-sm font-semibold text-red-600">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
             </div>
 

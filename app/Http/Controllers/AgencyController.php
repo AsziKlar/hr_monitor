@@ -8,6 +8,7 @@ use App\Models\Draft;
 use App\Models\FieldOffice;
 use App\Models\Mechanism;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AgencyController extends Controller
 {
@@ -37,12 +38,16 @@ class AgencyController extends Controller
             'email_address' => 'required|email|unique:agencies,email_address',
         ]);
 
+        $path = $request->file('photo')->store('photos', 'public');
+
         $agency = Agency::create([
             'name' => $request->name,
             'abbreviation' => $request->abbreviation,
             'head' => $request->head,
             'email_address' => $request->email_address,
-            'field_office_id' => $request->field_office_id
+            'field_office_id' => $request->field_office_id,
+            'photo' => $path
+
         ]);
 
         foreach ($mechanisms as $mechanism) {
@@ -90,15 +95,31 @@ class AgencyController extends Controller
             'field_office_id' => 'required|exists:field_offices,id',
             'email_address' => 'required|email',
             'head' => 'required|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $agency->update([
+        $data = [
             'name' => $request->name,
             'abbreviation' => $request->abbreviation,
             'field_office_id' => $request->field_office_id,
             'email_address' => $request->email_address,
             'head' => $request->head,
-        ]);
+        ];
+
+        if ($request->hasFile('photo')){
+            if ($agency->photo && Storage::disk('public')->exists($agency->photo)){
+                Storage::disk('public')->delete($agency->photo);
+            }
+
+            $path = $request->file('photo')->store('photos', 'public');
+
+            $data['photo']=$path;
+        }      
+
+        $agency->update($data);
+
+
+
 
         return back()->with('success', 'Agency updated successfully!');
     }

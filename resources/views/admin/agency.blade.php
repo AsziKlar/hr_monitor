@@ -3,9 +3,18 @@
 
     <div class="rounded-[28px] bg-white px-6 py-6 shadow-sm ring-1 ring-slate-100">
         <div class="flex items-center gap-6">
-            <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-red-700 to-red-900 text-2xl font-bold text-white shadow-md">
+            
+            @if ($agency->photo)
+            <div class="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full text-2xl font-bold text-white">
+                <img src="{{ asset('storage/' . $agency->photo) }}" class="h-full w-full object-cover">
+            </div>
+            @else
+            <div class="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-red-700 to-red-900 text-2xl font-bold text-white shadow-md">
                 {{ $agency->abbreviation }}
             </div>
+            @endif
+            
+
 
             <div class="flex-1">
                 <h1 class="text-2xl font-bold tracking-tight text-blue-950">{{ $agency->name }}</h1>
