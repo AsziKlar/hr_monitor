@@ -70,4 +70,6 @@ class DashboardTest extends TestCase
             $this->assertTrue($drafts->isNotEmpty());
         }
     }
+
+    
 }

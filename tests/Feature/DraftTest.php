@@ -256,6 +256,36 @@ class DraftTest extends TestCase
 
         $this->assertEquals('To be Reviewed',$searchDrafts->status->name);
     }
+public function test_failing_index_by_status_gets_drafts_by_status_and_mechanism(){
+        $agency = Agency::factory()->create();
+
+        $mechanism = Mechanism::factory()->create();
+
+        $status = Status::factory()->create([
+            'name' => 'Approved',
+        ]);
+
+        $matchingDraft = Draft::factory()->create([
+            'agency_id' => $agency->id,
+            'mechanism_id' => $mechanism->id,
+            'status_id' => $status->id,
+        ]);
+
+        $nonMatchingDraft = Draft::factory()->create();
+
+        $drafts = Draft::where('mechanism_id', $mechanism->id)
+            ->where('status_id', $status->id)
+            ->get();
+
+        $this->assertFalse(
+            $drafts->contains($matchingDraft)
+        );
+
+        $this->assertTrue(
+            $drafts->contains($nonMatchingDraft)
+        );
+    }
+
 
     // FAILING test for DraftController update()
     public function test_failing_user_can_update_draft_file(){
@@ -330,5 +360,35 @@ class DraftTest extends TestCase
 
         $this->assertEquals('newdraft.pdf', $draft->file_name);
     }
-   
+
+    public function test_index_by_status_gets_drafts_by_status_and_mechanism(){
+        $agency = Agency::factory()->create();
+
+        $mechanism = Mechanism::factory()->create();
+
+        $status = Status::factory()->create([
+            'name' => 'Approved',
+        ]);
+
+        $matchingDraft = Draft::factory()->create([
+            'agency_id' => $agency->id,
+            'mechanism_id' => $mechanism->id,
+            'status_id' => $status->id,
+        ]);
+
+        $nonMatchingDraft = Draft::factory()->create();
+
+        $drafts = Draft::where('mechanism_id', $mechanism->id)
+            ->where('status_id', $status->id)
+            ->get();
+
+        $this->assertTrue(
+            $drafts->contains($matchingDraft)
+        );
+
+        $this->assertFalse(
+            $drafts->contains($nonMatchingDraft)
+        );
+    }
+
 }
