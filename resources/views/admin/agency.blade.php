@@ -88,7 +88,7 @@
               </thead>
               <tbody class="text-1xl text-slate-700 items-center justify-center gap-3 flex-1">
 
-              {{-- @forelse ($drafts as $draft)
+              @forelse ($drafts as $draft)
               
                 <tr class="hover:bg-slate-100 border-b border-slate-200 h-12">
                   <td class="font-bold">{{$draft->file_name}}</td>
@@ -126,7 +126,7 @@
                             No drafts submitted
                         </td>
                     </tr>
-              @endforelse --}}
+              @endforelse
 
               </tbody>
             </table>

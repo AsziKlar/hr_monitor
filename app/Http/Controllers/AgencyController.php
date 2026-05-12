@@ -73,7 +73,9 @@ class AgencyController extends Controller
                                     ->latest()
                                     ->first();
             
-            $drafts->push($latestDraft);
+            if ($latestDraft) {
+                $drafts->push($latestDraft);
+            }
 
         }
 

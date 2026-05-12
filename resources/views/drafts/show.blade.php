@@ -5,12 +5,12 @@
         <div class="flex items-start justify-between gap-4">
 
             <div>
-                <h1 class="text-3xl font-bold text-blue-950">
+                <h1 class="text-2xl font-bold text-blue-950">
                     {{ $draft->mechanism->name }} Records
                 </h1>
 
                 <p class="mt-2 text-lg text-blue-950/50">
-                    Submitted by {{ $draft->agency->name }} under the {{ $draft->mechanism->name }} portal.
+                    Submitted by {{ $draft->agency->name }}
                 </p>
             </div>
 
