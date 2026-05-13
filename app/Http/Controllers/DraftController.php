@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Agency;
 use App\Models\AgencyMechanismPeriod;
+use App\Models\Comment;
 use App\Models\Draft;
 use App\Models\Mechanism;
 use App\Models\Status;
@@ -126,6 +127,7 @@ class DraftController extends Controller
 
     public function show($id) {
         $user = auth()->user();
+        $comments = Comment::where('draft_id', $id)->get();
 
         $draft = Draft::with('status')->find($id);
 
@@ -141,7 +143,7 @@ class DraftController extends Controller
         //             $draft->status->name === 'To be Reviewed' &&
         //             $draft->agency_id === $user->agency_id;
 
-        return view('drafts.show', compact('draft'));
+        return view('drafts.show', compact('draft', 'comments', 'user'));
     }
 
     public function approve($id){
@@ -155,6 +157,28 @@ class DraftController extends Controller
         $draft->status_id = 2;
         $draft->save();
         return back();
+    }
+
+   public function updateFile(Request $request, Draft $draft){
+
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+        ]);
+
+        if ($draft->file_path && Storage::disk('public')->exists($draft->file_path)) {
+            Storage::disk('public')->delete($draft->file_path);
+        }
+
+        $path = $request->file('file')->store('drafts', 'public');
+
+        $draft->update([
+            'file_name' => $request->file('file')->getClientOriginalName(),
+            'file_path' => $path,
+        ]);
+
+        return redirect()
+            ->back()
+            ->with('success', 'Draft file replaced successfully.');
     }
 
    

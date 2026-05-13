@@ -14,7 +14,8 @@ class Agency extends Model
         'field_office_id',
         'email_address',
         'head',
-        'abbreviation'
+        'abbreviation',
+        'photo'
     ];
 
     public function fieldOffice(){

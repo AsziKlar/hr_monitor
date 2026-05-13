@@ -3,8 +3,7 @@
 @if(auth()->user()->role->name === 'HRMO')
 <section>
 {{-- HRMO Dashboard --}}
-    <div class="min-h-screen bg-slate-100 p-4 md:p-6 lg:p-8 text-blue-950">
-    <h2 class="mb-5 text-2xl font-bold text-slate-500">Dashboard</h2>
+    <div class="min-h-screen bg-slate-100 p-4 md:p-6 lg:p-8 text-blue-950">     
         {{-- Top Section --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -143,7 +142,6 @@
  <!-- page content -->
     <section class="p-6">
         <!-- mechanism to be reviewed card -->
-        <h2 class="mb-5 text-2xl font-bold text-slate-500">Dashboard</h2>
         <div class="text-blue-950 flex flex-row gap-2 justify-between">
         
           <div class="flex-1 rounded-4xl bg-blue-200/40 p-6 shadow-sm">
