@@ -43,8 +43,15 @@
             <div class="grid grid-cols-1 gap-3 mt-1">
                 <a class="block duration-300 ease-in-out hover:-translate-y-1 hover:bg-blue-100 hover:shadow-blue-200/50 flex gap-3 items-center rounded-xl bg-white p-4 shadow-md ring-1 ring-slate-100"
                 href="{{ route('agency.show', $agency) }}">
-                    <img class="h-12 w-12 rounded-xl object-cover ring-2 ring-red-200"
-                        src="csc_logo.png">
+                     @if ($agency->photo)
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full text-2xl font-bold text-white">
+                            <img src="{{ asset('storage/' . $agency->photo) }}" class="h-full w-full object-cover">
+                        </div>
+                    @else
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-red-700 to-red-900 text-sm font-bold text-white shadow-md">
+                            {{ $agency->abbreviation }}
+                        </div>
+                    @endif
                     <div class="flex-1">
                         <p class="text-lg font-bold">
                             {{ $agency->name }}
