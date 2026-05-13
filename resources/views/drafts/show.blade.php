@@ -62,7 +62,7 @@
             <div>
                 <p class="text-lg text-blue-950/70">Category:</p>
                 <p class="text-lg font-bold text-blue-950">
-                    {{ $draft->mechanism->code ?? 'MSP' }}
+                    {{ $draft->mechanism->name }}
                 </p>
             </div>
 
@@ -148,9 +148,18 @@
                         <div class="flex gap-3">
 
                             {{-- Profile --}}
-                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-red-700 to-red-900 text-sm font-bold text-white">
-                                {{ strtoupper(collect(explode(' ', $comment->user->name))->first()[0] . collect(explode(' ', $comment->user->name))->last()[0]) }}
-                            </div>
+                            
+                                @if ($comment->user->agency == NULL)
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-red-700 to-red-900 text-sm font-bold text-white">
+                                    {{ strtoupper(collect(explode(' ', $comment->user->name))->first()[0] . collect(explode(' ', $comment->user->name))->last()[0]) }}
+                                     </div>
+                                @else
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full  text-sm font-bold text-white">
+                                    <img src="{{ asset('storage/' . $comment->draft->agency->photo) }}" class="h-full w-full object-cover">
+                                     </div>
+                                @endif
+                           
+                            
 
                             {{-- Content --}}
                             <div class="min-w-0 flex-1">

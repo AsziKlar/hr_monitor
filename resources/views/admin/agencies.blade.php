@@ -38,7 +38,7 @@
     </section>
 
 
-   <section class="p-4">
+   <section class="mx-6 mt-4">
         @forelse ($agencies as $agency)
             <div class="grid grid-cols-1 gap-3 mt-1">
                 <a class="block duration-300 ease-in-out hover:-translate-y-1 hover:bg-blue-100 hover:shadow-blue-200/50 flex gap-3 items-center rounded-xl bg-white p-4 shadow-md ring-1 ring-slate-100"
