@@ -23,9 +23,6 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth','prevent-back-history'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -37,9 +34,9 @@ Route::middleware(['auth','prevent-back-history'])->group(function () {
 });
 
 Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group(function () {
-    Route::get('/admin/agencies', [AgencyController::class, 'index'])->name('agencies.index');
+    
     Route::post('/admin/agency/store', [AgencyController::class, 'store'])->name('agency.store');
-    Route::get('/admin/agency/{agency}/show', [AgencyController::class, 'show'])->name('agency.show');
+    
     Route::patch('/admin/agency/{agency}/update', [AgencyController::class, 'update'])->name('agency.update');
 
     Route::get('/admin/manage-account/index', [UserController::class, 'index'])->name('admin.account.index');
@@ -47,7 +44,11 @@ Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group
 });
 
 Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,Reviewer'])->group(function () {
-   
+
+    Route::get('/admin/agencies', [AgencyController::class, 'index'])->name('agencies.index');
+    
+    Route::get('/admin/agency/{agency}/show', [AgencyController::class, 'show'])->name('agency.show');
+
     Route::get('/admin/dashboard', [DashboardController::class, 'index_admin'])->name('dashboard');
     Route::get('/admin/announcements', [AnnouncementController::class, 'index'])->name('announcements');
     Route::post('/admin/announcements/store', [AnnouncementController::class, 'store'])->name('store.announcements');

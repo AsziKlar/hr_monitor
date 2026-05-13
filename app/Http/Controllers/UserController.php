@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function index(){
         $user = auth()->user();
-        $users = User::all();
+        $users = User::latest()->get();
         $agencies = Agency::all();
         $roles = Role::all();
 

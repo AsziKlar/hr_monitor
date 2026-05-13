@@ -14,7 +14,7 @@
                 </p>
             </div>
 
-            @if (auth()->user()->role->name != 'HRMO')
+            @if (in_array(auth()->user()->role->id, [1,2]))
                 <div class="flex gap-3">
                     
                     <form action="{{ route('draft.approve', $draft->id) }}" method="POST">
@@ -37,16 +37,17 @@
                     </form>
 
                 </div>
-            @else
-                @if ($draft->status->name === 'To be Reviewed')
-                <x-modals.update-draft  :draft="$draft" />
-                        <button onclick="openUpdateDraftModal()"
-                            class="rounded-2xl bg-red-800 px-6 py-3 font-bold text-white hover:bg-red-900"
-                        >
-                            Replace File
-                        </button>
-                @endif
             @endif
+
+            @if ($draft->status->name === 'To be Reviewed' && auth()->user()->role->id == 4)
+            <x-modals.update-draft  :draft="$draft" />
+                    <button onclick="openUpdateDraftModal()"
+                        class="rounded-2xl bg-red-800 px-6 py-3 font-bold text-white hover:bg-red-900"
+                    >
+                        Replace File
+                    </button>
+            @endif
+            
 
         </div>
 

@@ -63,24 +63,31 @@
         </a>
         @endif
 
-        @if (in_array(auth()->user()->role->id, [1]))
-        <a class="{{ request()->routeIs('agencies.index', 'agency.show') ? $active : $inactive }}"  href="{{ route('agencies.index') }}">
-             <img src="{{ asset('images/folder-tree.svg') }}" />
-            Agencies Directory
-        </a>
+        @if (in_array(auth()->user()->role->id, [1,2,3]))
+            <a class="{{ request()->routeIs('agencies.index', 'agency.show') ? $active : $inactive }}"  href="{{ route('agencies.index') }}">
+                <img src="{{ asset('images/folder-tree.svg') }}" />
+                Agencies Directory
+            </a>
+        @endif
 
-        <p class="text-[11px] text-white/50 mt-6">ADMINISTRATIVE TOOLS</p>
+        @if (auth()->user()->role->id == 1)
+            <p class="text-[11px] text-white/50 mt-6">ADMINISTRATIVE TOOLS</p>
 
-        <a class="{{ request()->routeIs('admin.account.index') ? $active : $inactive }}" href="{{ route('admin.account.index') }}">
-            <img src="{{ asset('images/user-round-search.svg') }}" />
-            Manage Account
-        </a>
+            <a class="{{ request()->routeIs('admin.account.index') ? $active : $inactive }}" href="{{ route('admin.account.index') }}">
+                <img src="{{ asset('images/user-round-search.svg') }}" />
+                Manage Account
+            </a>
 
-        <a  class="{{ request()->routeIs('announcements') ? $active : $inactive }}" 
-            href="{{ route('announcements') }}">
-            <img src="{{ asset('images/book-a.svg') }}" />
-            Make Announcement
-        </a>
+            <a  class="{{ request()->routeIs('announcements') ? $active : $inactive }}" 
+                href="{{ route('announcements') }}">
+                <img src="{{ asset('images/book-a.svg') }}" />
+                Make Announcement
+            </a>
+            <a  class="{{ request()->routeIs('announcements') ? $active : $inactive }}" 
+                href="{{ route('announcements') }}">
+                <img src="{{ asset('images/settings.svg') }}" />
+                Other Settings
+            </a>
         @endif
     </nav>
     <div class="mt-auto pt-6">
@@ -89,11 +96,11 @@
         <form method="POST" action="{{ route('logout') }}">
             @csrf
 
-            <button type="submit"
-                class="flex w-full items-center gap-3 rounded-2xl p-3 text-sm font-bold transition hover:bg-white/10">
-                <img src="{{ asset('images/log-out.svg') }}" />
-                <span>Logout</span>
-            </button>
+         <button class="flex items-center gap-2 rounded-2xl bg-blue-950 pl-2 pr-3 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-blue-900">
+            <img src="{{ asset('images/log-out.svg') }}" class="h-5 w-5 brightness-0 invert pl-1">
+
+            Logout
+        </button>
         </form>
 
     </div>

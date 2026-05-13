@@ -19,6 +19,7 @@ class DraftController extends Controller
     public function mechanism_filter(){
         $mechanisms = Mechanism::All();
 
+
         return view('mechanisms', compact('mechanisms'));
     }
 

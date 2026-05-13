@@ -66,6 +66,7 @@ class AgencyController extends Controller
         $fieldOffices = FieldOffice::All();
         $mechanisms = Mechanism::All();
         $drafts =  collect();
+        $approvedCount = 0;
 
         foreach($mechanisms as $mechanism){ 
             $period = AgencyMechanismPeriod::where('agency_id', $agency->id)
@@ -80,12 +81,16 @@ class AgencyController extends Controller
             
             if ($latestDraft) {
                 $drafts->push($latestDraft);
+                if ($latestDraft->status->name == "Approved"){
+                    $approvedCount++;
+
+                }
             }
 
         }
 
         
-        return view('admin.agency', compact('agency','fieldOffices', 'drafts'));
+        return view('admin.agency', compact('agency','fieldOffices', 'drafts','approvedCount'));
     }
 
     public function update(Request $request, Agency $agency){

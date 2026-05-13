@@ -28,11 +28,13 @@
 
                 </select>
         </form>
-        <x-modals.create-agency :fieldOffices="$fieldOffices"/>
-        <button onclick="openCreateAgencyModal()"
-                class="flex items-center rounded-4xl transition hover:scale-[1.05] hover:bg-red-700 bg-red-800">
-            <span class="text-1xl font-bold text-white p-3">+ Add New Agency</span>
-        </button>
+        @if (auth()->user()->role->id == 1)
+            <x-modals.create-agency :fieldOffices="$fieldOffices"/>
+            <button onclick="openCreateAgencyModal()"
+                    class="flex items-center rounded-4xl transition hover:scale-[1.05] hover:bg-red-700 bg-red-800">
+                <span class="text-1xl font-bold text-white p-3">+ Add New Agency</span>
+            </button>
+        @endif
        
         </div>
     </section>
