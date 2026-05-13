@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DraftController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\UserController;
 use App\Models\Draft;
 use Illuminate\Support\Facades\Route;
 
@@ -36,7 +37,9 @@ Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group
     Route::get('/admin/agencies', [AgencyController::class, 'index'])->name('agencies.index');
     Route::post('/admin/agency/store', [AgencyController::class, 'store'])->name('agency.store');
     Route::get('/admin/agency/{agency}/show', [AgencyController::class, 'show'])->name('agency.show');
-    Route::patch('/admin/agency/{agency}/update', [AgencyController:: class, 'update'])->name('agency.update');
+    Route::patch('/admin/agency/{agency}/update', [AgencyController::class, 'update'])->name('agency.update');
+
+    Route::get('/admin/manage-account/index', [UserController::class, 'index'])->name('admin.account.index');
 });
 
 Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,Reviewer'])->group(function () {

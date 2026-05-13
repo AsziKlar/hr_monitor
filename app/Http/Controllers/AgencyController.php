@@ -54,7 +54,7 @@ class AgencyController extends Controller
             AgencyMechanismPeriod::create([
                 'agency_id' => $agency->id,
                 'mechanism_id' => $mechanism->id,
-                'current_perid' => 1
+                'current_period' => 1
             ]);
         }
        

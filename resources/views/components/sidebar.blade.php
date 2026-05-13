@@ -8,10 +8,7 @@
                         </div>
                     @elseif(in_array(auth()->user()->role->name, ['Administrator', 'Processor', 'Reviewer']))
                             <div class="flex h-12 w-12 items-center justify-center rounded-full bg-radial-[at_25%_25%] from-red-800 to-red-900 to-75% text-sm font-bold text-white shadow-lg">
-                                {{ strtoupper(
-                                    collect(explode(' ', auth()->user()->name))->first()[0] .
-                                    collect(explode(' ', auth()->user()->name))->last()[0]
-                                ) }}
+                                {{ strtoupper(collect(explode(' ', auth()->user()->name))->first()[0] . collect(explode(' ', auth()->user()->name))->last()[0]) }}
                             </div>
                     @else
                             <div class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-red-700 to-red-900 text-sm font-bold text-white shadow-md">
@@ -74,7 +71,7 @@
 
         <p class="text-[11px] text-white/50 mt-6">ADMINISTRATIVE TOOLS</p>
 
-        <a class="flex items-center gap-3 p-3 rounded-2xl font-bold transition hover:bg-white/10 " href="accmng.html">
+        <a class="flex items-center gap-3 p-3 rounded-2xl font-bold transition hover:bg-white/10 " href="{{ route('admin.account.index') }}">
             <img src="{{ asset('images/user-round-search.svg') }}" />
             Manage Account
         </a>
