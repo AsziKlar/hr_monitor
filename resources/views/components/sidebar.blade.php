@@ -51,7 +51,7 @@
             Dashboard
         </a>
 
-        <a  class="{{ request()->routeIs('mechanisms') ? $active : $inactive }}" 
+        <a  class="{{ request()->routeIs('mechanisms', 'admin.drafts.index') ? $active : $inactive }}" 
             href="{{ route('mechanisms') }}">
             <img src="{{ asset('images/library-big.svg') }}" />
             Mechanisms
@@ -64,14 +64,14 @@
         @endif
 
         @if (in_array(auth()->user()->role->id, [1]))
-        <a class="{{ request()->routeIs('agencies.index') ? $active : $inactive }}"  href="{{ route('agencies.index') }}">
+        <a class="{{ request()->routeIs('agencies.index', 'agency.show') ? $active : $inactive }}"  href="{{ route('agencies.index') }}">
              <img src="{{ asset('images/folder-tree.svg') }}" />
             Agencies Directory
         </a>
 
         <p class="text-[11px] text-white/50 mt-6">ADMINISTRATIVE TOOLS</p>
 
-        <a class="flex items-center gap-3 p-3 rounded-2xl font-bold transition hover:bg-white/10 " href="{{ route('admin.account.index') }}">
+        <a class="{{ request()->routeIs('admin.account.index') ? $active : $inactive }}" href="{{ route('admin.account.index') }}">
             <img src="{{ asset('images/user-round-search.svg') }}" />
             Manage Account
         </a>

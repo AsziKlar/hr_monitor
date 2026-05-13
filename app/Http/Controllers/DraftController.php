@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Agency;
 use App\Models\AgencyMechanismPeriod;
+use App\Models\Comment;
 use App\Models\Draft;
 use App\Models\Mechanism;
 use App\Models\Status;
@@ -126,6 +127,7 @@ class DraftController extends Controller
 
     public function show($id) {
         $user = auth()->user();
+        $comments = Comment::where('draft_id', $id)->get();
 
         $draft = Draft::with('status')->find($id);
 
@@ -141,7 +143,7 @@ class DraftController extends Controller
         //             $draft->status->name === 'To be Reviewed' &&
         //             $draft->agency_id === $user->agency_id;
 
-        return view('drafts.show', compact('draft'));
+        return view('drafts.show', compact('draft', 'comments', 'user'));
     }
 
     public function approve($id){

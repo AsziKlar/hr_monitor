@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DraftController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
 use App\Models\Draft;
 use App\Models\User;
@@ -32,6 +33,7 @@ Route::middleware(['auth','prevent-back-history'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/mechanism', [DraftController::class, 'mechanism_filter'])->name('mechanisms');
     Route::get('/drafts/{id}', [DraftController::class, 'show'])->name('drafts.show');
+    Route::post('/drafts/{id}/comment/store', [CommentController::class, 'store'])->name('drafts.comment.store');
 });
 
 Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group(function () {
@@ -58,6 +60,7 @@ Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,
     Route::get('/admin/draft/{id}', [DraftController::class, 'show'])->name('admin.drafts.show');
     Route::patch('/admin/approve/{id}', [DraftController::class, 'approve'])->name('draft.approve');
     Route::patch('/admin/revision/{id}', [DraftController::class, 'revision'])->name('draft.revision');
+
     
 
 });
@@ -73,6 +76,7 @@ Route::middleware(['auth', 'prevent-back-history', 'role:HRMO'])->group( functio
     Route::post('/drafts/store', [DraftController::class, 'store'])->name('drafts.store');
 
     Route::patch('/drafts/update/{draft}', [DraftController::class, 'updateFile'])->name('draft.update');
+    
 });
 
 
