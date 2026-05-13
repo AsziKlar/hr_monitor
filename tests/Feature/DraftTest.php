@@ -220,7 +220,7 @@ class DraftTest extends TestCase
             'name' => 'HRMO',
         ]);
         $agency = Agency::factory()->create();
-       
+    
         $mechanism = Mechanism::factory()->create();
 
         $draft = Draft::factory()->count(2)->create();
@@ -257,4 +257,65 @@ class DraftTest extends TestCase
         $this->assertEquals('To be Reviewed',$searchDrafts->status->name);
     }
 
-}
+
+    //-------------FAILING test for DraftController update()-------------
+    public function test_failing_approving_drafts(){
+        $agency = Agency::factory()->create();
+        $mechanism = Mechanism::factory()->create();
+
+        $status = Status::create([
+            'name' => 'To be Reviewed'
+        ]);
+
+        $status = Status::create([
+            'name' => 'Needs Revision'
+        ]);
+
+        $status = Status::create([
+            'name' => 'Approved'
+        ]);
+
+        $draft = Draft::factory()->create([
+            'agency_id' => $agency->id,
+            'mechanism_id' => $mechanism->id,
+            'status_id' => $status->id,
+        ]);
+
+        // Access the status name through the relationship
+        $statusName = $draft->status->name;
+
+        $this->assertNotEquals('To be Reviewed', $statusName);
+    }
+
+
+    //-------------PASSING test for DraftController update()-------------
+    public function test_passing_approving_drafts(){
+        $agency = Agency::factory()->create();
+        $mechanism = Mechanism::factory()->create();
+
+        $status = Status::create([
+            'name' => 'To be Reviewed'
+        ]);
+
+        $status = Status::create([
+            'name' => 'Needs Revision'
+        ]);
+
+        $status = Status::create([
+            'name' => 'Approved'
+        ]);
+
+        $draft = Draft::factory()->create([
+            'agency_id' => $agency->id,
+            'mechanism_id' => $mechanism->id,
+            'status_id' => 1,
+        ]);
+
+        $draft->status_id = 3;
+        $draft->save();
+
+        // Access the status name through the relationship
+        $statusName = $draft->status->name;
+
+        $this->assertEquals('Approved', $statusName);
+    }
