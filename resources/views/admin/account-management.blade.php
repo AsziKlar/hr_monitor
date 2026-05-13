@@ -64,7 +64,8 @@
         <form method="GET" class="w-full max-w-md">
             <div class="flex items-center rounded-2xl bg-white px-5 py-3 shadow-sm ring-1 ring-slate-200">
                 
-                <span class="mr-3 text-slate-400">⌕</span>
+                {{-- <span class="mr-3 text-slate-400">⌕</span> --}}
+                <img src="{{ asset('images/search.svg') }}" class="pr-3 opacity-30" />
 
                 <input
                     type="text"
@@ -80,26 +81,26 @@
 
     <div class="mt-8 space-y-6">
 
-        @forelse ($users as $user)
+        @forelse ($users as $account)
             <div class="flex items-center justify-between rounded-[2rem] bg-white p-6 shadow-sm">
 
                 <div class="flex items-center gap-5">
 
 
                     <div class="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-blue-100 text-2xl font-bold text-blue-600 ring-2 ring-blue-100">
-                        {{ strtoupper(collect(explode(' ', $user->name))->first()[0] . collect(explode(' ', $user->name))->last()[0]) }}
+                        {{ strtoupper(collect(explode(' ', $account->name))->first()[0] . collect(explode(' ', $account->name))->last()[0]) }}
                     </div>
 
                     <div>
-                        <h2 class="text-2xl font-bold">{{ $user->name }}</h2>
+                        <h2 class="text-2xl font-bold">{{ $account->name }}</h2>
                         
                         <p class="text-slate-500">
                             Agency: 
                             <span class="font-bold text-blue-950">
-                                @if ($user->agency?->id === null)
+                                @if ($account->agency?->id === null)
                                     Civil Service Commission
                                 @else
-                                    {{$user->agency->name}}
+                                    {{$account->agency->name}}
                                 @endif
                             </span>
                         </p>
@@ -107,14 +108,14 @@
                         <p class="text-slate-500">
                             Email:
                             <span class="font-bold text-blue-950">
-                                {{ $user->email }}
+                                {{ $account->email }}
                             </span>
                         </p>
 
                         <p class="text-slate-500">
                             Role:
                             <span class="font-bold text-blue-950">
-                                {{ $user->role->name }}
+                                {{ $account->role->name }}
                             </span>
                         </p>
                     </div>
@@ -134,7 +135,7 @@
                 </div>
             </div>
         @empty
-            
+            <p class="text=text-center">No Users</p>
         @endforelse
         
        
