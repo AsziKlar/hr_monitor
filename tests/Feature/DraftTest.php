@@ -256,6 +256,140 @@ class DraftTest extends TestCase
 
         $this->assertEquals('To be Reviewed',$searchDrafts->status->name);
     }
+public function test_failing_index_by_status_gets_drafts_by_status_and_mechanism(){
+        $agency = Agency::factory()->create();
+
+        $mechanism = Mechanism::factory()->create();
+
+        $status = Status::factory()->create([
+            'name' => 'Approved',
+        ]);
+
+        $matchingDraft = Draft::factory()->create([
+            'agency_id' => $agency->id,
+            'mechanism_id' => $mechanism->id,
+            'status_id' => $status->id,
+        ]);
+
+        $nonMatchingDraft = Draft::factory()->create();
+
+        $drafts = Draft::where('mechanism_id', $mechanism->id)
+            ->where('status_id', $status->id)
+            ->get();
+
+        $this->assertFalse(
+            $drafts->contains($matchingDraft)
+        );
+
+        $this->assertTrue(
+            $drafts->contains($nonMatchingDraft)
+        );
+    }
+
+
+    // FAILING test for DraftController update()
+    public function test_failing_user_can_update_draft_file(){
+        Storage::fake('public');
+
+        $agency = Agency::factory()->create();
+        $mechanism = Mechanism::factory()->create();
+
+        $status = Status::factory()->create([
+            'name' => 'To be Reviewed',
+        ]);
+
+        $draft = Draft::factory()->create([
+            'agency_id' => $agency->id,
+            'mechanism_id' => $mechanism->id,
+            'status_id' => $status->id,
+            'file_name' => 'old.pdf',
+            'file_path' => 'drafts/old.pdf',
+        ]);
+
+        $newFile = UploadedFile::fake()->create(
+            'newdraft.pdf',
+            100,
+            'application/pdf'
+        );
+
+        $path = $newFile->store('drafts', 'public');
+
+        $draft->file_path = $path;
+        $draft->file_name = $newFile->getClientOriginalName();
+
+        $draft->save();
+
+        $draft->refresh();
+
+        $this->assertNotEquals('old.pdf', $draft->file_name);
+    }
+
+    // PASSING test for DraftController update()
+     public function test_user_can_update_draft_file(){
+        Storage::fake('public');
+
+        $agency = Agency::factory()->create();
+        $mechanism = Mechanism::factory()->create();
+
+        $status = Status::factory()->create([
+            'name' => 'To be Reviewed',
+        ]);
+
+        $draft = Draft::factory()->create([
+            'agency_id' => $agency->id,
+            'mechanism_id' => $mechanism->id,
+            'status_id' => $status->id,
+            'file_name' => 'old.pdf',
+            'file_path' => 'drafts/old.pdf',
+        ]);
+
+        $newFile = UploadedFile::fake()->create(
+            'newdraft.pdf',
+            100,
+            'application/pdf'
+        );
+
+        $path = $newFile->store('drafts', 'public');
+
+        $draft->file_path = $path;
+        $draft->file_name = $newFile->getClientOriginalName();
+
+        $draft->save();
+
+        $draft->refresh();
+
+        $this->assertEquals('newdraft.pdf', $draft->file_name);
+    }
+
+    public function test_index_by_status_gets_drafts_by_status_and_mechanism(){
+        $agency = Agency::factory()->create();
+
+        $mechanism = Mechanism::factory()->create();
+
+        $status = Status::factory()->create([
+            'name' => 'Approved',
+        ]);
+
+        $matchingDraft = Draft::factory()->create([
+            'agency_id' => $agency->id,
+            'mechanism_id' => $mechanism->id,
+            'status_id' => $status->id,
+        ]);
+
+        $nonMatchingDraft = Draft::factory()->create();
+
+        $drafts = Draft::where('mechanism_id', $mechanism->id)
+            ->where('status_id', $status->id)
+            ->get();
+
+        $this->assertTrue(
+            $drafts->contains($matchingDraft)
+        );
+
+        $this->assertFalse(
+            $drafts->contains($nonMatchingDraft)
+        );
+    }
 
     public function failing_test_photo_is_required_when_storing_agency(){
         $role = Role::factory()->create([
@@ -304,4 +438,4 @@ class DraftTest extends TestCase
         ]);
     }
 
-}
+
