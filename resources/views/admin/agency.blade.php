@@ -44,6 +44,17 @@
                     <div class="h-10 w-px bg-slate-200"></div>
                     <div>
                         <p class="text-sm text-slate-500">
+                            HRMO
+                        </p>
+
+                        <p class="text-base font-bold text-blue-950">
+                            {{ $agency_hrmo->name }}
+                        </p>
+                    </div>
+
+                    <div class="h-10 w-px bg-slate-200"></div>
+                    <div>
+                        <p class="text-sm text-slate-500">
                             Email Address
                         </p>
 
@@ -58,17 +69,30 @@
                             Field Office
                         </p>
 
-                        <p class="font-semibold text-red-700">
+                        <p class="text-base font-bold text-blue-950">
                             {{ $agency->fieldOffice->name }}
                         </p>
                     </div>
-                    <x-modals.edit-agency :fieldOffices="$fieldOffices" :agency="$agency"/>
-                    <button onclick="openEditAgencyModal()"
-                            class="flex items-center justify-center rounded-4xl min-w-[100px] transition hover:scale-[1.05] hover:bg-red-700 bg-blue-800/70">
-                        <span class="text-1xl font-bold text-white p-3">
-                            Edit
-                        </span>
-                    </button>
+
+                    <div class="h-10 w-px bg-slate-200"></div>
+                    <div>
+                        <p class="text-sm text-slate-500">
+                            Approved Mechanisms
+                        </p>
+
+                        <p class="text-base font-bold text-blue-700">
+                            {{ $approvedCount }} / 5
+                        </p>
+                    </div>
+                    @if (in_array(auth()->user()->role->id, [1,4]))
+                        <x-modals.edit-agency :fieldOffices="$fieldOffices" :agency="$agency"/>
+                        <button onclick="openEditAgencyModal()"
+                                class="ml-auto flex items-center justify-center rounded-4xl min-w-[100px] transition hover:scale-[1.05] hover:bg-red-700 bg-blue-800/70">
+                            <span class="text-1xl font-bold text-white p-3">
+                                Edit
+                            </span>
+                        </button>
+                    @endif
                 </div>
                 
             </div>

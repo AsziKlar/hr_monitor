@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\AgencyController;
+use App\Http\Controllers\AgencyMechanismPeriodController;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DraftController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AnnouncementController;
-use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
+use App\Models\AgencyMechanismPeriod;
 use App\Models\Draft;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -23,9 +25,6 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth','prevent-back-history'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -37,17 +36,26 @@ Route::middleware(['auth','prevent-back-history'])->group(function () {
 });
 
 Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group(function () {
-    Route::get('/admin/agencies', [AgencyController::class, 'index'])->name('agencies.index');
+    
     Route::post('/admin/agency/store', [AgencyController::class, 'store'])->name('agency.store');
-    Route::get('/admin/agency/{agency}/show', [AgencyController::class, 'show'])->name('agency.show');
+    
     Route::patch('/admin/agency/{agency}/update', [AgencyController::class, 'update'])->name('agency.update');
 
     Route::get('/admin/manage-account/index', [UserController::class, 'index'])->name('admin.account.index');
     Route::post('/admin/manage-account/store', [UserController::class, 'store'])->name('admin.account.store');
+
+
+    Route::get('/admin/other-settings/mechanism_filter', [AgencyMechanismPeriodController::class, 'mechanism_filter'])->name('admin.settings.mechanisms');
+    Route::get('/admin/other-settings/{mechanism}/agencies', [AgencyMechanismPeriodController::class, 'agency_filter'])->name('admin.settings.agencies');
+    Route::post('/admin/other-settings/{mechanism}/{agency}/mechanism-reset', [AgencyMechanismPeriodController::class, 'period_increment'])->name('admin.settings.period_increment');
 });
 
 Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,Reviewer'])->group(function () {
-   
+
+    Route::get('/admin/agencies', [AgencyController::class, 'index'])->name('agencies.index');
+    
+    Route::get('/admin/agency/{agency}/show', [AgencyController::class, 'show'])->name('agency.show');
+
     Route::get('/admin/dashboard', [DashboardController::class, 'index_admin'])->name('dashboard');
     Route::get('/admin/announcements', [AnnouncementController::class, 'index'])->name('announcements');
     Route::post('/admin/announcements/store', [AnnouncementController::class, 'store'])->name('store.announcements');
@@ -76,6 +84,9 @@ Route::middleware(['auth', 'prevent-back-history', 'role:HRMO'])->group( functio
     Route::post('/drafts/store', [DraftController::class, 'store'])->name('drafts.store');
 
     Route::patch('/drafts/update/{draft}', [DraftController::class, 'updateFile'])->name('draft.update');
+
+    Route::get('/agency/profile/show', [AgencyController::class, 'show_profile'])->name('agency.profile.show');
+    Route::patch('/agency/profile/update', [AgencyController::class, 'update_profile'])->name('agency.profile.update');
     
 });
 

@@ -276,16 +276,16 @@
                               @foreach ($drafts as $draft)
                                   <tr class="border-b hover:bg-slate-50">
                                       <td class="p-2">
-                                          {{ $draft->agency->name }}
+                                          <a href="">{{ $draft->agency->name }}</a>
                                       </td>
                                       <td class="p-2">
-                                          {{ $draft->mechanism->description }}
+                                          <a>{{ $draft->mechanism->description }}</a>
                                       </td>
                                       <td class="p-2">
-                                          {{ $draft->created_at->format('m/d/y') }}
+                                          <a>{{ $draft->created_at->format('m/d/y') }}</a>
                                       </td>
                                       <td class="p-2">
-                                          {{ $draft->created_at->diffForHumans() }}
+                                          <a>{{ $draft->created_at->diffForHumans() }} </a>
                                       </td>
 
                                   </tr>
