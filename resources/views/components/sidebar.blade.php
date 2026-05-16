@@ -57,7 +57,7 @@
             Mechanisms
         </a>
         @if (auth()->user()->role->id == 4)
-         <a class="flex items-center gap-3 p-3 rounded-2xl font-bold transition hover:bg-white/10 " href="mechanisms.html">
+         <a class="flex items-center gap-3 p-3 rounded-2xl font-bold transition hover:bg-white/10 " href="{{ route('agency.profile.show') }}">
             <img src="{{ asset('images/book-search.svg') }}" />
             Agency Profile
         </a>
@@ -83,8 +83,8 @@
                 <img src="{{ asset('images/book-a.svg') }}" />
                 Make Announcement
             </a>
-            <a  class="{{ request()->routeIs('announcements') ? $active : $inactive }}" 
-                href="{{ route('announcements') }}">
+            <a  class="{{ request()->routeIs('settings') ? $active : $inactive }}" 
+                href="{{ route('admin.settings.mechanisms') }}">
                 <img src="{{ asset('images/settings.svg') }}" />
                 Other Settings
             </a>

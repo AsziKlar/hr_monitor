@@ -44,6 +44,17 @@
                     <div class="h-10 w-px bg-slate-200"></div>
                     <div>
                         <p class="text-sm text-slate-500">
+                            HRMO
+                        </p>
+
+                        <p class="text-base font-bold text-blue-950">
+                            {{ $agency_hrmo->name }}
+                        </p>
+                    </div>
+
+                    <div class="h-10 w-px bg-slate-200"></div>
+                    <div>
+                        <p class="text-sm text-slate-500">
                             Email Address
                         </p>
 
@@ -62,6 +73,8 @@
                             {{ $agency->fieldOffice->name }}
                         </p>
                     </div>
+
+                    <div class="h-10 w-px bg-slate-200"></div>
                     <div>
                         <p class="text-sm text-slate-500">
                             Approved Mechanisms

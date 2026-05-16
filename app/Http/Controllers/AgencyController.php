@@ -7,6 +7,7 @@ use App\Models\AgencyMechanismPeriod;
 use App\Models\Draft;
 use App\Models\FieldOffice;
 use App\Models\Mechanism;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -67,6 +68,7 @@ class AgencyController extends Controller
         $mechanisms = Mechanism::All();
         $drafts =  collect();
         $approvedCount = 0;
+        $agency_hrmo = User::where('agency_id', $agency->id)->first();
 
         foreach($mechanisms as $mechanism){ 
             $period = AgencyMechanismPeriod::where('agency_id', $agency->id)
@@ -90,7 +92,7 @@ class AgencyController extends Controller
         }
 
         
-        return view('admin.agency', compact('agency','fieldOffices', 'drafts','approvedCount'));
+        return view('admin.agency', compact('agency','fieldOffices', 'drafts','approvedCount', 'agency_hrmo'));
     }
 
     public function update(Request $request, Agency $agency){
@@ -128,4 +130,53 @@ class AgencyController extends Controller
 
         return back()->with('success', 'Agency updated successfully!');
     }
+
+    public function show_profile() {
+        $field_offices = FieldOffice::all();
+
+        $user = auth()->user();
+
+        $agency = Agency::where('id', $user->agency->id)->first();
+
+        return view('hrmo.profile', compact('user', 'agency', 'field_offices'));
+    }
+
+    public function update_profile(Request $request) {
+        $agency = auth()->user()->agency;
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'abbreviation' => 'required|string|max:20',
+            'field_office_id' => 'required|exists:field_offices,id',
+            'email_address'=> 'required|email',
+            'head' => 'required|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
+        $data = [
+            'name' => $request->name,
+            'abbreviation' => $request->abbreviation,
+            'field_office_id' => $request->field_office_id,
+            'email_address' => $request->email_address,
+            'head' => $request->head        
+        ];
+
+        if($agency->head !== $request->head) {
+            AgencyMechanismPeriod::where('agency_id', $agency->id)
+                                    ->increment('current_period');
+            
+        }
+
+        if ($request->hasFile('photo')){
+            if($agency->photo && Storage::disk('public')->exists($agency->photo)){
+                Storage::disk('public')->delete($agency->photo);
+            }
+            $path = $request->file('photo')->store('photos', 'public');
+
+            $data['photo']=$path;
+        }
+        $agency->update($data);
+        return redirect()->back();
+    }
+
+    
 }
