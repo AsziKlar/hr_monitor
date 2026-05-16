@@ -69,7 +69,7 @@
                 <span class="text-lg font-bold text-white p-3">LOG IN</span>
             </button>
 
-            <div class="flex justify-center items-center gap-2">
+            {{-- <div class="flex justify-center items-center gap-2">
                 <p class="text-lg text-slate-500 p-3">Forgot Password?</p>
 
                 @if (Route::has('password.request'))
@@ -78,7 +78,7 @@
                         Click here
                     </a>
                 @endif
-            </div>
+            </div> --}}
 
         </div>
     </section>

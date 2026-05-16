@@ -19,6 +19,7 @@ class DraftController extends Controller
     public function mechanism_filter(){
         $mechanisms = Mechanism::All();
 
+
         return view('mechanisms', compact('mechanisms'));
     }
 
@@ -27,13 +28,7 @@ class DraftController extends Controller
 
         return view('admin.statuses', compact('statuses','mechanism'));
     }
-    // public function index_by_status(Status $status, Mechanism $mechanism){
-    //     $drafts = Draft::where('mechanism_id', $mechanism->id)
-    //                     ->where('status_id', $status->id)
-    //                     ->get();
-    //     return view('admin.index', compact('drafts'));
-        
-    // }
+
 
     public function index_hrmo(Request $request, Mechanism $mechanism){
         $user = auth()->user();

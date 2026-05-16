@@ -1,4 +1,4 @@
-<div id="editAgencyModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40">
+<div id="editProfileModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40">
     <div class="w-full max-w-2xl overflow-hidden rounded-4xl bg-white shadow-2xl">
 
         
@@ -8,7 +8,7 @@
             </h2>
         </div>
 
-        <form method="POST" action="{{ route('agency.update', $agency) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('agency.profile.update') }}" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             <div class="border-y border-slate-200 bg-slate-100/20 p-8">
@@ -123,7 +123,7 @@
 
                 <button 
                     type="button"
-                    onclick="closeEditAgencyModal()"
+                    onclick="closeEditProfileModal()"
                     class="rounded-2xl border border-slate-300 px-6 py-3 font-bold text-blue-950 hover:bg-slate-100"
                 >
                     Cancel
@@ -133,7 +133,7 @@
                     type="submit"
                     class="rounded-2xl bg-red-800 px-6 py-3 font-bold text-white hover:bg-red-900"
                 >
-                    Update
+                    Save
                 </button>
             </div>
         </form>
@@ -144,11 +144,11 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         document
-            .getElementById('editAgencyModal')
+            .getElementById('editProfileModal')
             .classList.remove('hidden');
 
         document
-            .getElementById('editAgencyModal')
+            .getElementById('editProfileModal')
             .classList.add('flex');
     });
 </script>
