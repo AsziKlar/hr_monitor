@@ -62,10 +62,10 @@
 
 
         <form method="GET" class="w-full max-w-md">
-            <div class="flex items-center rounded-2xl bg-white px-5 py-3 shadow-sm ring-1 ring-slate-200">
+            <div class="flex items-center rounded-full bg-white px-2 py-3 shadow-sm ring-1 ring-slate-200">
                 
                 {{-- <span class="mr-3 text-slate-400">⌕</span> --}}
-                <img src="{{ asset('images/search.svg') }}" class="pr-3 opacity-30" />
+                <img src="{{ asset('images/search.svg') }}" class="pr-1 opacity-30" />
 
                 <input id="searchInput"
                     type="text"

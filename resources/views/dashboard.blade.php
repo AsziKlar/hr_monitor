@@ -225,7 +225,7 @@
               <div>
                 <div class="mb-4">
                     <h2 class="text-xl font-bold">Field Office Compliance</h2>
-                    <p class="text-sm">No. of agencies that completed all mechanisms</p>
+                   <p class="text-sm text-slate-700/40">No. of agencies that completed all mechanisms</p>
                 </div>
 
                 <div class="h-75">
@@ -241,7 +241,7 @@
               <div>
                 <div class="mb-4">
                     <h2 class="text-xl font-bold">Oldest Submissions</h2>
-                    <p class="text-sm"></p>
+                    <p class="text-sm text-slate-700/40">Drafts to be reviewed</p>
                 </div>
 
                   <div class="h-[300px] overflow-y-auto">

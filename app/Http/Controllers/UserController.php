@@ -9,17 +9,17 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         $user = auth()->user();
+        $users = User::query();
         $agencies = Agency::all();
         $roles = Role::all();
 
-        $search = request('search');
+        if($request->filled('search')){
+            $users->where('name', 'like', '%' . $request->search . '%');
+        }
 
-        $users = User::when($search, function ($query, $search){
-                        $query  ->where('name', 'like', "%{$search}%")
-                                ->orWhere('email', 'like', "%{$search}%");
-            })->latest()->get();
+        $users = $users->get();
 
         return view('admin.account-management', compact('user', 'users', 'agencies','roles'));
     }
