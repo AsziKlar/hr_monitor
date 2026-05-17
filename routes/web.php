@@ -34,6 +34,8 @@ Route::middleware(['auth','prevent-back-history'])->group(function () {
     Route::get('/mechanism', [DraftController::class, 'mechanism_filter'])->name('mechanisms');
     Route::get('/drafts/{id}', [DraftController::class, 'show'])->name('drafts.show');
     Route::post('/drafts/{id}/comment/store', [CommentController::class, 'store'])->name('drafts.comment.store');
+    Route::patch('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group(function () {

@@ -174,17 +174,22 @@
                                 </p>
 
                                 {{-- Buttons --}}
-                                <div class="mt-3 flex gap-2">
+                                @if (auth()->user()->id == $comment->user->id) 
+                                    <x-modals.edit-comment :comment="$comment"/>
+                                    <x-modals.delete-comment :comment="$comment" />
+                                    <div class="mt-3 flex gap-2">
 
-                                    <button class="rounded-lg bg-blue-50 px-3 py-1 text-xs font-bold text-blue-600 transition hover:bg-blue-100">
-                                        Edit
-                                    </button>
+                                        <button onclick="openEditCommentModal({{ $comment->id }})"class="rounded-lg bg-blue-50 px-3 py-1 text-xs font-bold text-blue-600 transition hover:bg-blue-100">
+                                            Edit
+                                        </button>
 
-                                    <button class="rounded-lg bg-red-50 px-3 py-1 text-xs font-bold text-red-600 transition hover:bg-red-100">
-                                        Trash
-                                    </button>
+                                        <button onclick="openDeleteCommentModal({{ $comment->id }})" class="rounded-lg bg-red-50 px-3 py-1 text-xs font-bold text-red-600 transition hover:bg-red-100">
+                                            Trash
+                                        </button>
 
-                                </div>
+                                    </div>
+                                @endif
+
                             </div>
 
                         </div>
@@ -206,7 +211,7 @@
                     <div class="mb-5 rounded-2xl bg-slate-50 p-4">
 
                         <textarea
-                            placeholder="Write a comment..."
+                            placeholder="Write a comment"
                             name="comment"
                             class="min-h-[100px] w-full resize-none rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-700 outline-none transition focus:border-blue-400"
                         ></textarea>
@@ -230,21 +235,44 @@
     </div>
 
 </section>
-<script>
-            function openUpdateDraftModal() {
-                document.getElementById('updateDraftModal')
-                    .classList.remove('hidden');
 
-                document.getElementById('updateDraftModal')
-                    .classList.add('flex');
-            }
-
-            function closeUpdateDraftModal() {
-                document.getElementById('updateDraftModal')
-                    .classList.add('hidden');
-
-                document.getElementById('updateDraftModal')
-                    .classList.remove('flex');
-            }
-        </script>
 </x-app-layout>
+<script>
+    function openUpdateDraftModal() {
+        document.getElementById('updateDraftModal').classList.remove('hidden');
+
+        document.getElementById('updateDraftModal').classList.add('flex');
+    }
+
+    function closeUpdateDraftModal() {
+        document.getElementById('updateDraftModal').classList.add('hidden');
+
+        document.getElementById('updateDraftModal').classList.remove('flex');
+    }
+</script>
+
+<script>
+    function openEditCommentModal(commentId) {
+        document.getElementById('editCommentModal-' + commentId).classList.remove('hidden');
+
+        document.getElementById('editCommentModal-' + commentId).classList.add('flex');
+    }
+    function closeEditCommentModal(commentId) {
+        document.getElementById('editCommentModal-' + commentId).classList.add('hidden');
+
+        document.getElementById('editCommentModal-' + commentId).classList.remove('flex');
+    }
+</script>
+
+<script>
+    function openDeleteCommentModal(commentId) {
+        document.getElementById('deleteCommentModal-' + commentId).classList.remove('hidden');
+
+        document.getElementById('deleteCommentModal-' + commentId).classList.add('flex');
+    }
+    function closeDeleteCommentModal(commentId) {
+        document.getElementById('deleteCommentModal-' + commentId).classList.add('hidden');
+
+        document.getElementById('deleteCommentModal-' + commentId).classList.remove('flex');
+    }
+</script>

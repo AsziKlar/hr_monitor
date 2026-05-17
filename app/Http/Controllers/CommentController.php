@@ -22,4 +22,22 @@ class CommentController extends Controller
 
         return redirect()->back()->with('success', 'Comment posted successfully!');
     }
+
+    public function update(Request $request, Comment $comment){
+        $request->validate([
+            'comment' => 'required|string|max:1000'
+        ]);
+
+        $comment->update([
+            'comment' => $request->comment
+        ]);
+
+        return redirect()->back()->with('success', 'Comment updated successfully');
+    }
+
+    public function destroy(Comment $comment){
+        $comment->delete();
+
+        return redirect()->back()->with('success', 'Comment deleted successfully');
+    }
 }
