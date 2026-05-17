@@ -7,10 +7,7 @@
               <p class="text-2xl font-bold ">Announcement Board</p>
               <p class="text-1xl text-gray-400">Publish official notices, reminders, and updates for agencies and CSC personnel.</p>
             </div>
-            <div class="flex h-4 w-full max-w-[320px] items-center rounded-4xl bg-slate-100 p-6 shadow-gray-400 ring-1 ring-slate-200">
-              <img src="{{ asset('images/search.svg') }}" alt="Search Icon" class="h-5 w-5">
-              <input class="w-full outline-none type='text' placeholder" placeholder='Search announcement...'/>
-            </div>
+
             <x-modals.create-announcement />
             <button onclick="openCreateAnnouncementModal()" class="flex items-center rounded-4xl transition hover:scale-[1.05] hover:bg-red-700 bg-red-800">
               <span class="text-1xl font-bold text-white p-3">+ Create Announcement</span>
@@ -48,32 +45,48 @@
                         </div>
                     </div>
                     <div class="items-start flex gap-4 shrink ">
-                    <button class="flex items-center rounded-2xl transition hover:scale-[1.07] bg-slate-100 ring-2 ring-slate-300 hover:bg-slate-200 hover:ring-slate-400 text-slate-600 hover:text-slate-700">
+                    {{-- <button class="flex items-center rounded-2xl transition hover:scale-[1.07] bg-slate-100 ring-2 ring-slate-300 hover:bg-slate-200 hover:ring-slate-400 text-slate-600 hover:text-slate-700">
                         <span class="font-bold text-slate-600 py-2 px-5">Edit</span>
+                    </button> --}}
+
+                    <x-modals.delete-announcement :announcement="$announcement"/>
+                    <button type="button" onclick="openDeleteAnnouncementModal({{ $announcement->id }})" class="flex items-center rounded-2xl transition hover:scale-[1.07] bg-red-100 ring-2 text-red-600 ring-red-300 hover:bg-red-200 hover:ring-red-400 hover:text-red-700">
+                        <span class="font-bold py-2 px-5">Delete</span>
                     </button>
-                    <button class="flex items-center rounded-2xl transition hover:scale-[1.07] bg-red-100 ring-2 text-red-600 ring-red-300 hover:bg-red-200 hover:ring-red-400 hover:text-red-700">
-                        <span class="font-bold py-2 px-5">Archive</span>
-                    </button>
+
                     </div>
                 </div>
             </section>
         @endforeach
 
-    <script>
-        function openCreateAnnouncementModal() {
-            document.getElementById('createAnnouncementModal')
-                .classList.remove('hidden');
-
-            document.getElementById('createAnnouncementModal')
-                .classList.add('flex');
-        }
-
-        function closeCreateAnnouncementModal() {
-            document.getElementById('createAnnouncementModal')
-                .classList.add('hidden');
-
-            document.getElementById('createAnnouncementModal')
-                .classList.remove('flex');
-        }
-    </script>
+   
 </x-app-layout>
+ <script>
+    function openCreateAnnouncementModal() {
+        document.getElementById('createAnnouncementModal')
+            .classList.remove('hidden');
+
+        document.getElementById('createAnnouncementModal')
+            .classList.add('flex');
+    }
+
+    function closeCreateAnnouncementModal() {
+        document.getElementById('createAnnouncementModal')
+            .classList.add('hidden');
+
+        document.getElementById('createAnnouncementModal')
+            .classList.remove('flex');
+    }
+</script>
+
+<script>
+    function openDeleteAnnouncementModal(announcementId) {
+        document.getElementById(`deleteAnnouncementModal-${announcementId}`).classList.remove('hidden');
+        document.getElementById(`deleteAnnouncementModal-${announcementId}`).classList.add('flex');
+    }
+
+    function closeDeleteAnnouncementModal(announcementId) {
+        document.getElementById(`deleteAnnouncementModal-${announcementId}`).classList.add('hidden');
+        document.getElementById(`deleteAnnouncementModal-${announcementId}`).classList.remove('flex');
+    }
+</script>
