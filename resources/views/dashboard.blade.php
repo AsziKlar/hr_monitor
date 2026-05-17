@@ -142,7 +142,7 @@
  <!-- page content -->
     <section class="p-6">
         <!-- mechanism to be reviewed card -->
-        <div class="text-blue-950 flex flex-row gap-2 justify-between">
+        <div class=" flex flex-row gap-5 justify-between mb-7">
         
           <div class="flex-1 rounded-4xl bg-blue-200/40 p-6 shadow-sm">
               <p class="text-2xl font-bold text-blue-600 uppercase tracking-wider">MSP</p>
@@ -156,11 +156,11 @@
               </div>
           </div>
 
-          <div class="flex-1 rounded-4xl bg-blue-200/40 p-6 shadow-sm">
-              <p class="text-2xl font-bold text-blue-600 uppercase tracking-wider">SPMS</p>
+          <div class="flex-1 rounded-4xl bg-emerald-100 p-6 shadow-sm">
+              <p class="text-2xl font-bold text-emerald-700 uppercase tracking-wider">SPMS</p>
               <div class="mt-2">
               <div>
-                  <p class="text-4xl font-bold">{{ $drafts_to_be_reviewed[2]->count() }}</p>
+                  <p class="text-4xl font-bold ">{{ $drafts_to_be_reviewed[2]->count() }}</p>
               </div>
               <div class="mt-2">
                   <p class="mt-2 inline-block rounded-full bg-yellow-200 p-2 text-xs font-bold text-yellow-700">To be Reviewed</p>
@@ -168,8 +168,8 @@
               </div>
           </div>
 
-          <div class="flex-1 rounded-4xl bg-blue-200/40 p-6 shadow-sm">
-              <p class="text-2xl font-bold text-blue-600 uppercase tracking-wider">PRAISE</p>
+          <div class="flex-1 rounded-4xl bg-violet-100 p-6 shadow-sm">
+              <p class="text-2xl font-bold text-violet-700 uppercase tracking-wider">PRAISE</p>
               <div class="mt-2">
               <div>
                   <p class="text-4xl font-bold">{{ $drafts_to_be_reviewed[3]->count() }}</p>
@@ -180,23 +180,11 @@
               </div>
           </div>
 
-          <div class="flex-1 rounded-4xl bg-blue-200/40 p-6 shadow-sm">
-              <p class="text-2xl font-bold text-blue-600 uppercase tracking-wider">GM</p>
+          <div class="flex-1 rounded-4xl bg-red-100 p-6 shadow-sm">
+              <p class="text-2xl font-bold text-red-700 uppercase tracking-wider">GM</p>
               <div class="mt-2">
               <div>
                   <p class="text-4xl font-bold">{{ $drafts_to_be_reviewed[4]->count() }}</p>
-              </div>
-              <div class="mt-2">
-                  <p class="mt-2 inline-block rounded-full bg-yellow-200 p-2 text-xs font-bold text-yellow-700">To be Reviewed</p>
-              </div>
-              </div>
-          </div>
-
-          <div class="flex-1 rounded-4xl bg-blue-200/40 p-6 shadow-sm">
-              <p class="text-2xl font-bold text-blue-600 uppercase tracking-wider">L&D</p>
-              <div class="mt-2">
-              <div>
-                  <p class="text-4xl font-bold">{{ $drafts_to_be_reviewed[5]->count() }}</p>
               </div>
               <div class="mt-2">
                   <p class="mt-2 inline-block rounded-full bg-yellow-200 p-2 text-xs font-bold text-yellow-700">To be Reviewed</p>
@@ -237,7 +225,7 @@
               <div>
                 <div class="mb-4">
                     <h2 class="text-xl font-bold">Field Office Compliance</h2>
-                    <p class="text-sm">No. of agencies that completed all mechanisms</p>
+                   <p class="text-sm text-slate-700/40">No. of agencies that completed all mechanisms</p>
                 </div>
 
                 <div class="h-75">
@@ -253,7 +241,7 @@
               <div>
                 <div class="mb-4">
                     <h2 class="text-xl font-bold">Oldest Submissions</h2>
-                    <p class="text-sm"></p>
+                    <p class="text-sm text-slate-700/40">Drafts to be reviewed</p>
                 </div>
 
                   <div class="h-[300px] overflow-y-auto">
@@ -261,7 +249,7 @@
                       <table class="w-full table-auto border-collapse">
 
                           <thead class="sticky top-0 bg-white">
-                              <tr class="border-b border-slate-300/50">
+                              <tr class="border-b border-slate-300">
 
                                   <th class="p-2 text-left text-slate-700/50">Agency</th>
                                   <th class="p-2 text-left text-slate-700/50">Mechanism</th>
@@ -274,22 +262,16 @@
                           <tbody>
 
                               @foreach ($drafts as $draft)
-                                  <tr class="border-b hover:bg-slate-50">
-                                      <td class="p-2">
-                                          <a href="">{{ $draft->agency->name }}</a>
-                                      </td>
-                                      <td class="p-2">
-                                          <a>{{ $draft->mechanism->description }}</a>
-                                      </td>
-                                      <td class="p-2">
-                                          <a>{{ $draft->created_at->format('m/d/y') }}</a>
-                                      </td>
-                                      <td class="p-2">
-                                          <a>{{ $draft->created_at->diffForHumans() }} </a>
-                                      </td>
-
+                              
+                                  <tr onclick="window.location='{{ route('drafts.show', $draft->id) }}'" class="cursor-pointer border-b border-slate-100 transition hover:bg-slate-50">
+                                      
+                                    <td class="p-2">{{ $draft->agency->name }}</td>
+                                    <td class="p-2">{{ $draft->mechanism->description }}</td>
+                                    <td class="p-2">{{ $draft->created_at->format('m/d/y') }}</td>
+                                    <td class="p-2">{{ $draft->created_at->diffForHumans() }}</td>
+                                    
                                   </tr>
-
+                              
                               @endforeach
 
                           </tbody>

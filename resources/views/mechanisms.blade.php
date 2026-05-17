@@ -23,48 +23,53 @@
           </div>
       </section>
 
-        <section class="p-6">
+        <section class="p-6 py-1">
 
             
-            <div class="grid grid-cols-2 grid-rows-4 gap-4">
-
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
                 @foreach ($mechanisms as $mechanism)
 
-                <a  class="flex min-h-[180px] items-center gap-6 rounded-[2rem] bg-white p-6 shadow-lg shadow-slate-200 ring-1 ring-slate-100 transition duration-300 ease-in-out hover:-translate-y-2 hover:shadow-slate-300"
-                    href="{{ auth()->user()->role->name === 'HRMO'
-                        ? route('hrmo.drafts.index', $mechanism)
-                        : route('admin.drafts.index', $mechanism) }}">
+                    @php
+                        $arts = [
+                            'MSP' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-900', 'icon' => 'images/file-badge.svg'],
+                            'SPMS' => ['bg' => 'bg-emerald-100', 'text' => 'text-emerald-900', 'icon' => 'images/notepad-text.svg'],
+                            'PRAISE' => ['bg' => 'bg-violet-100', 'text' => 'text-violet-900', 'icon' => 'images/trophy.svg'],
+                            'GM' => ['bg' => 'bg-red-100', 'text' => 'text-red-900', 'icon' => 'images/scale.svg'],
+                            'L&D' => ['bg' => 'bg-yellow-100', 'text' => 'text-yellow-900', 'icon' => 'images/blocks.svg']
+                        ];
 
-                  
-                    <div class="flex h-28 w-28 shrink-0 items-center justify-center rounded-[1.5rem] bg-yellow-50">
-                        <img 
-                            src="{{ asset('images/mechanism-icon.svg') }}" 
-                            class="h-12 w-12"
-                        >
-                    </div>
+                        $art = $arts[$mechanism->description];
+                    @endphp
 
-                    {{-- Text --}}
-                    <div class="flex-1">
-                        <p class="text-2xl font-bold leading-snug text-blue-950">
-                            {{ $mechanism->name }}
-                        </p>
+                    <a  
+                        class="relative flex min-h-[210px] items-center gap-5 rounded-[2rem] bg-white p-6 pr-20 shadow-lg shadow-slate-200 ring-1 ring-slate-100 transition duration-300 ease-in-out hover:-translate-y-2 hover:shadow-slate-300"
+                        href="{{ auth()->user()->role->name === 'HRMO'
+                            ? route('hrmo.drafts.index', $mechanism)
+                            : route('admin.drafts.index', $mechanism) }}"
+                    >
 
-                        <p class="mt-4 leading-7 text-slate-500">
-                            {{ $mechanism->description ?? 'View submitted documents and track review progress.' }}
-                        </p>
+                        <div class="flex h-24 w-24 shrink-0 items-center justify-center rounded-[1.5rem] {{ $art['bg'] }}">
+                            <img 
+                                src="{{ asset($art['icon']) }}" 
+                                class="h-10 w-10"
+                            >
+                        </div>
 
-                        <p class="mt-5 font-bold text-yellow-600">
+                        <div class="min-w-0 flex-1">
+                            <p class="text-xl font-bold leading-snug text-blue-950">
+                                {{ $mechanism->name }}
+                            </p>
 
-                          idk what to put here
-                        </p>
-                    </div>
+                            <p class="mt-3 text-base text-slate-500">
+                                {{ $mechanism->description }}
+                            </p>
+                        </div>
 
-                    {{-- Arrow --}}
-                    <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-yellow-50 text-2xl font-bold text-yellow-600">
-                        ›
-                    </div>
+                        <div class="absolute right-6 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full {{ $art['bg'] }} text-2xl font-bold {{ $art['text'] }}">
+                            ›
+                        </div>
 
-                </a>
+                    </a>
 
                 @endforeach
             

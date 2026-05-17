@@ -8,11 +8,13 @@
         <form method="GET" class="w-full max-w-[320px]">
             <div class="flex items-center rounded-full bg-slate-100 py-3 px-2 shadow-gray-400 ring-1 ring-slate-200">
                 <img src="{{ asset('images/search.svg') }}" class="opacity-20" />
-                <input
+                <input id="searchInput"
                     type="text"
                     name="search"
                     value="{{ request('search') }}"
                     placeholder="Search agency..."
+                    autofocus
+                    oninput="clearTimeout(this.delay); this.delay = setTimeout(() => this.form.submit(), 400)"
                     class="w-full bg-transparent outline-none pl-1"
                 >
 
@@ -101,3 +103,12 @@
             }
         </script>
 </x-app-layout>
+
+<script>
+    const searchInput = document.getElementById('searchInput');
+
+    if (searchInput) {
+        searchInput.focus();
+        searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+    }
+</script>

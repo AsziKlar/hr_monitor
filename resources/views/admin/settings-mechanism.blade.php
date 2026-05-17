@@ -19,49 +19,59 @@
                 </a>
               @endif
           </div>
-      </section>
+    </section>
+
+
+
 
     <section class="p-6">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
 
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            @foreach ($mechanisms as $mechanism)
 
-        @foreach ($mechanisms as $mechanism)
+                @php
+                    $arts = [
+                        'MSP' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-900', 'icon' => 'images/file-badge.svg'],
+                        'SPMS' => ['bg' => 'bg-emerald-100', 'text' => 'text-emerald-900', 'icon' => 'images/notepad-text.svg'],
+                        'PRAISE' => ['bg' => 'bg-violet-100', 'text' => 'text-violet-900', 'icon' => 'images/trophy.svg'],
+                        'GM' => ['bg' => 'bg-red-100', 'text' => 'text-red-900', 'icon' => 'images/scale.svg'],
+                        'L&D' => ['bg' => 'bg-yellow-100', 'text' => 'text-yellow-900', 'icon' => 'images/blocks.svg']
+                    ];
 
-            <a href="{{ route('admin.settings.agencies', $mechanism)}}" class="rounded-[2rem] bg-white p-6 shadow-lg shadow-slate-200 ring-1 ring-slate-100 transition hover:-translate-y-1 hover:shadow-slate-300">
+                    $art = $arts[$mechanism->description];
+                @endphp 
 
-                <div class="flex items-start justify-between">
 
-                    <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-yellow-50">
+                <a  class="relative flex min-h-[210px] items-center gap-5 rounded-[2rem] bg-white p-6 pr-20 shadow-lg shadow-slate-200 ring-1 ring-slate-100 transition duration-300 ease-in-out hover:-translate-y-2 hover:shadow-slate-300"
+                    href="{{ route('admin.settings.agencies', $mechanism)}}">
+
+                    <div class="flex h-24 w-24 shrink-0 items-center justify-center rounded-[1.5rem] {{ $art['bg'] }}">
                         <img 
-                            src="{{ asset('images/mechanism-icon.svg') }}"
-                            class="h-8 w-8"
+                            src="{{ asset($art['icon']) }}" 
+                            class="h-10 w-10"
                         >
                     </div>
 
-                    <div class="rounded-full bg-yellow-50 px-3 py-1 text-sm font-bold text-yellow-600">
-                        View
+                    <div class="min-w-0 flex-1">
+                        <p class="text-xl font-bold leading-snug text-blue-950">
+                            {{ $mechanism->name }}
+                        </p>
+
+                        <p class="mt-3 text-base text-slate-500">
+                            {{ $mechanism->description }}
+                        </p>
                     </div>
 
-                </div>
+                    <div class="absolute right-6 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full {{ $art['bg'] }} text-2xl font-bold {{ $art['text'] }}">
+                        ›
+                    </div>
 
-                <div class="mt-6">
+                </a>
 
-                    <p class="text-2xl font-bold text-blue-950">
-                        {{ $mechanism->name }}
-                    </p>
+            @endforeach
 
-                    <p class="mt-3 leading-7 text-slate-500">
-                        {{ $mechanism->description ?? 'View submitted documents and track review progress.' }}
-                    </p>
+        </div>
 
-                </div>
-
-            </a>
-
-        @endforeach
-
-    </div>
-
-</section>
+    </section>
 
 </x-app-layout>
