@@ -47,6 +47,7 @@ Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group
     Route::get('/admin/manage-account/index', [UserController::class, 'index'])->name('admin.account.index');
     Route::post('/admin/manage-account/store', [UserController::class, 'store'])->name('admin.account.store');
 
+    Route::patch('/admin/profile', [UserController::class, 'admin_profile_update'])->name('admin.admin-profile.update');
 
     Route::get('/admin/other-settings/mechanism_filter', [AgencyMechanismPeriodController::class, 'mechanism_filter'])->name('admin.settings.mechanisms');
     Route::get('/admin/other-settings/{mechanism}/agencies', [AgencyMechanismPeriodController::class, 'agency_filter'])->name('admin.settings.agencies');
@@ -58,6 +59,10 @@ Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group
     Route::patch('/admin/field-office/add', [FieldOfficeController::class, 'field_office_add'])->name('admin.field-office.add');
 
     Route::patch('/admin/manage-account/{user}/archive', [UserController::class, 'archive'])->name('admin.accounts.archive');
+
+    Route::delete('/announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+
+   
 });
 
 Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,Reviewer'])->group(function () {

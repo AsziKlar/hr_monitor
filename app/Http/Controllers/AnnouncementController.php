@@ -26,7 +26,9 @@ class AnnouncementController extends Controller
 
     }
 
-    public function view(){
-        
+    public function destroy(Announcement $announcement){
+        $announcement->delete();
+
+        return redirect()->back()->with('success', 'Announcement deleted successfully.');
     }
 }
