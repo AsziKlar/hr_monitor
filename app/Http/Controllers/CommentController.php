@@ -20,6 +20,6 @@ class CommentController extends Controller
             'user_id' => $user
         ]);
 
-        return redirect()->back()->with('success', 'Draft submitted successfully!');
+        return redirect()->back()->with('success', 'Comment posted successfully!');
     }
 }

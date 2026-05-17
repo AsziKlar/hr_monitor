@@ -22,7 +22,7 @@ class AnnouncementController extends Controller
             'user_id' => $user->id
         ]);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Announcement successfully made!');
 
     }
 

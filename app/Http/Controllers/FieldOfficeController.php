@@ -34,7 +34,7 @@ class FieldOfficeController extends Controller
             'field_office_id' =>  $new_field_office_id
         ]);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Field office changed successfully!');
     }
 
     public function field_office_add(Request $request){
@@ -46,7 +46,7 @@ class FieldOfficeController extends Controller
             'name' => $request->field_office_name
         ]);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Added new field office successfully');
 
     }
 }

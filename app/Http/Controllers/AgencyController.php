@@ -60,7 +60,7 @@ class AgencyController extends Controller
         }
        
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Agency added successfully');
     }
 
     public function show(Agency $agency){
@@ -175,7 +175,7 @@ class AgencyController extends Controller
             $data['photo']=$path;
         }
         $agency->update($data);
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Updated profile successfully');
     }
 
     

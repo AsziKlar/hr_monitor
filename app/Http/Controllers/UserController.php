@@ -61,7 +61,7 @@ class UserController extends Controller
             ]);
             
         }
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Successfully created a new user account!');
     }
     public function archive(User $user){
         $user->update([
