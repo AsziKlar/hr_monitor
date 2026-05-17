@@ -1,7 +1,16 @@
 <x-app-layout>
 
     <section class="p-6 pb-0">
-        <div class="flex justify-end">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <x-modals.add-field-office />
+            <button onclick="openAddFieldOfficeModal()"
+                type="button"
+                class="flex items-center justify-center gap-2 self-start rounded-2xl bg-gradient-to-br from-red-700 to-red-900 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:scale-[1.02]"
+            >
+                <span class="text-lg">＋</span>
+
+                Add Field Office
+            </button>
 
             <form method="GET" class="w-full max-w-sm">
                 <div class="flex items-center rounded-full bg-white px-4 py-3 shadow-sm ring-1 ring-slate-100">
@@ -72,8 +81,8 @@
                                         {{ $agency->email_address }}
                                     </p>
                                 </div>
-
-                                <button class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-orange-100 transition hover:scale-105 hover:bg-orange-200">
+                                <x-modals.change-field_office :agency="$agency" :fieldOffices="$all_field_offices"/>
+                                <button onclick="openChangeFieldOfficeModal({{ $agency->id }})" type="button" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-orange-100 transition hover:scale-105 hover:bg-orange-200" >
                                     <img 
                                         src="{{ asset('images/folder-sync.svg') }}" 
                                         class="h-4 w-4"
@@ -103,3 +112,30 @@
     </section>
 
 </x-app-layout>
+
+<script>
+    function openChangeFieldOfficeModal(agencyId){
+        document.getElementById('changeFieldOfficeModal-' + agencyId).classList.remove('hidden');
+        document.getElementById('changeFieldOfficeModal-' + agencyId).classList.add('flex');
+
+    }
+
+    function closeChangeFieldOfficeModal(agencyId){
+        document.getElementById('changeFieldOfficeModal-' + agencyId).classList.add('hidden');
+        document.getElementById('changeFieldOfficeModal-' + agencyId).classList.remove('flex');
+    }
+</script>
+
+<script>
+    function openAddFieldOfficeModal(){
+        document.getElementById('addFieldOfficeModal').classList.remove('hidden');
+        document.getElementById('addFieldOfficeModal').classList.add('flex');
+        
+    }
+
+    function closeAddFieldOfficeModal(){
+        document.getElementById('addFieldOfficeModal').classList.add('hidden');
+        document.getElementById('addFieldOfficeModal').classList.remove('flex');
+        
+    }
+</script>
