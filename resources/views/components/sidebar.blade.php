@@ -88,6 +88,12 @@
                 <img src="{{ asset('images/settings.svg') }}" />
                 Other Settings
             </a>
+
+            <a  class="{{ request()->routeIs('admin.field-office.index') ? $active : $inactive }}" 
+                href="{{ route('admin.field-office.index') }}">
+                <img src="{{ asset('images/settings.svg') }}" />
+                Field Office Settings
+            </a>
         @endif
     </nav>
     <div class="mt-auto pt-6">

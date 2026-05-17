@@ -6,6 +6,7 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DraftController;
+use App\Http\Controllers\FieldOfficeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Models\AgencyMechanismPeriod;
@@ -48,6 +49,9 @@ Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group
     Route::get('/admin/other-settings/mechanism_filter', [AgencyMechanismPeriodController::class, 'mechanism_filter'])->name('admin.settings.mechanisms');
     Route::get('/admin/other-settings/{mechanism}/agencies', [AgencyMechanismPeriodController::class, 'agency_filter'])->name('admin.settings.agencies');
     Route::post('/admin/other-settings/{mechanism}/{agency}/mechanism-reset', [AgencyMechanismPeriodController::class, 'period_increment'])->name('admin.settings.period_increment');
+    Route::post('/admin/other-settings/mechanism-reset/all//{mechanism}', [AgencyMechanismPeriodController::class, 'period_increment_all'])->name('admin.settings.period_increment_all');
+
+    Route::get('/admin/field-office/index', [FieldOfficeController::class, 'field_office_index'])->name('admin.field-office.index');
 });
 
 Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,Reviewer'])->group(function () {

@@ -52,4 +52,26 @@ class AgencyMechanismPeriodController extends Controller
 
     }
 
+    public function period_increment_all(Mechanism $mechanism){
+        $agencies = Agency::all();
+        $approved = Status::where('name', 'Approved')->first()->id;
+
+        foreach ($agencies as $agency) {
+            $agencyMechanismPeriod = AgencyMechanismPeriod::where('agency_id', $agency->id)
+                                                            ->where('mechanism_id', $mechanism->id)
+                                                            ->first();
+
+            $current_period = $agencyMechanismPeriod->current_period;
+
+            Draft::where('agency_id', $agency->id)
+                    ->where('mechanism_id', $mechanism->id)
+                    ->where('period', $current_period)
+                    ->where('status_id','!=', $approved)
+                    ->delete();
+            
+            $agencyMechanismPeriod->increment('current_period');
+        }
+        return redirect()->back();
+    }
+
 }
