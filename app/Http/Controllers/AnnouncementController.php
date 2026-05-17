@@ -22,11 +22,13 @@ class AnnouncementController extends Controller
             'user_id' => $user->id
         ]);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Announcement successfully made!');
 
     }
 
-    public function view(){
-        
+    public function destroy(Announcement $announcement){
+        $announcement->delete();
+
+        return redirect()->back()->with('success', 'Announcement deleted successfully.');
     }
 }

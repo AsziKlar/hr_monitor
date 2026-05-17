@@ -116,8 +116,7 @@ class DraftController extends Controller
             'description' => $request->description
         ]);
 
-        return redirect()   ->back()
-                            ->with('success', 'Draft submitted successfully!');
+        return redirect()->back()->with('success', 'Draft submitted successfully!');
     }
 
     public function show($id) {
@@ -145,13 +144,13 @@ class DraftController extends Controller
         $draft = Draft::find($id);
         $draft->status_id = 3;
         $draft->save();
-        return back();
+        return redirect()->back()->with('success', 'This draft is now approved!');
     }
     public function revision($id){
         $draft = Draft::find($id);
         $draft->status_id = 2;
         $draft->save();
-        return back();
+        return redirect()->back()->with('success', 'This draft needs to be revised.');
     }
 
    public function updateFile(Request $request, Draft $draft){
