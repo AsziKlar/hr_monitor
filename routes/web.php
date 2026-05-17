@@ -54,6 +54,8 @@ Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group
     Route::get('/admin/field-office/index', [FieldOfficeController::class, 'field_office_index'])->name('admin.field-office.index');
     Route::patch('/admin/field-office/update/{agency}', [FieldOfficeController::class, 'field_office_update'])->name('admin.field-office.update');
     Route::patch('/admin/field-office/add', [FieldOfficeController::class, 'field_office_add'])->name('admin.field-office.add');
+
+    Route::patch('/admin/manage-account/{user}/archive', [UserController::class, 'archive'])->name('admin.accounts.archive');
 });
 
 Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,Reviewer'])->group(function () {

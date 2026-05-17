@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function index(Request $request){
         $user = auth()->user();
-        $users = User::query();
+        $users = User::whereNull('archived_at');
         $agencies = Agency::all();
         $roles = Role::all();
 
@@ -19,7 +19,7 @@ class UserController extends Controller
             $users->where('name', 'like', '%' . $request->search . '%');
         }
 
-        $users = $users->get();
+        $users = $users->latest()->get();
 
         return view('admin.account-management', compact('user', 'users', 'agencies','roles'));
     }
@@ -62,6 +62,12 @@ class UserController extends Controller
             
         }
         return redirect()->back();
+    }
+    public function archive(User $user){
+        $user->update([
+            'archived_at' => now()
+        ]);
+        return redirect()->back()->with('success', 'Account archived successfully');
     }
 
 }
