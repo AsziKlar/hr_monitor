@@ -42,8 +42,8 @@
 
 
         <div class="flex gap-3">
-
-            <button class="rounded-xl border border-slate-300 px-5 py-2 text-sm font-bold text-blue-950 transition hover:bg-slate-50">
+        <x-modals.update-admin-profile :user="$user"/>
+            <button onclick="openEditAdminProfileModal()" class="rounded-xl border border-slate-300 px-5 py-2 text-sm font-bold text-blue-950 transition hover:bg-slate-50">
                 Edit Info
             </button>
 
@@ -125,7 +125,7 @@
 
 
                 <div class="flex gap-3">
-
+                    
                     <button class="rounded-xl border border-slate-300 px-5 py-2 text-sm font-bold transition hover:bg-slate-50">
                         Edit Info
                     </button>
@@ -183,5 +183,16 @@
     function closeArchiveUserModal(userId) {
         document.getElementById('archiveUserModal-' + userId ).classList.add('hidden');
         document.getElementById('archiveUserModal-' + userId ).classList.remove('flex');
+    }
+</script>
+
+<script>
+    function openEditAdminProfileModal() {
+        document.getElementById('editAdminProfileModal').classList.remove('hidden');
+        document.getElementById('editAdminProfileModal').classList.add('flex');
+    }
+    function closeEditAdminProfileModal() {
+        document.getElementById('editAdminProfileModal').classList.add('hidden');
+        document.getElementById('editAdminProfileModal').classList.remove('flex');
     }
 </script>
