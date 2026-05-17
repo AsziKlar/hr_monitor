@@ -57,14 +57,19 @@ class DashboardController extends Controller
        
         // this for the piecharts
         foreach ($mechanisms as $mechanism) {
-            $period = AgencyMechanismPeriod::where('mechanism_id', $mechanism->id)
-                    ->value('current_period');
 
-            $latestDrafts = Draft::where('mechanism_id', $mechanism->id)
-                                    ->where('period', $period)
-                                    ->latest()
-                                    ->get()
-                                    ->unique('agency_id');
+            $latestDrafts = Draft::query()
+                                ->select('drafts.*')
+                                ->join('agency_mechanism_periods', function ($join) use ($mechanism) {
+                                    $join->on('drafts.agency_id', '=', 'agency_mechanism_periods.agency_id')
+                                        ->where('agency_mechanism_periods.mechanism_id', $mechanism->id)
+                                        ->whereColumn('drafts.period', 'agency_mechanism_periods.current_period');
+                                })
+                                ->where('drafts.mechanism_id', $mechanism->id)
+                                ->latest('drafts.id')
+                                ->get()
+                                ->unique('agency_id')
+                                ->values();
 
             $total_drafts_num[$mechanism->id]= $latestDrafts->whereIn('status_id', [1,2,3])->count();
             
@@ -74,7 +79,6 @@ class DashboardController extends Controller
             $approved_count[$mechanism->id] = $latestDrafts->where('status_id', 3)->count();
             $drafts_approved[$mechanism->id] = $latestDrafts->where('status_id', 3);
 
-            
         }
 
        

@@ -9,11 +9,17 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         $user = auth()->user();
-        $users = User::latest()->get();
+        $users = User::query();
         $agencies = Agency::all();
         $roles = Role::all();
+
+        if($request->filled('search')){
+            $users->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $users = $users->get();
 
         return view('admin.account-management', compact('user', 'users', 'agencies','roles'));
     }
@@ -29,7 +35,6 @@ class UserController extends Controller
             ]);
 
             
-
             User::create([
                 'name' => $request->name,
                 'email' => $request->email,

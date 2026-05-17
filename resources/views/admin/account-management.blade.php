@@ -62,16 +62,18 @@
 
 
         <form method="GET" class="w-full max-w-md">
-            <div class="flex items-center rounded-2xl bg-white px-5 py-3 shadow-sm ring-1 ring-slate-200">
+            <div class="flex items-center rounded-full bg-white px-2 py-3 shadow-sm ring-1 ring-slate-200">
                 
                 {{-- <span class="mr-3 text-slate-400">⌕</span> --}}
-                <img src="{{ asset('images/search.svg') }}" class="pr-3 opacity-30" />
+                <img src="{{ asset('images/search.svg') }}" class="pr-1 opacity-30" />
 
-                <input
+                <input id="searchInput"
                     type="text"
                     name="search"
                     value="{{ request('search') }}"
                     placeholder="Search staff account..."
+                    autofocus
+                    oninput="clearTimeout(this.delay); this.delay = setTimeout(() => this.form.submit(), 400)"
                     class="w-full bg-transparent text-slate-600 outline-none placeholder:text-slate-400"
                 >
             </div>
@@ -145,20 +147,29 @@
 </section>
 </x-app-layout>
    
-   <script>
-            function openCreateUserModal() {
-                document.getElementById('createUserModal')
-                    .classList.remove('hidden');
+<script>
+        function openCreateUserModal() {
+            document.getElementById('createUserModal')
+                .classList.remove('hidden');
 
-                document.getElementById('createUserModal')
-                    .classList.add('flex');
-            }
+            document.getElementById('createUserModal')
+                .classList.add('flex');
+        }
 
-            function closeCreateUserModal() {
-                document.getElementById('createUserModal')
-                    .classList.add('hidden');
+        function closeCreateUserModal() {
+            document.getElementById('createUserModal')
+                .classList.add('hidden');
 
-                document.getElementById('createUserModal')
-                    .classList.remove('flex');
-            }
-    </script>
+            document.getElementById('createUserModal')
+                .classList.remove('flex');
+        }
+</script>
+
+<script>
+    const searchInput = document.getElementById('searchInput');
+
+    if (searchInput) {
+        searchInput.focus();
+        searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+    }
+</script>
