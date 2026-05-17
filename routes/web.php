@@ -52,6 +52,8 @@ Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group
     Route::post('/admin/other-settings/mechanism-reset/all//{mechanism}', [AgencyMechanismPeriodController::class, 'period_increment_all'])->name('admin.settings.period_increment_all');
 
     Route::get('/admin/field-office/index', [FieldOfficeController::class, 'field_office_index'])->name('admin.field-office.index');
+    Route::patch('/admin/field-office/update/{agency}', [FieldOfficeController::class, 'field_office_update'])->name('admin.field-office.update');
+    Route::patch('/admin/field-office/add', [FieldOfficeController::class, 'field_office_add'])->name('admin.field-office.add');
 });
 
 Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,Reviewer'])->group(function () {
