@@ -48,7 +48,7 @@ class AgencyMechanismPeriodController extends Controller
 
         $current_period->increment('current_period');
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Period updated. New batch of drafts for this mechanism.');
 
     }
 
@@ -71,7 +71,7 @@ class AgencyMechanismPeriodController extends Controller
             
             $agencyMechanismPeriod->increment('current_period');
         }
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Period updated for all agencies. New batch of drafts for all agencies in this mechanism');
     }
 
 }

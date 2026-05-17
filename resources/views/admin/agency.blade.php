@@ -48,7 +48,7 @@
                         </p>
 
                         <p class="text-base font-bold text-blue-950">
-                            {{ $agency_hrmo->name }}
+                            {{ $agency_hrmo?->name ?? 'No HRMO yet' }}
                         </p>
                     </div>
 

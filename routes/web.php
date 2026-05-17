@@ -34,6 +34,8 @@ Route::middleware(['auth','prevent-back-history'])->group(function () {
     Route::get('/mechanism', [DraftController::class, 'mechanism_filter'])->name('mechanisms');
     Route::get('/drafts/{id}', [DraftController::class, 'show'])->name('drafts.show');
     Route::post('/drafts/{id}/comment/store', [CommentController::class, 'store'])->name('drafts.comment.store');
+    Route::patch('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group(function () {
@@ -54,6 +56,8 @@ Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group
     Route::get('/admin/field-office/index', [FieldOfficeController::class, 'field_office_index'])->name('admin.field-office.index');
     Route::patch('/admin/field-office/update/{agency}', [FieldOfficeController::class, 'field_office_update'])->name('admin.field-office.update');
     Route::patch('/admin/field-office/add', [FieldOfficeController::class, 'field_office_add'])->name('admin.field-office.add');
+
+    Route::patch('/admin/manage-account/{user}/archive', [UserController::class, 'archive'])->name('admin.accounts.archive');
 });
 
 Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,Reviewer'])->group(function () {

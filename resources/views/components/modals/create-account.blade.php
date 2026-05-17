@@ -128,7 +128,7 @@
                     Cancel
                 </button>
 
-                <button onclick="closeCreateUserModal()"
+                <button
                     type="submit"
                     class="rounded-2xl bg-red-800 px-6 py-3 font-bold text-white hover:bg-red-900"
                 >

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password','role_id', 'agency_id'])]
+#[Fillable(['name', 'email', 'password','role_id', 'agency_id', 'archived_at'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -28,6 +28,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected static function booted(): void 
+    {
+        static::addGlobalScope('notArchived', function ($query) {
+            $query->whereNull('archived_at');
+        });
     }
 
     public function role(){

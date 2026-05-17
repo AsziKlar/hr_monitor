@@ -130,7 +130,8 @@
                         Edit Info
                     </button>
 
-                    <button class="rounded-xl bg-gradient-to-br from-red-50 to-red-100 px-5 py-2 text-sm font-bold text-red-700 transition hover:from-red-100 hover:to-red-200">
+                    <x-modals.archive-user :user="$account"/>
+                    <button onclick="openArchiveUserModal({{$account->id}})" type="button" class="rounded-xl bg-gradient-to-br from-red-50 to-red-100 px-5 py-2 text-sm font-bold text-red-700 transition hover:from-red-100 hover:to-red-200">
                         Archive Account
                     </button>
 
@@ -171,5 +172,16 @@
     if (searchInput) {
         searchInput.focus();
         searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+    }
+</script>
+
+<script>
+    function openArchiveUserModal(userId) {
+        document.getElementById('archiveUserModal-' + userId).classList.remove('hidden');
+        document.getElementById('archiveUserModal-' + userId ).classList.add('flex');
+    }
+    function closeArchiveUserModal(userId) {
+        document.getElementById('archiveUserModal-' + userId ).classList.add('hidden');
+        document.getElementById('archiveUserModal-' + userId ).classList.remove('flex');
     }
 </script>
