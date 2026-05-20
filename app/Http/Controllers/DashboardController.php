@@ -4,21 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\AgencyMechanismPeriod;
 use App\Models\Announcement;
-use Illuminate\Http\Request;
 use App\Models\Draft;
 use App\Models\FieldOffice;
 use App\Models\Mechanism;
+use App\Models\Status;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
     public function index_hrmo(Request $request){
         $user = auth()->user();
+        $statuses = Status::all();
         $agency_id = $user->agency_id;
         $mechanisms = Mechanism::all();
         $latest_draft_per_mechanism = [];
-        $period = AgencyMechanismPeriod::where('agency_id', $agency_id) //for the recent submissions
-                                        ->value('current_period'); 
 
         foreach ($mechanisms as $mechanism) { //for the overview cards
             $period = AgencyMechanismPeriod::where('agency_id', $agency_id)
@@ -34,14 +34,24 @@ class DashboardController extends Controller
             $latest_draft_per_mechanism[$mechanism->id] = $latestDraft;
         }
         
-        $latestSubmissions = Draft::where('agency_id', $agency_id) //for the recent submission
-                                ->where('period', $period)
-                                ->where('created_at', '>=', now()->subMonth())
-                                ->latest()
-                                ->get();
+        $currentPeriods = AgencyMechanismPeriod::where('agency_id', $agency_id)
+            ->pluck('current_period', 'mechanism_id');
+
+        $latestSubmissions = Draft::where('agency_id', $agency_id)
+            ->where('created_at', '>=', now()->subMonth())
+            ->where('status_id', 1)
+            ->latest()
+            ->get()
+            ->filter(function ($draft) use ($currentPeriods) {
+
+                return isset($currentPeriods[$draft->mechanism_id])
+
+                    && $draft->period == $currentPeriods[$draft->mechanism_id];
+
+            });
 
         $latestAnnouncement = Announcement::latest()->first();
-
+        
         return view('dashboard', compact('mechanisms','latest_draft_per_mechanism', 'latestSubmissions','latestAnnouncement'));
 
     }

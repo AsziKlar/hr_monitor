@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <nav class="space-y-2 text-base">
+    <nav class="space-y-2 text-sm">
         <p class="text-[11px] text-white/50 mt-6">NAVIGATION</p>
 
         @php
@@ -47,25 +47,25 @@
 
         <a  class="{{ request()->routeIs($dashboardRoute) ? $active : $inactive }}"
             href="{{ route($dashboardRoute) }}">
-            <img src="{{ asset('images/layout-dashboard.svg') }}" />
+            <img src="{{ asset('images/layout-dashboard.svg') }}" class="h-5 w-5"/>
             Dashboard
         </a>
 
         <a  class="{{ request()->routeIs('mechanisms', 'admin.drafts.index') ? $active : $inactive }}" 
             href="{{ route('mechanisms') }}">
-            <img src="{{ asset('images/library-big.svg') }}" />
+            <img src="{{ asset('images/library-big.svg') }}" class="h-5 w-5"/>
             Mechanisms
         </a>
         @if (auth()->user()->role->id == 4)
          <a class="flex items-center gap-3 p-3 rounded-2xl font-bold transition hover:bg-white/10 " href="{{ route('agency.profile.show') }}">
-            <img src="{{ asset('images/book-search.svg') }}" />
+            <img src="{{ asset('images/book-search.svg') }}" class="h-5 w-5"/>
             Agency Profile
         </a>
         @endif
 
         @if (in_array(auth()->user()->role->id, [1,2,3]))
             <a class="{{ request()->routeIs('agencies.index', 'agency.show') ? $active : $inactive }}"  href="{{ route('agencies.index') }}">
-                <img src="{{ asset('images/folder-tree.svg') }}" />
+                <img src="{{ asset('images/folder-tree.svg') }}" class="h-5 w-5"/>
                 Agencies Directory
             </a>
         @endif
@@ -74,24 +74,24 @@
             <p class="text-[11px] text-white/50 mt-6">ADMINISTRATIVE TOOLS</p>
 
             <a class="{{ request()->routeIs('admin.account.index') ? $active : $inactive }}" href="{{ route('admin.account.index') }}">
-                <img src="{{ asset('images/user-round-search.svg') }}" />
+                <img src="{{ asset('images/user-round-search.svg') }}" class="h-5 w-5"/>
                 Manage Account
             </a>
 
             <a  class="{{ request()->routeIs('announcements') ? $active : $inactive }}" 
                 href="{{ route('announcements') }}">
-                <img src="{{ asset('images/book-a.svg') }}" />
+                <img src="{{ asset('images/book-a.svg') }}" class="h-5 w-5"/>
                 Make Announcement
             </a>
             <a  class="{{ request()->routeIs('settings') ? $active : $inactive }}" 
                 href="{{ route('admin.settings.mechanisms') }}">
-                <img src="{{ asset('images/settings.svg') }}" />
+                <img src="{{ asset('images/settings.svg') }}" class="h-5 w-5"/>
                 Other Settings
             </a>
 
             <a  class="{{ request()->routeIs('admin.field-office.index') ? $active : $inactive }}" 
                 href="{{ route('admin.field-office.index') }}">
-                <img src="{{ asset('images/settings.svg') }}" />
+                <img src="{{ asset('images/settings.svg') }}" class="h-5 w-5"/>
                 Field Office Settings
             </a>
         @endif
@@ -103,7 +103,7 @@
             @csrf
 
          <button class="flex items-center gap-2 rounded-2xl bg-blue-950 pl-2 pr-3 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-blue-900">
-            <img src="{{ asset('images/log-out.svg') }}" class="h-5 w-5 brightness-0 invert pl-1">
+            <img src="{{ asset('images/log-out.svg') }}" class="h-5 w-5 brightness-0 invert pl-1" class="h-5 w-5"/>
 
             Logout
         </button>
