@@ -25,7 +25,7 @@
                     
                     <option value="">All Agencies</option>
                     @foreach ($fieldOffices as $fieldOffice)
-                    <option value="{{ $fieldOffice->id }}" {{ request('fieldOffice') == $fieldOffice->id ? 'selected' : ''}}>{{ $fieldOffice->name }}</option>
+                        <option value="{{ $fieldOffice->id }}" {{ request('fieldOffice') == $fieldOffice->id ? 'selected' : ''}}>{{ $fieldOffice->name }}</option>
                     @endforeach
 
                 </select>

@@ -39,7 +39,12 @@ class AgencyController extends Controller
             'email_address' => 'required|email|unique:agencies,email_address',
         ]);
 
-        $path = $request->file('photo')->store('photos', 'public');
+        
+        
+        
+        if ($path = $request->file('photo')){
+            $path->store('photos', 'public');
+        }
 
         $agency = Agency::create([
             'name' => $request->name,
