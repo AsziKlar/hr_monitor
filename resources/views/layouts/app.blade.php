@@ -34,6 +34,8 @@
         </main>
     </div>
 
+    @livewireScripts
+
     <script> 
       const hamburger = document.getElementById('hamburger');
       const sidebar = document.getElementById('sidebar');
@@ -79,7 +81,7 @@
     
     
     
-    @livewireScripts
+   
 
   </body>
 
