@@ -22,8 +22,8 @@ class Agency extends Model
         return $this->belongsTo(FieldOffice::class);
     }
 
-    public function users(){
-        return $this->hasMany(User::class);
+    public function user(){
+        return $this->hasOne(User::class);
     }
 
     public function drafts(){
