@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Agency;
 use App\Models\AgencyMechanismPeriod;
+use App\Models\Comment;
 use App\Models\Draft;
 use App\Models\Mechanism;
 use App\Models\Status;
@@ -18,6 +19,7 @@ class DraftController extends Controller
     public function mechanism_filter(){
         $mechanisms = Mechanism::All();
 
+
         return view('mechanisms', compact('mechanisms'));
     }
 
@@ -26,13 +28,7 @@ class DraftController extends Controller
 
         return view('admin.statuses', compact('statuses','mechanism'));
     }
-    // public function index_by_status(Status $status, Mechanism $mechanism){
-    //     $drafts = Draft::where('mechanism_id', $mechanism->id)
-    //                     ->where('status_id', $status->id)
-    //                     ->get();
-    //     return view('admin.index', compact('drafts'));
-        
-    // }
+
 
     public function index_hrmo(Request $request, Mechanism $mechanism){
         $user = auth()->user();
@@ -120,12 +116,12 @@ class DraftController extends Controller
             'description' => $request->description
         ]);
 
-        return redirect()   ->back()
-                            ->with('success', 'Draft submitted successfully!');
+        return redirect()->back()->with('success', 'Draft submitted successfully!');
     }
 
     public function show($id) {
         $user = auth()->user();
+        $comments = Comment::where('draft_id', $id)->get();
 
         $draft = Draft::with('status')->find($id);
 
@@ -135,26 +131,43 @@ class DraftController extends Controller
                         ->latest('id')
                         ->first();
 
-        // //for the frontend either to show Edit button or not.
-        // $canEdit =  $latestDraft && 
-        //             $latestDraft->id === $draft->id &&
-        //             $draft->status->name === 'To be Reviewed' &&
-        //             $draft->agency_id === $user->agency_id;
 
-        return view('drafts.show', compact('draft'));
+        return view('drafts.show', compact('draft', 'comments', 'user'));
     }
 
     public function approve($id){
         $draft = Draft::find($id);
         $draft->status_id = 3;
         $draft->save();
-        return back();
+        return redirect()->back()->with('success', 'This draft is now approved!');
     }
     public function revision($id){
         $draft = Draft::find($id);
         $draft->status_id = 2;
         $draft->save();
-        return back();
+        return redirect()->back()->with('success', 'This draft needs to be revised.');
+    }
+
+   public function updateFile(Request $request, Draft $draft){
+
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+        ]);
+
+        if ($draft->file_path && Storage::disk('public')->exists($draft->file_path)) {
+            Storage::disk('public')->delete($draft->file_path);
+        }
+
+        $path = $request->file('file')->store('drafts', 'public');
+
+        $draft->update([
+            'file_name' => $request->file('file')->getClientOriginalName(),
+            'file_path' => $path,
+        ]);
+
+        return redirect()
+            ->back()
+            ->with('success', 'Draft file replaced successfully.');
     }
 
    

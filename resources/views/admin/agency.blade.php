@@ -3,9 +3,18 @@
 
     <div class="rounded-[28px] bg-white px-6 py-6 shadow-sm ring-1 ring-slate-100">
         <div class="flex items-center gap-6">
-            <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-red-700 to-red-900 text-2xl font-bold text-white shadow-md">
+            
+            @if ($agency->photo)
+            <div class="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full text-2xl font-bold text-white">
+                <img src="{{ asset('storage/' . $agency->photo) }}" class="h-full w-full object-cover">
+            </div>
+            @else
+            <div class="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-red-700 to-red-900 text-2xl font-bold text-white shadow-md">
                 {{ $agency->abbreviation }}
             </div>
+            @endif
+            
+
 
             <div class="flex-1">
                 <h1 class="text-2xl font-bold tracking-tight text-blue-950">{{ $agency->name }}</h1>
@@ -35,6 +44,17 @@
                     <div class="h-10 w-px bg-slate-200"></div>
                     <div>
                         <p class="text-sm text-slate-500">
+                            HRMO
+                        </p>
+
+                        <p class="text-base font-bold text-blue-950">
+                            {{ $agency_hrmo?->name ?? 'No HRMO yet' }}
+                        </p>
+                    </div>
+
+                    <div class="h-10 w-px bg-slate-200"></div>
+                    <div>
+                        <p class="text-sm text-slate-500">
                             Email Address
                         </p>
 
@@ -49,17 +69,30 @@
                             Field Office
                         </p>
 
-                        <p class="font-semibold text-red-700">
+                        <p class="text-base font-bold text-blue-950">
                             {{ $agency->fieldOffice->name }}
                         </p>
                     </div>
-                    <x-modals.edit-agency :fieldOffices="$fieldOffices" :agency="$agency"/>
-                    <button onclick="openEditAgencyModal()"
-                            class="flex items-center justify-center rounded-4xl min-w-[100px] transition hover:scale-[1.05] hover:bg-red-700 bg-blue-800/70">
-                        <span class="text-1xl font-bold text-white p-3">
-                            Edit
-                        </span>
-                    </button>
+
+                    <div class="h-10 w-px bg-slate-200"></div>
+                    <div>
+                        <p class="text-sm text-slate-500">
+                            Approved Mechanisms
+                        </p>
+
+                        <p class="text-base font-bold text-blue-700">
+                            {{ $approvedCount }} / 5
+                        </p>
+                    </div>
+                    @if (in_array(auth()->user()->role->id, [1,4]))
+                        <x-modals.edit-agency :fieldOffices="$fieldOffices" :agency="$agency"/>
+                        <button onclick="openEditAgencyModal()"
+                                class="ml-auto flex items-center justify-center rounded-4xl min-w-[100px] transition hover:scale-[1.05] hover:bg-red-700 bg-blue-800/70">
+                            <span class="text-1xl font-bold text-white p-3">
+                                Edit
+                            </span>
+                        </button>
+                    @endif
                 </div>
                 
             </div>
@@ -88,7 +121,7 @@
               </thead>
               <tbody class="text-1xl text-slate-700 items-center justify-center gap-3 flex-1">
 
-              {{-- @forelse ($drafts as $draft)
+              @forelse ($drafts as $draft)
               
                 <tr class="hover:bg-slate-100 border-b border-slate-200 h-12">
                   <td class="font-bold">{{$draft->file_name}}</td>
@@ -126,7 +159,7 @@
                             No drafts submitted
                         </td>
                     </tr>
-              @endforelse --}}
+              @endforelse
 
               </tbody>
             </table>

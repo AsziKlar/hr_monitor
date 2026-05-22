@@ -14,15 +14,16 @@ class Agency extends Model
         'field_office_id',
         'email_address',
         'head',
-        'abbreviation'
+        'abbreviation',
+        'photo'
     ];
 
     public function fieldOffice(){
         return $this->belongsTo(FieldOffice::class);
     }
 
-    public function users(){
-        return $this->hasMany(User::class);
+    public function user(){
+        return $this->hasOne(User::class);
     }
 
     public function drafts(){

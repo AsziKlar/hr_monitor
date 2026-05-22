@@ -9,7 +9,7 @@
             <h2 class="text-3xl font-bold text-blue-950">Replace Draft</h2>
         </div>
 
-        <form method="POST" action="{{ route('draft.update', $draft->id) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('draft.update', $draft) }}" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
 

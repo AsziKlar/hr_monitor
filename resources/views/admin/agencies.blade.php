@@ -8,11 +8,13 @@
         <form method="GET" class="w-full max-w-[320px]">
             <div class="flex items-center rounded-full bg-slate-100 py-3 px-2 shadow-gray-400 ring-1 ring-slate-200">
                 <img src="{{ asset('images/search.svg') }}" class="opacity-20" />
-                <input
+                <input id="searchInput"
                     type="text"
                     name="search"
                     value="{{ request('search') }}"
                     placeholder="Search agency..."
+                    autofocus
+                    oninput="clearTimeout(this.delay); this.delay = setTimeout(() => this.form.submit(), 400)"
                     class="w-full bg-transparent outline-none pl-1"
                 >
 
@@ -23,28 +25,37 @@
                     
                     <option value="">All Agencies</option>
                     @foreach ($fieldOffices as $fieldOffice)
-                    <option value="{{ $fieldOffice->id }}" {{ request('fieldOffice') == $fieldOffice->id ? 'selected' : ''}}>{{ $fieldOffice->name }}</option>
+                        <option value="{{ $fieldOffice->id }}" {{ request('fieldOffice') == $fieldOffice->id ? 'selected' : ''}}>{{ $fieldOffice->name }}</option>
                     @endforeach
 
                 </select>
         </form>
-        <x-modals.create-agency :fieldOffices="$fieldOffices"/>
-        <button onclick="openCreateAgencyModal()"
-                class="flex items-center rounded-4xl transition hover:scale-[1.05] hover:bg-red-700 bg-red-800">
-            <span class="text-1xl font-bold text-white p-3">+ Add New Agency</span>
-        </button>
+        @if (auth()->user()->role->id == 1)
+            <x-modals.create-agency :fieldOffices="$fieldOffices"/>
+            <button onclick="openCreateAgencyModal()"
+                    class="flex items-center rounded-4xl transition hover:scale-[1.05] hover:bg-red-700 bg-red-800">
+                <span class="text-1xl font-bold text-white p-3">+ Add New Agency</span>
+            </button>
+        @endif
        
         </div>
     </section>
 
 
-   <section class="p-4">
+   <section class="mx-6 mt-4">
         @forelse ($agencies as $agency)
             <div class="grid grid-cols-1 gap-3 mt-1">
                 <a class="block duration-300 ease-in-out hover:-translate-y-1 hover:bg-blue-100 hover:shadow-blue-200/50 flex gap-3 items-center rounded-xl bg-white p-4 shadow-md ring-1 ring-slate-100"
                 href="{{ route('agency.show', $agency) }}">
-                    <img class="h-12 w-12 rounded-xl object-cover ring-2 ring-red-200"
-                        src="csc_logo.png">
+                     @if ($agency->photo)
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full text-2xl font-bold text-white">
+                            <img src="{{ asset('storage/' . $agency->photo) }}" class="h-full w-full object-cover">
+                        </div>
+                    @else
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-red-700 to-red-900 text-sm font-bold text-white shadow-md">
+                            {{ $agency->abbreviation }}
+                        </div>
+                    @endif
                     <div class="flex-1">
                         <p class="text-lg font-bold">
                             {{ $agency->name }}
@@ -92,3 +103,12 @@
             }
         </script>
 </x-app-layout>
+
+<script>
+    const searchInput = document.getElementById('searchInput');
+
+    if (searchInput) {
+        searchInput.focus();
+        searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+    }
+</script>

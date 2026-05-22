@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @livewireStyles
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,6 +25,7 @@
 
     <div class="flex-1 flex flex-col overflow-hidden w-full main-content lg:ml-64 transition-all duration-300 ease-in-out transition-none">
         <x-topbar />
+        <x-alert />
 
         <main class=" bg-slate-100 flex-1 overflow-y-auto">
             
@@ -30,6 +33,8 @@
 
         </main>
     </div>
+
+    @livewireScripts
 
     <script> 
       const hamburger = document.getElementById('hamburger');
@@ -76,7 +81,7 @@
     
     
     
-
+   
 
   </body>
 
