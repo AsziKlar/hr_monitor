@@ -16,6 +16,11 @@ class AnnouncementController extends Controller
     public function store(Request $request){
         $user = auth()->user();
 
+        $request->validate([
+            'title' => 'required|string|max:100',
+            'body' => 'required|string|max:255'
+        ]);
+
         Announcement::create([
             'title' => $request->title,
             'body' => $request->body,
