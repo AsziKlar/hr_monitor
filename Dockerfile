@@ -32,13 +32,8 @@ RUN npm install
 # Build Vite assets
 RUN npm run build
 
-# Cache Laravel configs
-RUN php artisan config:cache
-RUN php artisan route:cache
-RUN php artisan view:cache
+
 
 # Expose Render port
 EXPOSE 10000
 
-# Start Laravel
-CMD php artisan migrate --force --seed && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
