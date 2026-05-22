@@ -1,6 +1,6 @@
 <x-app-layout>
-<section class="p-6">
-
+<section class="px-6">
+    <x-back-button />
     <div class="rounded-[28px] bg-white px-6 py-6 shadow-sm ring-1 ring-slate-100">
         <div class="flex items-center gap-6">
             

@@ -55,7 +55,7 @@
     <div class="mt-8 flex items-center justify-between">
 
         <x-modals.create-account :agencies="$agencies" :roles="$roles"/>
-        <button onclick="openCreateUserModal()" class="flex items-center gap-2 rounded-2xl bg-gradient-to-br from-red-700 to-red-900 px-5 py-3 text-sm font-bold text-white shadow-md transition hover:scale-[1.01]">
+        <button onclick="openCreateUserModal()" class="flex items-center gap-2 rounded-full bg-gradient-to-br from-red-700 to-red-900 px-5 py-3 text-base font-bold text-white shadow-md transition hover:scale-[1.01]">
             <span class="text-lg">+</span>
             Add New Account
         </button>
@@ -138,7 +138,7 @@
                 </div>
             </div>
         @empty
-            <p class="text=text-center">No Users</p>
+            <p class="my-4 text-base text-center">No Users</p>
         @endforelse
         
        

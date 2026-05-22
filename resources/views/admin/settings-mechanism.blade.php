@@ -1,6 +1,7 @@
 <x-app-layout>
 
     <section class="p-6">
+        
           <div class="flex items-center justify-between rounded-4xl bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">
               <div class="text-blue-950">
                   <p class="text-2xl font-bold">

@@ -1,16 +1,17 @@
 <x-app-layout>
 
-    <section class="p-6 pb-0">
+    <section class="p-6">
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <x-modals.add-field-office />
             <button onclick="openAddFieldOfficeModal()"
                 type="button"
-                class="flex items-center justify-center gap-2 self-start rounded-2xl bg-gradient-to-br from-red-700 to-red-900 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:scale-[1.02]"
+                class="flex items-center justify-center gap-2 self-start rounded-full bg-gradient-to-br from-red-700 to-red-900 px-5 py-3 text-base font-bold text-white shadow-sm transition hover:scale-[1.02]"
             >
                 <span class="text-lg">＋</span>
 
                 Add Field Office
             </button>
+           
 
             <form method="GET" class="w-full max-w-sm">
                 <div class="flex items-center rounded-full bg-white px-4 py-3 shadow-sm ring-1 ring-slate-100">
@@ -30,12 +31,27 @@
 
                 </div>
             </form>
+            
 
         </div>
     </section>
+   
+       
 
 
-    <section class="p-6">
+    <section class="p-6" x-data="{ showAll: false }">
+         <div class="flex">
+            <div class="ml-auto">
+                <button
+                    type="button"
+                    @click="showAll = !showAll"
+                    class="mb-4 rounded-2xl bg-blue-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-900"
+                >
+                    <span x-show="!showAll">Show All</span>
+                    <span x-show="showAll">Hide All</span>
+                </button>
+            </div>
+        </div>
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
 
             @forelse ($field_offices as $field_office)
@@ -60,13 +76,13 @@
                             @click="open = !open"
                             class="rounded-full bg-blue-950 px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-900"
                         >
-                            <span x-show="!open">Show</span>
-                            <span x-show="open">Hide</span>
+                            <span x-show="!(open || showAll)">Show</span>
+                            <span x-show="open || showAll">Hide</span>
                         </button>
                     </div>
 
                     {{-- Scrollable Content --}}
-                    <div x-show="open" class="max-h-[350px] space-y-3 overflow-y-auto pr-2">
+                    <div x-show="open || showAll" class="max-h-[350px] space-y-3 overflow-y-auto pr-2">
 
                         @forelse ($field_office->agencies as $agency)
 
