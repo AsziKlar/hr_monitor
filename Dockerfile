@@ -24,7 +24,7 @@ WORKDIR /var/www
 COPY . .
 
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 # Install frontend dependencies
 RUN npm install
@@ -36,4 +36,6 @@ RUN npm run build
 
 # Expose Render port
 EXPOSE 10000
+
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
 
