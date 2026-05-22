@@ -11,14 +11,14 @@ use App\Models\Status;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Notifications\SystemNotification;
 
 class DraftController extends Controller
 {
     public function mechanism_filter(){
         $mechanisms = Mechanism::All();
-
 
         return view('mechanisms', compact('mechanisms'));
     }
@@ -29,27 +29,25 @@ class DraftController extends Controller
         return view('admin.statuses', compact('statuses','mechanism'));
     }
 
-
     public function index_hrmo(Request $request, Mechanism $mechanism){
         $user = auth()->user();
 
         $drafts = Draft::where('mechanism_id', $mechanism->id);
 
         $latestDraft = null;
-
-       
+     
         $period = AgencyMechanismPeriod::where('agency_id', $user->agency_id)
                     ->where('mechanism_id', $mechanism->id)
                     ->first();
 
         $drafts = $drafts   ->where('agency_id', $user->agency_id)
                             ->where('period', $period->current_period)->latest()->get();
-        
+       
         $latestDraft = Draft::where('agency_id', $user->agency_id)
                         ->where('mechanism_id', $mechanism->id)
                         ->where('period', $period->current_period)
                         ->latest('id')
-                        ->first();                   
+                        ->first();        
 
         return view('drafts.index', compact('drafts', 'mechanism', 'latestDraft'));
     }
@@ -77,9 +75,8 @@ class DraftController extends Controller
         return view('admin.index', compact('drafts', 'mechanism'));
     }
 
-
     public function create($mechanism){
-        
+       
         return view('drafts.create', compact('mechanism'));
     }
 
@@ -100,12 +97,11 @@ class DraftController extends Controller
                     ->where('mechanism_id', $request->mechanism_id)
                     ->first();
 
-
         if (!$period) {
             return back()->with('error', 'No period has been opened for this mechanism yet.');
         }
 
-        Draft::create([
+        $draft = Draft::create([
             'mechanism_id' => $request->mechanism_id,
             'user_id' => $user->id,
             'agency_id' => $user->agency_id,
@@ -115,6 +111,19 @@ class DraftController extends Controller
             'period' => $period->current_period,
             'description' => $request->description
         ]);
+
+        $users_to_notify = User::whereIn('role_id', [1,2,3])->get();  
+        $mechanism = Mechanism::find($request->mechanism_id);
+
+        foreach ($users_to_notify as $csc_user) {
+
+            $csc_user->notify(
+                new SystemNotification(
+                    'New draft submitted by ' . $user->agency->name . ' for ' . $mechanism->description ,
+                    route('admin.drafts.show', $draft->id),
+                )
+            );
+        }
 
         return redirect()->back()->with('success', 'Draft submitted successfully!');
     }
@@ -131,20 +140,36 @@ class DraftController extends Controller
                         ->latest('id')
                         ->first();
 
-
         return view('drafts.show', compact('draft', 'comments', 'user'));
     }
 
     public function approve($id){
         $draft = Draft::find($id);
-        $draft->status_id = 3;
-        $draft->save();
+        $draft->update([
+            'status_id' => 3,
+        ]);
+
+        $draft->user->notify(
+            new SystemNotification(
+                'Your draft status has been updated.',
+                route('drafts.show', ['id' => $draft->id])
+            )
+        );
+
         return redirect()->back()->with('success', 'This draft is now approved!');
     }
     public function revision($id){
         $draft = Draft::find($id);
-        $draft->status_id = 2;
-        $draft->save();
+        $draft->update([
+            'status_id' => 2
+        ]);
+        $draft->user->notify(
+            new SystemNotification(
+                'Your draft in ' . $draft->mechanism->description . ' needs revision',
+                route('drafts.show', ['id' => $draft->id])
+            )
+        );
+        
         return redirect()->back()->with('success', 'This draft needs to be revised.');
     }
 
@@ -169,6 +194,5 @@ class DraftController extends Controller
             ->back()
             ->with('success', 'Draft file replaced successfully.');
     }
-
-   
+  
 }
