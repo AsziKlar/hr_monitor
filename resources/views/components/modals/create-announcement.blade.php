@@ -25,6 +25,7 @@
                         name="title"
                         placeholder="Enter announcement title"
                         class="mt-2 w-full bg-white rounded-2xl border border-slate-300 p-4 text-lg focus:border-blue-500 focus:ring-blue-500"
+                        required
                     >
                 </div>
 
@@ -36,6 +37,7 @@
                         rows="6"
                         placeholder="Write the announcement here..."
                         class="mt-2 w-full bg-white resize-none rounded-2xl border border-slate-300 p-4 text-lg focus:border-blue-500 focus:ring-blue-500"
+                        required
                     ></textarea>
                 </div>
 

@@ -1,6 +1,6 @@
 <x-app-layout>
 
-        <main class=" bg-slate-100 flex-1 overflow-y-auto">
+    <main class=" bg-slate-100 flex-1 overflow-y-auto">
         
         <section class="p-6">
           <div class="flex items-center justify-between rounded-4xl bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">

@@ -41,7 +41,7 @@ class AgencyController extends Controller
         ]);
        
         if ($path = $request->file('photo')){
-            $path->store('photos', 'public');
+            $path = $path->store('photos', 'public');
         }
 
         $agency = Agency::create([

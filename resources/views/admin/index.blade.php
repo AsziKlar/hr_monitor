@@ -1,5 +1,6 @@
 <x-app-layout>
-    <section class="p-6">
+    <section class="px-6">
+      <x-back-button />
           <div class="flex gap-4 items-center rounded-4xl bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">
             <div class="flex h-4 w-full items-center rounded-4xl bg-slate-100 p-6 shadow-gray-400 ring-1 ring-slate-200">
               <input class="w-full outline-none type='text' placeholder" placeholder='Search submission...'/>

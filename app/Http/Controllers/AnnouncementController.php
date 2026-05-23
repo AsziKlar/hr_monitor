@@ -20,11 +20,11 @@ class AnnouncementController extends Controller
         $user = auth()->user();
 
         $request->validate([
-            'title' => 'required|string|max:50',
+            'title' => 'required|string|max:100',
             'body' => 'required|string|max:255'
         ]);
-
-        $announcement = Announcement::create([
+      
+        Announcement::create([
             'title' => $request->title,
             'body' => $request->body,
             'user_id' => $user->id
