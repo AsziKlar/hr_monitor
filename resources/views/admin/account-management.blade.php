@@ -128,8 +128,9 @@
                 </div>
 
                 <div class="flex gap-2">
+                    <x-modals.edit-acc-by-admin :account="$account" />
 
-                    <button class="rounded-lg border border-slate-300 px-4 py-2 text-xs font-semibold transition hover:bg-slate-50">
+                    <button onclick="openEditAccByAdminModal({{$account->id}})" class="rounded-lg border border-slate-300 px-4 py-2 text-xs font-semibold transition hover:bg-slate-50">
                         Edit Info
                     </button>
 
@@ -204,4 +205,14 @@
         document.getElementById('editAdminProfileModal').classList.add('hidden');
         document.getElementById('editAdminProfileModal').classList.remove('flex');
     }
+
+    function openEditAccByAdminModal(accountId) {
+        document.getElementById('editAccByAdminModal-' + accountId).classList.remove('hidden');
+        document.getElementById('editAccByAdminModal-' + accountId).classList.add('flex');
+    }
+    function closeEditAccByAdminModal(accountId) {
+        document.getElementById('editAccByAdminModal-' + accountId).classList.add('hidden');
+        document.getElementById('editAccByAdminModal-' + accountId).classList.remove('flex');
+    }
 </script>
+

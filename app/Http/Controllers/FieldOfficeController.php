@@ -38,7 +38,7 @@ class FieldOfficeController extends Controller
 
         $user = User::where('agency_id', $agency->id)->first();
 
-        $user->notify(
+        $user?->notify(
             new SystemNotification(
                 'You have been re-assigned to ' . $new_field_office->name . ' field office',
                 route('agency.profile.show')

@@ -7,15 +7,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class HRMOAccountCreated extends Notification
+class PasswordUpdatedByAdmin extends Notification
 {
     use Queueable;
 
     public $password;
 
-    /**
-     * Create a new notification instance.
-     */
     public function __construct($password)
     {
         $this->password = $password;
@@ -37,9 +34,8 @@ class HRMOAccountCreated extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->greeting('Hello ' . $notifiable->name . ',')
-            ->line('This is your HR Mechanism Tracker account for **' . $notifiable?->agency?->name . '**')
-            ->line('The following are your login credentials: ')
+             ->greeting('Hello ' . $notifiable->name . ',')
+            ->line('The following are your new login credentials: ')
             ->line('Email: **' . $notifiable->email . '**')
             ->line('Temporary Password: **' . $this->password . '**')
             ->action('Login', url('/login'))
