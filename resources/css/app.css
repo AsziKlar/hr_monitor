@@ -8,3 +8,12 @@ body {
 [x-cloak] {
     display: none !important;
 }
+
+.password-toggle-input::-ms-clear,
+.password-toggle-input::-ms-reveal {
+    display: none;
+}
+
+.password-toggle-input::-webkit-textfield-decoration-container {
+    display: none !important;
+}

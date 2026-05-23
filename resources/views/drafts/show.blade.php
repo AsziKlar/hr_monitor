@@ -150,16 +150,24 @@
                             <div class="flex gap-3">
 
                                 {{-- Profile --}}
-                                
-                                    @if ($comment->user->agency == NULL)
+                                @php
+                                    $agency = $comment?->user?->agency;
+                                    $nameParts = collect(explode(' ', $comment?->user?->name ?? ''));
+                                    $initials = strtoupper(
+                                        ($nameParts->first()[0] ?? '?') .
+                                        ($nameParts->count() > 1 ? $nameParts->last()[0] : '')
+                                    );
+                                @endphp
+
+                                @if ($agency === null)
                                     <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-red-700 to-red-900 text-sm font-bold text-white">
-                                        {{ strtoupper(collect(explode(' ', $comment->user->name))->first()[0] . collect(explode(' ', $comment->user->name))->last()[0]) }}
-                                        </div>
-                                    @else
-                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full  text-sm font-bold text-white">
-                                        <img src="{{ asset('storage/' . $comment->draft->agency->photo) }}" class="h-full w-full object-cover">
-                                        </div>
-                                    @endif
+                                        {{ $initials }}
+                                    </div>
+                                @else
+                                    <div class="flex h-10 w-10 shrink-0 overflow-hidden items-center justify-center rounded-full text-sm font-bold text-white">
+                                        <img src="{{ asset('storage/' . $agency->photo) }}" class="h-full w-full object-cover">
+                                    </div>
+                                @endif
                             
                                 
 
@@ -167,11 +175,11 @@
                                 <div class="min-w-0 flex-1">
 
                                     <p class="font-bold text-sm text-blue-950">
-                                        {{ $comment->user->name }}
+                                        {{ $comment?->user?->name }}
                                     </p>
 
                                     <p class="mt-1 text-sm leading-relaxed text-slate-600">
-                                        {{ $comment->comment }}
+                                        {{ $comment?->comment }}
                                     </p>
 
                                     {{-- Buttons --}}
