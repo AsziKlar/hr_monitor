@@ -57,7 +57,7 @@ new class extends Component
         onclick="document.getElementById('notif-dropdown').classList.toggle('hidden')"
         class="relative flex h-9 w-9 items-center justify-center rounded-full hover:bg-slate-100"
     >
-        🔔
+        <img src="{{ asset('images/notification_bell.svg') }}" class="h-5 w-5">
         @if ($unreadCount > 0)
             <span class="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white">
                 {{ $unreadCount }}

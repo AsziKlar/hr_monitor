@@ -1,4 +1,4 @@
-<header class="sticky top-0 left-0 w-full flex items-center justify-between px-4 py-3 border-b border-slate-200/80 bg-white z-[9999]">    <div class="flex items-center gap-4">
+<header class="sticky top-0 left-0 w-full flex items-center justify-between px-4 py-3 border-b border-slate-200/80 bg-white z-[30]]">    <div class="flex items-center gap-4">
     <div id='hamburger' class="flex h-9 w-9 items-center justify-center rounded-xl transition hover:bg-fuchsia-400/20 ">
         <img class="h-7 w-7 object-contain rounded-xl bg-white/5" src="{{ asset('images/hamburger.svg') }}" alt="hamburger">
     </div>

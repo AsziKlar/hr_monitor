@@ -1,4 +1,7 @@
+
 <x-app-layout>
+    <x-modals.edit-profile :agency="$agency" :fieldOffices="$field_offices" />
+
     <section class="sticky top-0 z-40 mx-6 mt-6">
         <div class="rounded-[40px] bg-white p-10 shadow-gray-400 ring-1 ring-slate-100">
 
@@ -73,7 +76,7 @@
         <div class="mt-10 flex flex-wrap items-center justify-center gap-4 rounded-[32px] bg-slate-50 p-6 ring-1 ring-slate-100">
 
             <!-- Edit -->
-            <x-modals.edit-profile :agency="$agency" :fieldOffices="$field_offices" />
+            
             <button type="button" onclick="openEditProfileModal()" class="rounded-2xl border border-slate-300 bg-white px-6 py-3 text-base font-bold text-blue-950 transition hover:bg-slate-100">
                 Edit Info
             </button>
