@@ -66,7 +66,7 @@ new class extends Component
 
     <div
         id="notif-dropdown"
-        class="hidden absolute right-0 mt-3 w-80 rounded-3xl border border-slate-200 bg-white shadow-xl z-[99999]"
+        class="hidden fixed right-6 top-16 z-[999999] w-80 rounded-3xl border border-slate-200 bg-white shadow-2xl"
     >
         <div class="border-b border-slate-100 p-4">
             <h2 class="font-bold text-lg">Notifications</h2>

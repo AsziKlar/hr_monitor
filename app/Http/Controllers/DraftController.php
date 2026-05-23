@@ -154,12 +154,15 @@ class DraftController extends Controller
     }
 
     public function approve($id){
+
         $draft = Draft::find($id);
         $draft->update([
             'status_id' => 3,
         ]);
 
-        $draft->user->notify(
+
+
+        $draft->user?->notify(
             new SystemNotification(
                 'Your draft status has been updated.',
                 route('drafts.show', ['id' => $draft->id])
@@ -173,7 +176,8 @@ class DraftController extends Controller
         $draft->update([
             'status_id' => 2
         ]);
-        $draft->user->notify(
+
+        $draft->user?->notify(
             new SystemNotification(
                 'Your draft in ' . $draft->mechanism->description . ' needs revision',
                 route('drafts.show', ['id' => $draft->id])
