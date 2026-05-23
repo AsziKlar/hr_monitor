@@ -13,7 +13,7 @@
   
 
 
-  <body class="flex h-screen">
+  <body class="flex h-screen overflow-hidden">
 
     {{-- sidebar content --}}
     <x-sidebar />
@@ -27,7 +27,7 @@
         <x-topbar />
         <x-alert />
 
-        <main class=" bg-slate-100 flex-1 overflow-y-auto">
+        <main class="bg-slate-100 flex-1 min-h-0 overflow-y-auto">
             
             {{ $slot }}
 

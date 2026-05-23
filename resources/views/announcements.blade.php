@@ -1,21 +1,23 @@
 <x-app-layout>
-    <section class="px-6 pb-5 bg-slate-100 flex-1 overflow-y-auto">
-        <x-back-button />
-        <div class="flex gap-4 items-center rounded-4xl bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">
-        <div class="flex-1 text-blue-950 gap-2 justify-between">
-            <p class="text-2xl font-bold ">Announcement Board</p>
-            <p class="text-1xl text-gray-400">Publish official notices, reminders, and updates for agencies and CSC personnel.</p>
-        </div>
+    <div class="h-full min-h-0 flex flex-col overflow-hidden">
+        <section class="px-6 pb-5">
+            <x-back-button />
+            <div class="flex gap-4 items-center rounded-4xl bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">
+            <div class="flex-1 text-blue-950 gap-2 justify-between">
+                <p class="text-2xl font-bold ">Announcement Board</p>
+                <p class="text-1xl text-gray-400">Publish official notices, reminders, and updates for agencies and CSC personnel.</p>
+            </div>
 
-        <x-modals.create-announcement />
-        <button onclick="openCreateAnnouncementModal()" class="flex items-center rounded-4xl transition hover:scale-[1.05] hover:bg-red-700 bg-red-800">
-            <span class="text-1xl font-bold text-white p-3">+ Create Announcement</span>
-        </button>
-        </div>
-    </section>
+            <x-modals.create-announcement />
+            <button onclick="openCreateAnnouncementModal()" class="flex items-center rounded-4xl transition hover:scale-[1.05] hover:bg-red-700 bg-red-800">
+                <span class="text-1xl font-bold text-white p-3">+ Create Announcement</span>
+            </button>
+            </div>
+        </section>
 
-        @forelse ($announcements as $announcement)
-            <section class="px-6 pt-2">
+        <section class="px-6 pt-2 pb-6 flex-1 min-h-0 overflow-y-auto">
+            @forelse ($announcements as $announcement)
+            
                 <div class="flex gap-4 items-start rounded-4xl bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">
                     <div class="flex text-blue-950 gap-4 grow">
 
@@ -55,14 +57,15 @@
 
                     </div>
                 </div>
-            </section>
-        @empty
-            <p class="my-6 text-base text-center text-slate-500">
-                No announcement created yet
-            </p>
+                
+            @empty
+                <p class="my-6 text-base text-center text-slate-500">
+                    No announcement created yet
+                </p>
 
-        @endforelse
-
+            @endforelse
+        </section>
+    </div>
    
 </x-app-layout>
  <script>

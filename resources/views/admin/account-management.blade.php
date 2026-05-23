@@ -1,8 +1,8 @@
 <x-app-layout>
-<section class="min-h-screen bg-slate-100 p-6 font-sans text-blue-950">
+<section class="h-full overflow-hidden bg-slate-100 p-6 font-sans text-blue-950 flex flex-col min-h-0">
 
     {{-- Logged-in Admin Card --}}
-    <div class="flex items-center justify-between rounded-[2rem] bg-white p-8 shadow-sm">
+    <div class="flex items-center justify-between rounded-[2rem] bg-white p-6 shadow-sm">
         
         <div class="flex items-center gap-6">
             
@@ -81,7 +81,7 @@
     </div>
 
 
-    <div class="mt-8 space-y-6">
+   <div class="mt-8 space-y-6 flex-1 min-h-0 overflow-y-auto pr-2">
 
         @forelse ($users as $account)
             <div class="flex items-center justify-between rounded-[2rem] bg-white p-6 shadow-sm">
