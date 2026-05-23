@@ -1,5 +1,5 @@
 <x-app-layout>
-    <section class="px-6">
+    <section class="px-6 mb-5">
         <x-back-button />
         <div class="rounded-4xl bg-white p-8 shadow-gray-400 ring-1 ring-slate-100">
 
@@ -7,12 +7,12 @@
 
                 <div>
                     <h1 class="text-2xl font-bold text-blue-950">
-                        {{ $draft->mechanism->name }} Records
+                        {{ $draft->mechanism->name }} 
                     </h1>
 
-                    <p class="mt-2 text-lg text-blue-950/50">
+                    {{-- <p class="mt-2 text-lg text-blue-950/50">
                         Submitted by {{ $draft->agency->name }}
-                    </p>
+                    </p> --}}
                 </div>
 
                 @if (in_array(auth()->user()->role->id, [1,2]))

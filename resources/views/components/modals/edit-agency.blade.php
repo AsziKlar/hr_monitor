@@ -1,8 +1,8 @@
-<div id="editAgencyModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40">
-    <div class="w-full max-w-2xl overflow-hidden rounded-4xl bg-white shadow-2xl">
+<div id="editAgencyModal" class="fixed inset-0 z-[999999] hidden items-center justify-center bg-black/40 p-4">
+    <div class="w-full max-w-xl overflow-hidden rounded-3xl bg-white shadow-2xl">
 
         
-        <div class="p-8">
+        <div class="p-4">
             <h2 class="text-3xl font-bold text-blue-950">
                Edit Agency Details
             </h2>
