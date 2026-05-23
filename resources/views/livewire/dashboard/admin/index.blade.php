@@ -133,7 +133,7 @@
                                     <td class="p-2">{{ $draft->agency->name }}</td>
                                     <td class="p-2">{{ $draft->mechanism->description }}</td>
                                     <td class="p-2">{{ $draft->created_at->format('m/d/y') }}</td>
-                                    <td class="p-2">{{ $draft->created_at->diffForHumans() }}</td>
+                                    <td class="p-2"><p class="text-xs">{{ $draft->created_at->diffForHumans() }}</p></td>
                                     
                                 </tr>
                             

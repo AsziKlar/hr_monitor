@@ -84,63 +84,72 @@
    <div class="mt-8 space-y-6 flex-1 min-h-0 overflow-y-auto pr-2">
 
         @forelse ($users as $account)
-            <div class="flex items-center justify-between rounded-[2rem] bg-white p-6 shadow-sm">
+            <div class="flex items-center justify-between rounded-[1.5rem] bg-white p-4 shadow-sm">
 
-                <div class="flex items-center gap-5">
+                <div class="flex items-center gap-4">
 
-
-                    <div class="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-blue-100 text-2xl font-bold text-blue-600 ring-2 ring-blue-100">
+                    <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-blue-100 text-xl font-bold text-blue-600 ring-2 ring-blue-100">
                         {{ strtoupper(collect(explode(' ', $account->name))->first()[0] . collect(explode(' ', $account->name))->last()[0]) }}
                     </div>
 
                     <div>
-                        <h2 class="text-2xl font-bold">{{ $account->name }}</h2>
-                        
-                        <p class="text-slate-500">
-                            Agency: 
-                            <span class="font-bold text-blue-950">
+                        <h2 class="text-base font-bold text-blue-950">
+                            {{ $account->name }}
+                        </h2>
+
+                        <p class="text-sm text-slate-500">
+                            Agency:
+                            <span class="font-semibold text-blue-950">
                                 @if ($account->agency?->id === null)
                                     Civil Service Commission
                                 @else
-                                    {{$account->agency->name}}
+                                    {{ $account->agency->name }}
                                 @endif
                             </span>
                         </p>
 
-                        <p class="text-slate-500">
-                            Email:
-                            <span class="font-bold text-blue-950">
-                                {{ $account->email }}
-                            </span>
-                        </p>
+                        <div class="mt-1 flex items-center gap-4 text-sm text-slate-500">
+                            <p>
+                                Email:
+                                <span class="font-semibold text-blue-950">
+                                    {{ $account->email }}
+                                </span>
+                            </p>
 
-                        <p class="text-slate-500">
-                            Role:
-                            <span class="font-bold text-blue-950">
-                                {{ $account->role->name }}
-                            </span>
-                        </p>
+                            <p>
+                                Role:
+                                <span class="font-semibold text-blue-950">
+                                    {{ $account->role->name }}
+                                </span>
+                            </p>
+
+                        </div>
                     </div>
                 </div>
 
+                <div class="flex gap-2">
 
-                <div class="flex gap-3">
-                    
-                    <button class="rounded-xl border border-slate-300 px-5 py-2 text-sm font-bold transition hover:bg-slate-50">
+                    <button class="rounded-lg border border-slate-300 px-4 py-2 text-xs font-semibold transition hover:bg-slate-50">
                         Edit Info
                     </button>
 
                     <x-modals.archive-user :user="$account"/>
-                    <button onclick="openArchiveUserModal({{$account->id}})" type="button" class="rounded-xl bg-gradient-to-br from-red-50 to-red-100 px-5 py-2 text-sm font-bold text-red-700 transition hover:from-red-100 hover:to-red-200">
+
+                    <button
+                        onclick="openArchiveUserModal({{$account->id}})"
+                        type="button"
+                        class="rounded-lg bg-gradient-to-br from-red-50 to-red-100 px-4 py-2 text-xs font-semibold text-red-700 transition hover:from-red-100 hover:to-red-200"
+                    >
                         Archive Account
                     </button>
 
                 </div>
             </div>
         @empty
-            <p class="my-4 text-base text-center">No Users</p>
+            <p class="my-4 text-center text-sm text-slate-500">
+                No Users
+            </p>
         @endforelse
-        
        
 
 

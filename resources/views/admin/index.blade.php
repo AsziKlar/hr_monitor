@@ -2,13 +2,28 @@
     <section class="px-6">
       <x-back-button />
           <div class="flex gap-4 items-center rounded-4xl bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">
-            <div class="flex h-4 w-full items-center rounded-4xl bg-slate-100 p-6 shadow-gray-400 ring-1 ring-slate-200">
-              <input class="w-full outline-none type='text' placeholder" placeholder='Search submission...'/>
-            </div>
+
+            <form method="GET" action="{{ route('admin.drafts.index', $mechanism) }}" class="w-full">
+    
+                <div class="flex gap-4 items-center">
+
+                    <div class="flex h-12 w-60 items-center rounded-4xl bg-slate-100 px-6 ring-1 ring-slate-200">
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{ request('search') }}"
+                            placeholder="Search agency or category..."
+                            class="w-full bg-transparent outline-none placeholder:text-slate-400"
+                        />
+                    </div>
+
+                </div>
+
+            </form>
 
             <form method="GET" action="{{ route('admin.drafts.index', $mechanism) }}">
                 <select name="status" onchange="this.form.submit()" class="select select-bordered rounded-[16px] bg-slate-100 text-1xl min-w-[170px] ring-2 ring-slate-200 p-3">
-                    <option disabled selected>Filter by Status</option>
+                    <option option="">All Agencies</option>
                     <option value="1" {{ request('status') == 1 ? 'selected' : ''}}>To be Reviewed</option>
                     <option value="2" {{ request('status') == 2 ? 'selected' : ''}}>Needs Revision</option>
                     <option value="3" {{ request('status') == 3 ? 'selected' : ''}}>Approved</option>
@@ -25,7 +40,7 @@
         <section class="p-6">
           <div class="rounded-[30px] bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">
               <div class="max-h-[65vh] overflow-y-auto overflow-x-auto">
-                  <table class="w-full table-auto border-collapse border-slate-400">
+                  <table class="w-full table-fixed border-collapse border-slate-400">
                       <thead class="sticky top-0 z-10 bg-white text-left">
                           <tr class="text-1xl uppercase text-[#96A3BA] border-b border-slate-400">
                               <th class="font-bold py-3">Submission Title</th>
@@ -40,8 +55,10 @@
                       <tbody class="text-1xl text-slate-700">
                           @forelse ($drafts as $draft)
                               <tr class="hover:bg-slate-100 border-b border-slate-200 h-12">
-                                  <td class="font-bold">{{ $draft->file_name }}</td>
-                                  <td>{{ $draft->agency->name }}</td>
+                                  <td title="{{ $draft->file_name }}" class="font-bold">
+                                        {{ Str::limit($draft->file_name, 20, '...') }}
+                                    </td>
+                                  <td title="{{ $draft->agency->name }}">{{ Str::limit($draft->agency->name, 20, '...') }}</td>
                                   <td>{{ $draft->mechanism->description }}</td>
                                   <td>{{ $draft->created_at->format('F d, Y') }}</td>
 
