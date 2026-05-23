@@ -30,10 +30,10 @@
         }
     </style>
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/csc_logo.png" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>tailwind-beginner</title>
+    <title>HR Mechanism Tracker</title>
 
 
 </head>

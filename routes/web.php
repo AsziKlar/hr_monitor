@@ -13,6 +13,7 @@ use App\Models\AgencyMechanismPeriod;
 use App\Models\Draft;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use App\Notifications\HRMOAccountCreated;
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -61,6 +62,7 @@ Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group
     Route::patch('/admin/manage-account/{user}/archive', [UserController::class, 'archive'])->name('admin.accounts.archive');
 
     Route::delete('/announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+
 
    
 });

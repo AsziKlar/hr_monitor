@@ -15,7 +15,6 @@ new class extends Component
         $this->notifications = auth()->user()
                                     ->notifications()
                                     ->latest()
-                                    ->take(10)
                                     ->get();
         $this->unreadCount = auth()->user()
             ->unreadNotifications()

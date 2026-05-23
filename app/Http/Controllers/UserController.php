@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Agency;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\HRMOAccountCreated;
 use App\Notifications\SystemNotification;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -29,11 +31,13 @@ class UserController extends Controller
 
     public function store(Request $request) {
 
+        $password = Str::upper(Str::random(4)) . rand(100, 999) . Str::lower(Str::random(3));
+
         if ($request->role == 4){
+
             $request->validate([
                 'name' => 'required',
                 'email' => 'required|email',
-                'password' => 'required',
                 'role' => 'required',
                 'agency' => 'required'
             ]);
@@ -41,7 +45,7 @@ class UserController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => bcrypt($request->password),
+                'password' => bcrypt($password),
                 'role_id' => $request->role,
                 'agency_id' => $request->agency
             ]);
@@ -50,14 +54,13 @@ class UserController extends Controller
             $request->validate([
                 'name' => 'required',
                 'email' => 'required|email',
-                'password' => 'required',
                 'role' => 'required',
             ]);
          
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => bcrypt($request->password),
+                'password' => bcrypt($password),
                 'role_id' => $request->role,
             ]);
 
@@ -79,6 +82,10 @@ class UserController extends Controller
                 )
             );
         }
+
+        $user->notify(
+            new HRMOAccountCreated($password)
+        );
 
         return redirect()->back()->with('success', 'Successfully created a new user account!');
     }

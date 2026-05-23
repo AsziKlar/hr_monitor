@@ -52,15 +52,25 @@ class DraftController extends Controller
         return view('drafts.index', compact('drafts', 'mechanism', 'latestDraft'));
     }
 
-    public function index_admin(Request $request, Mechanism $mechanism){
-        $drafts = Draft::query()
-            ->select('drafts.*')
+   public function index_admin(Request $request, Mechanism $mechanism){
+        $search = $request->search;
+
+        $drafts = Draft::select('drafts.*')
             ->join('agency_mechanism_periods', function ($join) use ($mechanism) {
                 $join->on('drafts.agency_id', '=', 'agency_mechanism_periods.agency_id')
                     ->where('agency_mechanism_periods.mechanism_id', $mechanism->id)
                     ->whereColumn('drafts.period', 'agency_mechanism_periods.current_period');
             })
             ->where('drafts.mechanism_id', $mechanism->id);
+
+        if ($search) {
+            $drafts->where(function ($query) use ($search) {
+                $query->whereHas('agency', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('abbreviation', 'like', "%{$search}%");
+                });
+            });
+        }
 
         if ($request->filled('status')) {
             $drafts->where('drafts.status_id', $request->status);

@@ -44,26 +44,6 @@
                             </p>
                         @enderror
                     </div>
-                    <div class="relative">
-                        <label class="font-bold text-blue-950">
-                            Password
-                        </label>
-
-                        <input id="password"
-                            type="password" 
-                            name="password"
-                            placeholder="Enter Password"
-                            class="mt-2 w-full rounded-2xl border border-slate-300 bg-white p-4 focus:border-blue-500 focus:ring-blue-500"
-                            required
-                        >
-
-                        <button type="button" id="togglePassword" class="absolute right-4 top-[52px] text-slate-500 hover:text-slate-700"><img id="passwordIcon" src="{{ asset('images/eye-closed.svg') }}"></button>
-                        @error('email_address')
-                            <p class="mt-2 text-sm font-semibold text-red-600">
-                                {{ $message }}
-                            </p>
-                        @enderror
-                    </div>
                 </div>
 
                 <div class="mt-5 grid grid-cols-2 gap-4">
