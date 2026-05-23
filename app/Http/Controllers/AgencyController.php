@@ -8,6 +8,7 @@ use App\Models\Draft;
 use App\Models\FieldOffice;
 use App\Models\Mechanism;
 use App\Models\User;
+use App\Notifications\SystemNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,10 +39,7 @@ class AgencyController extends Controller
         $request->validate([
             'email_address' => 'required|email|unique:agencies,email_address',
         ]);
-
-        
-        
-        
+       
         if ($path = $request->file('photo')){
             $path = $path->store('photos', 'public');
         }
@@ -62,8 +60,7 @@ class AgencyController extends Controller
                 'mechanism_id' => $mechanism->id,
                 'current_period' => 1
             ]);
-        }
-       
+        }      
 
         return redirect()->back()->with('success', 'Agency added successfully');
     }
@@ -75,7 +72,7 @@ class AgencyController extends Controller
         $approvedCount = 0;
         $agency_hrmo = User::where('agency_id', $agency->id)->first();
 
-        foreach($mechanisms as $mechanism){ 
+        foreach($mechanisms as $mechanism){
             $period = AgencyMechanismPeriod::where('agency_id', $agency->id)
                                             ->where('mechanism_id', $mechanism->id)
                                             ->first();
@@ -85,7 +82,7 @@ class AgencyController extends Controller
                                     ->where('period', $period->current_period)
                                     ->latest()
                                     ->first();
-            
+           
             if ($latestDraft) {
                 $drafts->push($latestDraft);
                 if ($latestDraft->status->name == "Approved"){
@@ -96,7 +93,8 @@ class AgencyController extends Controller
 
         }
 
-        
+
+       
         return view('admin.agency', compact('agency','fieldOffices', 'drafts','approvedCount', 'agency_hrmo'));
     }
 
@@ -130,9 +128,6 @@ class AgencyController extends Controller
 
         $agency->update($data);
 
-
-
-
         return back()->with('success', 'Agency updated successfully!');
     }
 
@@ -165,10 +160,21 @@ class AgencyController extends Controller
             'head' => $request->head        
         ];
 
+        $csc_users = User::whereIn('role_id', [1,2,3])->get();
+
         if($agency->head !== $request->head) {
             AgencyMechanismPeriod::where('agency_id', $agency->id)
                                     ->increment('current_period');
-            
+           
+            foreach ($csc_users as $csc_user){
+                $csc_user->notify(
+                    new SystemNotification(
+                        $agency->name . ' has new agency head. Mechanisms will have new drafts.',
+                        route('agency.show', $agency)
+                    )
+                );
+            }
+           
         }
 
         if ($request->hasFile('photo')){
@@ -182,6 +188,5 @@ class AgencyController extends Controller
         $agency->update($data);
         return redirect()->back()->with('success', 'Updated profile successfully');
     }
-
-    
+      
 }
