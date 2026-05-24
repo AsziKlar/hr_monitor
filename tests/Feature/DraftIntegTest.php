@@ -75,9 +75,7 @@ class DraftIntegTest extends TestCase
         ]);
         $mechanism = Mechanism::factory()->msp()->create();
 
-        $status = Status::factory()->create([
-            'name' => 'To be Reviewed',
-        ]);
+        $status = Status::factory()->create();
         AgencyMechanismPeriod::create([
             'agency_id' => $agency->id,
             'mechanism_id' => $mechanism->id,
@@ -109,11 +107,8 @@ class DraftIntegTest extends TestCase
             ->get(route('admin.drafts.index', $mechanism));
 
         $response->assertStatus(200);
-
         $response->assertViewIs('admin.index');
-
         $response->assertViewHas('mechanism');
-
         $response->assertViewHas('drafts', function ($drafts) use ($oldPeriodDraft, $olderCurrentDraft, $latestCurrentDraft) {
             return $drafts->contains('id', $latestCurrentDraft->id)
                 && ! $drafts->contains('id', $olderCurrentDraft->id)
@@ -136,17 +131,8 @@ class DraftIntegTest extends TestCase
         ]);
         $hrmo = User::factory()->hrmo($agency->id)->create();
 
-        $mechanism = Mechanism::firstOrCreate(
-            ['id' => 1],
-            [
-                'name' => 'Merit Selection Plan',
-                'description' => 'MSP',
-                'is_active' => true,
-            ]
-        );
-        $status = Status::factory()->create([
-            'name' => 'To be Reviewed',
-        ]);
+        $mechanism = Mechanism::factory()->msp()->create();
+        $status = Status::factory()->create();
         AgencyMechanismPeriod::create([
             'agency_id' => $agency->id,
             'mechanism_id' => $mechanism->id,
@@ -177,5 +163,87 @@ class DraftIntegTest extends TestCase
             'status_id' => $status->id,
             'period' => 1,
         ]);
+    }
+
+    public function test_can_approve_draft(): void {
+        Role::factory()->administrator()->create();
+        Role::factory()->hrmo()->create();
+        $admin = User::factory()->administrator()->create();
+        $fieldOffice = FieldOffice::factory()->create();
+
+        $agency = Agency::factory()->create([
+            'field_office_id' => $fieldOffice->id
+        ]);
+
+        $hrmo = User::factory()->hrmo($agency->id)->create();
+
+        $mechanism = Mechanism::factory()->msp()->create();
+        $statuses = Status::factory()->count(3)->create();
+
+        $draft = Draft::factory()->create([
+            'mechanism_id' => $mechanism->id,
+            'user_id' => $admin->id,
+            'agency_id' => $agency->id,
+            'status_id' => $statuses[0]->id,
+            'period' => 1
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->patch(route('draft.approve', $draft->id));
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success', 'This draft is now approved!');
+        $this->assertDatabaseHas('drafts', [
+            'id' => $draft->id,
+            'status_id' => 3
+        ]);
+    }
+    public function test_can_update_draft(): void {
+        Storage::fake('public');
+        Role::factory()->hrmo()->create();
+
+        $agency = Agency::factory()->create();
+        $hrmo = User::factory()->hrmo($agency->id)->create();
+
+        $mechanism = Mechanism::factory()->msp()->create();
+
+        $status = Status::factory()->create();
+
+        
+        $draft = Draft::factory()->create([
+            'mechanism_id' => $mechanism->id,
+            'user_id' => $hrmo->id,
+            'agency_id' => NULL,
+            'status_id' => $status->id,
+            'file_name' => 'old-draft.pdf',
+            'file_path' => 'drafts/old-draft.pdf',
+            'period' => 1
+        ]); 
+
+        Storage::disk('public')->put($draft->file_path, '');
+        Storage::disk('public')->assertExists('drafts/old-draft.pdf');
+
+        $response = $this->actingAs($hrmo)
+            ->patch(route('draft.update', $draft->id), [
+                'file' => UploadedFile::fake()->create(
+                    'new-draft.pdf',
+                    100,
+                    'application/pdf'
+                )
+            ]);
+        
+        $response->assertRedirect();
+        $response->assertSessionHas(
+            'success',
+            'Draft file replaced successfully.'
+        );
+
+        $this->assertDatabaseHas('drafts', [
+            'id' => $draft->id,
+            'file_name' => 'new-draft.pdf'
+        ]);
+
+        Storage::disk('public')->assertMissing('drafts/old-draft.pdf');
+
     }
 }
