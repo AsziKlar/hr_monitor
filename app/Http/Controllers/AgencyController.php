@@ -37,7 +37,7 @@ class AgencyController extends Controller
         $mechanisms = Mechanism::All();
 
         $request->validate([
-            'email_address' => 'required|email|unique:agencies,email_address',
+            'email_address' => 'required|email|unique:agencies,email_address|regex:/^[^@\s]+@[^@\s]+\.[^@\s]+$/',
         ]);
        
         if ($path = $request->file('photo')){
