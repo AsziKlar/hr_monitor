@@ -13,6 +13,7 @@ use App\Models\AgencyMechanismPeriod;
 use App\Models\Draft;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use App\Notifications\HRMOAccountCreated;
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -36,6 +37,7 @@ Route::middleware(['auth','prevent-back-history'])->group(function () {
     Route::post('/drafts/{id}/comment/store', [CommentController::class, 'store'])->name('drafts.comment.store');
     Route::patch('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
 });
 
 Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group(function () {
@@ -59,8 +61,10 @@ Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group
     Route::patch('/admin/field-office/add', [FieldOfficeController::class, 'field_office_add'])->name('admin.field-office.add');
 
     Route::patch('/admin/manage-account/{user}/archive', [UserController::class, 'archive'])->name('admin.accounts.archive');
+    Route::patch('/admin/manage-account/{user}/editAcc', [UserController::class, 'edit_acc_by_admin'])->name('admin.accounts.update');
 
     Route::delete('/announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+
 
    
 });
@@ -91,6 +95,7 @@ Route::middleware(['auth', 'prevent-back-history','role:Administrator,Processor,
 
 
 Route::middleware(['auth', 'prevent-back-history', 'role:HRMO'])->group( function () {
+
     Route::get('/agency/dashboard', [DashboardController::class, 'index_hrmo'])->name('hrmo.dashboard');
     Route::get('/drafts/index/{mechanism}', [DraftController::class, 'index_hrmo'])->name('hrmo.drafts.index');
     Route::get('/drafts/create/{mechanism}', [DraftController::class, 'create'])->name('drafts.create');
@@ -102,6 +107,9 @@ Route::middleware(['auth', 'prevent-back-history', 'role:HRMO'])->group( functio
 
     Route::get('/agency/profile/show', [AgencyController::class, 'show_profile'])->name('agency.profile.show');
     Route::patch('/agency/profile/update', [AgencyController::class, 'update_profile'])->name('agency.profile.update');
+    Route::patch('/hrmo/account/update', [UserController::class, 'hrmo_account_update'])->name('hrmo.account.update');
+
+    Route::patch('/hrmo/self-archive', [UserController::class, 'self_archive_hrmo'])->name('hrmo.self-archive');
     
 });
 

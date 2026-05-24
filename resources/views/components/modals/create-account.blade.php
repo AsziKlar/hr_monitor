@@ -44,7 +44,7 @@
                             </p>
                         @enderror
                     </div>
-                    <div class="relative">
+                    {{-- <div class="relative">
                         <label class="font-bold text-blue-950">
                             Password
                         </label>
@@ -63,7 +63,7 @@
                                 {{ $message }}
                             </p>
                         @enderror
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div class="mt-5 grid grid-cols-2 gap-4">

@@ -86,7 +86,7 @@
             <a  class="{{ request()->routeIs('settings') ? $active : $inactive }}" 
                 href="{{ route('admin.settings.mechanisms') }}">
                 <img src="{{ asset('images/settings.svg') }}" class="h-5 w-5"/>
-                Other Settings
+                Mechanism Settings
             </a>
 
             <a  class="{{ request()->routeIs('admin.field-office.index') ? $active : $inactive }}" 

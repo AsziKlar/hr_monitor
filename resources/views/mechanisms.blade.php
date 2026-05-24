@@ -1,6 +1,6 @@
 <x-app-layout>
 
-        <main class=" bg-slate-100 flex-1 overflow-y-auto">
+    
         
         <section class="p-6">
           <div class="flex items-center justify-between rounded-4xl bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">
@@ -13,17 +13,17 @@
                       Select a mechanism to view all submitted documents
                   </p>
               </div>
-              @if (auth()->user()->role === 'Administrator')
+              {{-- @if (auth()->user()->role->name === 'Administrator')
                 <a class="flex items-center gap-2 rounded-2xl bg-gradient-to-br from-red-700 to-red-900 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:scale-[1.02]" href="">
                     <img src="{{ asset('images/settings.svg') }}" class="h-5 w-5 brightness-0 invert">
 
                     Settings
                 </a>
-              @endif
+              @endif --}}
           </div>
       </section>
 
-        <section class="p-6 py-1">
+        <section class="relative z-0 p-6 py-1">
 
             
             <div class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
@@ -42,7 +42,7 @@
                     @endphp
 
                     <a  
-                        class="relative flex min-h-[210px] items-center gap-5 rounded-[2rem] bg-white p-6 pr-20 shadow-lg shadow-slate-200 ring-1 ring-slate-100 transition duration-300 ease-in-out hover:-translate-y-2 hover:shadow-slate-300"
+                        class="relative z-0 flex min-h-[210px] items-center gap-5 rounded-[2rem] bg-white p-6 pr-20 shadow-lg shadow-slate-200 ring-1 ring-slate-100 transition duration-300 ease-in-out hover:-translate-y-2 hover:shadow-slate-300"
                         href="{{ auth()->user()->role->name === 'HRMO'
                             ? route('hrmo.drafts.index', $mechanism)
                             : route('admin.drafts.index', $mechanism) }}"
@@ -77,5 +77,5 @@
             </div>
             
         </section>
-      </main>
+    
 </x-app-layout>

@@ -19,7 +19,7 @@
 
             <button
                 type="button"
-                onclick="closeArchiveAccountModal({{ $user->id }})"
+                onclick="closeArchiveUserModal({{ $user->id }})"
                 class="rounded-2xl border border-slate-300 px-6 py-3 font-bold text-blue-950 transition hover:bg-slate-100"
             >
                 Cancel
