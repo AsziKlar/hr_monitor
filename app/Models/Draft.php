@@ -27,7 +27,7 @@ class Draft extends Model
     }
 
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withoutGlobalScope('notArchived');
     }
 
     public function status(){

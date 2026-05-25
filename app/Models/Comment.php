@@ -17,7 +17,7 @@ class Comment extends Model
     }
 
     public function user(){
-        return $this->belongsTo(User::class)->withoutGlobalScopes();
+        return $this->belongsTo(User::class)->withoutGlobalScope('notArchived');
     }
     
 }
