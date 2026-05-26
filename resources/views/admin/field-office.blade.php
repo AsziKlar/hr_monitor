@@ -3,14 +3,8 @@
     <section class="p-6">
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <x-modals.add-field-office />
-            <button onclick="openAddFieldOfficeModal()"
-                type="button"
-                class="flex items-center justify-center gap-2 self-start rounded-full bg-gradient-to-br from-red-700 to-red-900 px-5 py-3 text-base font-bold text-white shadow-sm transition hover:scale-[1.02]"
-            >
-                <span class="text-lg">＋</span>
-
-                Add Field Office
-            </button>
+            <x-modals.remove-field-office :fieldOffices="$field_offices"/>
+            
            
 
             <form method="GET" class="w-full max-w-sm">
@@ -31,6 +25,23 @@
 
                 </div>
             </form>
+
+            <button onclick="openAddFieldOfficeModal()"
+                type="button"
+                class="flex items-center justify-center gap-2 self-start rounded-full bg-gradient-to-br from-red-700 to-red-900 px-5 py-3 text-base font-bold text-white shadow-sm transition hover:scale-[1.02]"
+            >
+                <span class="text-lg">＋</span>
+
+                Add Field Office
+            </button>
+            <button onclick="openRemoveFieldOfficeModal()"
+                type="button"
+                class="flex items-center justify-center gap-2 self-start rounded-full bg-gradient-to-br from-slate-700 to-slate-900 px-5 py-3 text-base font-bold text-white shadow-sm transition hover:scale-[1.02]"
+            >
+                <span class="text-lg">-</span>
+
+               Remove Field Office
+            </button>
             
 
         </div>
@@ -41,11 +52,12 @@
 
     <section class="p-6" x-data="{ showAll: false }">
          <div class="flex">
-            <div class="ml-auto">
+            <div class="mr-auto">
+                
                 <button
                     type="button"
                     @click="showAll = !showAll"
-                    class="mb-4 rounded-2xl bg-blue-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-900"
+                    class="mb-4 rounded-2xl bg-blue-800 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-900"
                 >
                     <span x-show="!showAll">Show All</span>
                     <span x-show="showAll">Hide All</span>
@@ -66,15 +78,25 @@
                                 {{ $field_office->name }}
                             </h2>
 
-                            <p class="text-slate-500">
-                                No. of agencies: {{ $field_office->agencies->count() }}
-                            </p>
+                           <div class="flex items-center gap-2">
+                                <p class="text-slate-500">
+                                    No. of agencies: {{ $field_office->agencies->count() }}
+                                </p>
+                                <x-modals.add-agency-to-field-office :fieldOffice="$field_office" :agenciesWithNoFieldOffice="$agencies_with_no_field_office"/>
+                                <button onclick="openAddAgencyToFieldOfficeModal({{$field_office->id}})"
+                                    type="button"
+                                    class="flex h-6 w-6 items-center justify-center rounded-full bg-red-700 text-sm font-bold text-white transition hover:scale-105 hover:bg-red-400"
+                                >
+                                    +
+                                </button>
+                            </div>
                         </div>
+                        
 
                         <button
                             type="button"
                             @click="open = !open"
-                            class="rounded-full bg-blue-950 px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-900"
+                            class="rounded-full bg-blue-800 px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-900"
                         >
                             <span x-show="!(open || showAll)">Show</span>
                             <span x-show="open || showAll">Hide</span>
@@ -152,6 +174,41 @@
     function closeAddFieldOfficeModal(){
         document.getElementById('addFieldOfficeModal').classList.add('hidden');
         document.getElementById('addFieldOfficeModal').classList.remove('flex');
+        
+    }
+
+    function openRemoveFieldOfficeModal(){
+        document.getElementById('removeFieldOfficeModal').classList.remove('hidden');
+        document.getElementById('removeFieldOfficeModal').classList.add('flex');
+        
+    }
+
+    function closeRemoveFieldOfficeModal(){
+        document.getElementById('removeFieldOfficeModal').classList.add('hidden');
+        document.getElementById('removeFieldOfficeModal').classList.remove('flex');
+        
+    }
+
+    function openAddAgencyToFieldOfficeModal(fieldOfficeId){
+        document.getElementById('addAgencyToFieldOfficeModal-' + fieldOfficeId).classList.remove('hidden');
+        document.getElementById('addAgencyToFieldOfficeModal-' + fieldOfficeId).classList.add('flex');
+
+        let select = document.getElementById('agencySelect-' + fieldOfficeId);
+
+        if (select && !select.tomselect) {
+            new TomSelect(select, {
+                create: false,
+                sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                }
+            });
+        }
+    }
+
+    function closeAddAgencyToFieldOfficeModal(fieldOfficeId){
+        document.getElementById('addAgencyToFieldOfficeModal-'+ fieldOfficeId).classList.add('hidden');
+        document.getElementById('addAgencyToFieldOfficeModal-'+ fieldOfficeId).classList.remove('flex');
         
     }
 </script>
