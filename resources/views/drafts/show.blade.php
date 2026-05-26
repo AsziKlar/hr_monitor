@@ -62,9 +62,14 @@
                 </div>
 
                 <div>
-                    <p class="text-lg text-blue-950/70">Category:</p>
+                    <p class="text-lg text-blue-950/70">Submitted by:</p>
                     <p class="text-lg font-bold text-blue-950">
-                        {{ $draft->mechanism->name }}
+                        {{ $draft->user?->name }}
+                        @if($draft->user->archived_at)
+                            <span class="rounded-full bg-slate-300 px-2 py-1 text-[10px] font-bold text-slate-700">
+                                Archived
+                            </span>
+                        @endif
                     </p>
                 </div>
 
@@ -176,7 +181,13 @@
 
                                     <p class="font-bold text-sm text-blue-950">
                                         {{ $comment?->user?->name }}
+                                         @if ($comment->user->archived_at)
+                                        <span class="rounded-full bg-slate-300 px-2 py-1 text-[10px] font-bold text-slate-700">
+                                            Archived
+                                        </span>
+                                    @endif
                                     </p>
+                                   
 
                                     <p class="mt-1 text-sm leading-relaxed text-slate-600">
                                         {{ $comment?->comment }}

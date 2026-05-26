@@ -17,3 +17,8 @@ body {
 .password-toggle-input::-webkit-textfield-decoration-container {
     display: none !important;
 }
+
+.ts-control {
+    padding: 1rem !important;
+    border-radius: 1rem !important;
+}

@@ -57,8 +57,6 @@ class DashboardController extends Controller
     }
     
     public function index_admin(){
-       
-
         return view('dashboard');
     }
 }
