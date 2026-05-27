@@ -17,8 +17,62 @@
 
 
             <div class="flex-1">
-                <h1 class="text-2xl font-bold tracking-tight text-blue-950">{{ $agency->name }}</h1>
-                <div class="mt-4 flex items-center gap-6">
+                
+               <div class="flex flex-wrap items-center justify-between gap-4">
+
+                    <div class="flex items-center gap-3">
+                        <h1 class="text-2xl font-bold tracking-tight text-blue-950">
+                            {{ $agency->name }}
+                        </h1>
+
+                        @if ($agency->archived_at)
+                            <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700 ring-1 ring-slate-200">
+                                Archived
+                            </span>
+                        @endif
+                    </div>
+
+                    @if (in_array(auth()->user()->role->id, [1,4]))
+
+                        <div class="flex flex-wrap items-center gap-3">
+
+                            <x-modals.edit-agency :fieldOffices="$fieldOffices" :agency="$agency"/>
+                            <x-modals.archive-agency :agency="$agency" />
+                            <x-modals.unarchive-agency :agency="$agency" />
+
+                            <button onclick="openEditAgencyModal()"
+                                    class="flex min-w-[110px] items-center justify-center rounded-full bg-blue-800 px-5 py-3 text-white transition hover:scale-[1.03] hover:bg-blue-900">
+                                <span class="font-bold">
+                                    Edit
+                                </span>
+                            </button>
+
+                            @if (!$agency->archived_at)
+
+                                <button onclick="openArchiveAgencyModal()"
+                                        class="flex min-w-[110px] items-center justify-center rounded-full bg-red-700 px-5 py-3 text-white transition hover:scale-[1.03] hover:bg-red-900">
+                                    <span class="font-bold">
+                                        Archive
+                                    </span>
+                                </button>
+
+                            @else
+
+                                <button onclick="openUnarchiveAgencyModal()"
+                                        class="flex min-w-[110px] items-center justify-center rounded-full bg-green-700 px-5 py-3 text-white transition hover:scale-[1.03] hover:bg-green-900">
+                                    <span class="font-bold">
+                                        Unarchive
+                                    </span>
+                                </button>
+
+                            @endif
+
+                        </div>
+
+                    @endif
+
+                </div>
+                <div class="mt-4 flex flex-wrap items-center gap-6">
 
                     <div>
                         <p class="text-sm text-slate-500">
@@ -84,15 +138,6 @@
                             {{ $approvedCount }} / 4
                         </p>
                     </div>
-                    @if (in_array(auth()->user()->role->id, [1,4]))
-                        <x-modals.edit-agency :fieldOffices="$fieldOffices" :agency="$agency"/>
-                        <button onclick="openEditAgencyModal()"
-                                class="ml-auto flex items-center justify-center rounded-4xl min-w-[100px] transition hover:scale-[1.05] hover:bg-red-700 bg-blue-800/70">
-                            <span class="text-1xl font-bold text-white p-3">
-                                Edit
-                            </span>
-                        </button>
-                    @endif
                 </div>
                 
             </div>
@@ -184,6 +229,38 @@
             .classList.add('hidden');
 
         document.getElementById('editAgencyModal')
+            .classList.remove('flex');
+    }
+
+    function openArchiveAgencyModal() {
+        document.getElementById('archiveAgencyModal')
+            .classList.remove('hidden');
+
+        document.getElementById('archiveAgencyModal')
+            .classList.add('flex');
+    }
+
+    function closeArchiveAgencyModal() {
+        document.getElementById('archiveAgencyModal')
+            .classList.add('hidden');
+
+        document.getElementById('archiveAgencyModal')
+            .classList.remove('flex');
+    }
+
+     function openUnarchiveAgencyModal() {
+        document.getElementById('unarchiveAgencyModal')
+            .classList.remove('hidden');
+
+        document.getElementById('unarchiveAgencyModal')
+            .classList.add('flex');
+    }
+
+    function closeUnarchiveAgencyModal() {
+        document.getElementById('unarchiveAgencyModal')
+            .classList.add('hidden');
+
+        document.getElementById('unarchiveAgencyModal')
             .classList.remove('flex');
     }
 </script>

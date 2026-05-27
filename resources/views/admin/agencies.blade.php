@@ -58,13 +58,23 @@
                                 </div>
                             @endif
                             <div class="flex-1">
-                                <p class="text-lg font-bold">
-                                    {{ $agency->name }}
-                                </p>
+                                <div class="flex items-center gap-2">
+                                    <p class="text-lg font-bold">
+                                        {{ $agency->name }}
+                                    </p>
+
+                                    @if ($agency->archived_at)
+                                        <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700 ring-1 ring-slate-200">
+                                            Archived
+                                        </span>
+                                    @endif
+                                </div>
 
                                 <p class="text-sm font-semibold text-red-800">
-                                    Field Office: {{ $agency->fieldOffice->name }}
-                                </p>
+                                    Field Office: {{ $agency->fieldOffice?->name }}
+                                    @if (!$agency->fieldOffice)
+                                        <span class="text-slate-800">Not assigned</span>
+                                    @endif
                             </div>
                             <div class="text-right">
                                 <p class="text-sm text-gray-600">

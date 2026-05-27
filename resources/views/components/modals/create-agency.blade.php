@@ -8,7 +8,8 @@
             </h2>
         </div>
 
-        <form method="POST" action="{{ route('agency.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('agency.store') }}" enctype="multipart/form-data" onsubmit="this.querySelector('button[type=submit]').disabled = true;
+                    this.querySelector('button[type=submit]').innerText = 'Processing...';">
             @csrf
             <div class="border-y border-slate-200 bg-slate-100/20 p-8">
                 <div>

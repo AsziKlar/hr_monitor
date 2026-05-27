@@ -45,6 +45,8 @@ Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group
     Route::post('/admin/agency/store', [AgencyController::class, 'store'])->name('agency.store');
     
     Route::patch('/admin/agency/{agency}/update', [AgencyController::class, 'update'])->name('agency.update');
+    Route::patch('/admin/agency/{agency}/archive', [AgencyController::class, 'archive'])->name('agency.archive');
+    Route::patch('/admin/agency/{agency}/unarchive', [AgencyController::class, 'unarchive'])->name('agency.unarchive');
 
     Route::get('/admin/manage-account/index', [UserController::class, 'index'])->name('admin.account.index');
     Route::post('/admin/manage-account/store', [UserController::class, 'store'])->name('admin.account.store');
@@ -59,6 +61,9 @@ Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group
     Route::get('/admin/field-office/index', [FieldOfficeController::class, 'field_office_index'])->name('admin.field-office.index');
     Route::patch('/admin/field-office/update/{agency}', [FieldOfficeController::class, 'field_office_update'])->name('admin.field-office.update');
     Route::patch('/admin/field-office/add', [FieldOfficeController::class, 'field_office_add'])->name('admin.field-office.add');
+    Route::delete('/admin/field-office/destroy', [FieldOfficeController::class, 'field_office_destroy'])->name('admin.field-office.remove');
+
+    Route::patch('/admin/field-office/add-agency/{fieldOffice}', [FieldOfficeController::class, 'add_agency'])->name('admin.field-office.add.agency');
 
     Route::patch('/admin/manage-account/{user}/archive', [UserController::class, 'archive'])->name('admin.accounts.archive');
     Route::patch('/admin/manage-account/{user}/editAcc', [UserController::class, 'edit_acc_by_admin'])->name('admin.accounts.update');

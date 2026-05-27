@@ -9,6 +9,7 @@ use App\Models\FieldOffice;
 use App\Models\Mechanism;
 use App\Models\User;
 use App\Notifications\SystemNotification;
+use Illuminate\Cache\RedisTaggedCache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -99,14 +100,34 @@ class AgencyController extends Controller
     }
 
     public function update(Request $request, Agency $agency){
+        $agency_head = $agency->head;  
+        $hrmo = User::where('agency_id', $agency->id)
+                    ->whereNull('archived_at')
+                    ->first();
+
         $request->validate([
             'name' => 'required|string|max:255',
             'abbreviation' => 'required|string|max:20',
             'field_office_id' => 'required|exists:field_offices,id',
-            'email_address' => 'required|email',
             'head' => 'required|string|max:255',
+            'email_address' => 'required|email|regex:/^[^@\s]+@[^@\s]+\.[^@\s]+$/|unique:agencies,email_address,' . $agency->id,
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+
+       if ($agency_head !== $request->head) {
+            AgencyMechanismPeriod::where('agency_id', $agency->id)
+                ->increment('current_period');
+
+            if ($hrmo) {
+                $hrmo->notify(
+                    new SystemNotification(
+                        $agency->name . ' has new agency head. Mechanisms will have new drafts.',
+                        route('agency.profile.show')
+                    )
+                );
+            }
+        }
 
         $data = [
             'name' => $request->name,
@@ -147,7 +168,7 @@ class AgencyController extends Controller
             'name' => 'required|string|max:255',
             'abbreviation' => 'required|string|max:20',
             'field_office_id' => 'required|exists:field_offices,id',
-            'email_address'=> 'required|email',
+            'email_address' => 'required|email|regex:/^[^@\s]+@[^@\s]+\.[^@\s]+$/|unique:agencies,email_address,' . $agency->id,
             'head' => 'required|string|max:255',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
@@ -187,6 +208,21 @@ class AgencyController extends Controller
         }
         $agency->update($data);
         return redirect()->back()->with('success', 'Updated profile successfully');
+    }
+
+    public function archive(Agency $agency){
+        $agency->update([
+            'archived_at' => now()
+        ]);
+
+        return redirect()->back()->with('success', $agency->name . ' successfully archived!');
+    }
+    public function unarchive(Agency $agency){
+        $agency->update([
+            'archived_at' => NULL
+        ]);
+
+        return redirect()->back()->with('success', $agency->name . ' successfully unarchived!');
     }
       
 }

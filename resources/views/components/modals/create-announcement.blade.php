@@ -12,7 +12,9 @@
             </p>
         </div>
 
-        <form method="POST" action="{{ route('store.announcements') }}">
+        <form method="POST" action="{{ route('store.announcements') }}" onsubmit="this.querySelector('button[type=submit]').disabled = true;
+                    this.querySelector('button[type=submit]').innerText = 'Processing...';
+            ">
             @csrf
 
             
