@@ -8,7 +8,10 @@
             </h2>
         </div>
 
-        <form method="POST" action="{{ route('admin.account.store') }}">
+        <form method="POST" action="{{ route('admin.account.store') }}" 
+            onsubmit="this.querySelector('button[type=submit]').disabled = true;
+                    this.querySelector('button[type=submit]').innerText = 'Processing...';
+            ">
             @csrf
             <div class="border-y border-slate-200 bg-slate-100/20 p-8">
                 <div>
@@ -33,12 +36,12 @@
                         <input 
                             type="email" 
                             name="email"
-                            value="{{ old('email_address') }}"
+                            value="{{ old('email') }}"
                             placeholder="Enter Email Address"
                             class="mt-2 w-full rounded-2xl border border-slate-300 bg-white p-4 focus:border-blue-500 focus:ring-blue-500"
                             required
                         >
-                        @error('email_address')
+                        @error('email')
                             <p class="mt-2 text-sm font-semibold text-red-600">
                                 {{ $message }}
                             </p>

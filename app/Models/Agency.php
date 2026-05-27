@@ -15,7 +15,8 @@ class Agency extends Model
         'email_address',
         'head',
         'abbreviation',
-        'photo'
+        'photo',
+        'archived_at'
     ];
 
     public function fieldOffice(){
@@ -31,5 +32,8 @@ class Agency extends Model
     }
     public function agencyMechanismPeriods(){
         return $this->hasMany(AgencyMechanismPeriod::class);
+    }
+    public function scopeNotArchived($query){
+        return $query->whereNull('archived_at');
     }
 }
