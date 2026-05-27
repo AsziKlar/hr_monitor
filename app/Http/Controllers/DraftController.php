@@ -52,7 +52,7 @@ class DraftController extends Controller
         return view('drafts.index', compact('drafts', 'mechanism', 'latestDraft'));
     }
 
-   public function index_admin(Request $request, Mechanism $mechanism){
+    public function index_admin(Request $request, Mechanism $mechanism){
         $search = $request->search;
 
         $drafts = Draft::select('drafts.*')

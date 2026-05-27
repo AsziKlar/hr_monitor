@@ -33,7 +33,16 @@ class UserController extends Controller
 
     public function store(Request $request) {
 
-        $password = Str::upper(Str::random(4)) . rand(100, 999) . Str::lower(Str::random(3));
+        $existing_user = User::where('email', $request->email)
+                            ->whereNull('archived_at')
+                            ->exists();
+
+        if ($existing_user) {
+            return redirect()->back()->with('error', 'User creation unsuccessful. Active email already exists');
+        }
+
+        $password = '123456789';
+        // $password = Str::upper(Str::random(4)) . rand(100, 999) . Str::lower(Str::random(3));
 
         if ($request->role == 4){
 
@@ -47,7 +56,8 @@ class UserController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => bcrypt($password),
+                // 'password' => bcrypt($password),
+                'password' => $password,
                 'role_id' => $request->role,
                 'agency_id' => $request->agency
             ]);

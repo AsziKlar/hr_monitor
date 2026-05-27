@@ -70,7 +70,7 @@
                         </p>
 
                         <p class="text-base font-bold text-blue-950">
-                            {{ $agency->fieldOffice->name }}
+                            {{ $agency->fieldOffice?->name ?? 'Not assigned' }}
                         </p>
                     </div>
 
@@ -81,7 +81,7 @@
                         </p>
 
                         <p class="text-base font-bold text-blue-700">
-                            {{ $approvedCount }} / 5
+                            {{ $approvedCount }} / 4
                         </p>
                     </div>
                     @if (in_array(auth()->user()->role->id, [1,4]))

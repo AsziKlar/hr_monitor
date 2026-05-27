@@ -2,7 +2,9 @@
     
     <div class="w-full max-w-2xl rounded-4xl bg-white p-8 shadow-2xl">
 
-        <form method="POST" action="{{ route('admin.field-office.update', [$agency]) }}">
+        <form method="POST" action="{{ route('admin.field-office.update', [$agency]) }}" onsubmit="this.querySelector('button[type=submit]').disabled = true;
+                    this.querySelector('button[type=submit]').innerText = 'Processing...';
+            ">
             @csrf
             @method('PATCH')
 
