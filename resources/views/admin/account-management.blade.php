@@ -26,11 +26,6 @@
                     </div>
 
                     <div>
-                        <p class="text-slate-500">Password:</p>
-                        <p class="inline-block bg-blue-50 rounded-xl px-2 text-xs text-blue-600 text-center transition hover:bg-slate-50">change</p>
-                    </div>
-
-                    <div>
                         <p class="text-slate-500">Role:</p>
                         <p class="font-bold">Admin</p>
                     </div>

@@ -31,6 +31,16 @@
                 >
             </div>
 
+            <div class="mt-5">
+                <label class="font-bold text-blue-950">Password (Leave blank if no change)</label>
+                <input
+                    type="password"
+                    name="password"
+                    value=""
+                    class="mt-2 w-full rounded-2xl border border-slate-300 p-4"
+                >
+            </div>
+
             <div class="mt-6 flex justify-end gap-4">
                 <button
                     type="button"

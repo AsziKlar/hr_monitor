@@ -113,6 +113,7 @@ class UserController extends Controller
     public function admin_profile_update(Request $request){
         $user = auth()->user();
 
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => [
@@ -121,6 +122,26 @@ class UserController extends Controller
                 Rule::unique('users', 'email')->ignore($user->id),
             ],
         ]);
+
+        if ($request->password) {
+
+            $request->validate([
+                'password' => [
+                    'required',
+                    'string',
+                    'min:8',
+                    'max:20',
+                    'regex:/[A-Z]/',
+                    'regex:/[a-z]/',
+                    'regex:/[0-9]/',
+                    'regex:/[@$!%*#?&]/',
+                ],
+            ], [
+                'password.regex' => 'Password must contain uppercase, lowercase, number, and special character.',
+            ]);
+
+            $data['password'] = bcrypt($request->password);
+        }
 
         $user->update([
             'name' => $request->name,

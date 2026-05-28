@@ -142,20 +142,6 @@
     </div>
 </div>
 
-@if ($errors->any())
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document
-            .getElementById('createUserModal')
-            .classList.remove('hidden');
-
-        document
-            .getElementById('createUserModal')
-            .classList.add('flex');
-    });
-</script>
-@endif
-
 <script>
     const roleSelect = document.getElementById('roleSelect');
     const agencyField = document.getElementById('agencyField');
