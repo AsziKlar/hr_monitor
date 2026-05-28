@@ -30,7 +30,7 @@ class Index extends Component
 
     public function loadDashboard()
     {
-        $this->mechanisms = Mechanism::all();
+        $this->mechanisms = Mechanism::where('description', '!=', 'L&D')->get();
 
         $this->drafts_to_be_reviewed = [];
         $this->drafts_approved = [];

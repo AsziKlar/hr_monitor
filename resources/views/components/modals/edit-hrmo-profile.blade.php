@@ -77,19 +77,7 @@
     </div>
 </div>
 
-@if ($errors->any())
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document
-            .getElementById('editHRMOModal')
-            .classList.remove('hidden');
 
-        document
-            .getElementById('editHRMOModal')
-            .classList.add('flex');
-    });
-</script>
-@endif
 
 <script> 
 

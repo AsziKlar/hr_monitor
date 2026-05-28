@@ -30,6 +30,14 @@ class AuthenticatedSessionController extends Controller
         $user = auth()->user();
 
         if($user->role->id === 4){
+            if ($user->agency->archived_at){
+                auth()->logout();
+
+                return redirect()->route('login')->withErrors([
+                    'email' => 'Your agency is archived'
+                ]);
+                
+            }
             return redirect()->intended(route('hrmo.dashboard', absolute: false));
         } else if (in_array($user->role->id, [1, 2, 3])){
             return redirect()->intended(route('dashboard', absolute: false));
