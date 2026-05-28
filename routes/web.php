@@ -109,12 +109,15 @@ Route::middleware(['auth', 'prevent-back-history', 'role:HRMO'])->group( functio
     Route::post('/drafts/store', [DraftController::class, 'store'])->name('drafts.store');
 
     Route::patch('/drafts/update/{draft}', [DraftController::class, 'updateFile'])->name('draft.update');
+    Route::get('/drafts/index/{mechanism}/approved', [DraftController::class, 'index_approved_history'])->name('hrmo.drafts.index.approved');
 
     Route::get('/agency/profile/show', [AgencyController::class, 'show_profile'])->name('agency.profile.show');
     Route::patch('/agency/profile/update', [AgencyController::class, 'update_profile'])->name('agency.profile.update');
     Route::patch('/hrmo/account/update', [UserController::class, 'hrmo_account_update'])->name('hrmo.account.update');
 
     Route::patch('/hrmo/self-archive', [UserController::class, 'self_archive_hrmo'])->name('hrmo.self-archive');
+
+
     
 });
 

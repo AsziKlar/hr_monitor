@@ -1,4 +1,5 @@
 <x-app-layout>
+  <x-back-button />
     <section class="p-6">
         <div class="flex flex-col gap-4 rounded-4xl bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">
 

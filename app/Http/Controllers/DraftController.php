@@ -208,5 +208,19 @@ class DraftController extends Controller
             ->back()
             ->with('success', 'Draft file replaced successfully.');
     }
+
+    public function index_approved_history(Mechanism $mechanism){
+        $user = auth()->user();
+        $approved_status = Status::where('name', 'Approved')->first();
+        
+        $approved_drafts = Draft::where('agency_id', $user->agency->id)
+                                ->where('status_id', $approved_status->id)
+                                ->where('mechanism_id', $mechanism->id)
+                                ->latest()
+                                ->get();
+        
+        return view('drafts.index-approved-history', compact('approved_drafts'));
+
+    }
   
 }
