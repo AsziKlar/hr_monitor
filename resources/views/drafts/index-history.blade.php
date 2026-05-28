@@ -3,50 +3,8 @@
         <div class="flex flex-col gap-4 rounded-4xl bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">
 
             <div class="flex items-center gap-4">
-
-                <div class="flex h-4 w-full items-center rounded-4xl bg-slate-100 p-6 shadow-gray-400 ring-1 ring-slate-200">
-                    <input class="w-full outline-none"
-                          type="text"
-                          placeholder="Search submission..." />
-                </div>
-
-                <select class="select select-bordered rounded-[16px] bg-slate-100 text-1xl min-w-[170px] ring-2 ring-slate-200 p-3">
-                    <option selected disabled>Filter by Status</option>
-                    <option>To be Reviewed</option>
-                    <option>Needs Revision</option>
-                    <option>Approved</option>
-                </select>
-
-                <x-modals.create-draft :mechanismId="$mechanism->id" />
-
-                @if (auth()->user()->role->name === 'HRMO')
-
-                    @if ($latestDraft && ($latestDraft->status->name === 'To be Reviewed' || $latestDraft->status->name === 'Approved'))
-
-                        <button disabled
-                                title="You can only submit another draft once the recent draft has been reviewed."
-                                class="flex min-w-[240px] cursor-not-allowed items-center justify-center rounded-4xl bg-slate-300 opacity-70">
-                            <span class="p-3 text-1xl font-bold text-white">
-                                + Add New Submission
-                            </span>
-                        </button>
-
-                    @else
-
-                        <button onclick="openCreateDraftModal()"
-                                class="flex min-w-[240px] items-center justify-center rounded-4xl bg-red-800 transition hover:scale-[1.05] hover:bg-red-700">
-                            <span class="p-3 text-1xl font-bold text-white">
-                                + Add New Submission
-                            </span>
-                        </button>
-
-                    @endif
-
-                @endif
-
+                <p>Approved Files</p>
             </div>
-
-            
 
         </div>
     </section>
@@ -120,21 +78,4 @@
         </div>
         </section>
 
-        <script>
-            function openCreateDraftModal() {
-                document.getElementById('createDraftModal')
-                    .classList.remove('hidden');
-
-                document.getElementById('createDraftModal')
-                    .classList.add('flex');
-            }
-
-            function closeCreateDraftModal() {
-                document.getElementById('createDraftModal')
-                    .classList.add('hidden');
-
-                document.getElementById('createDraftModal')
-                    .classList.remove('flex');
-            }
-        </script>
 </x-app-layout>

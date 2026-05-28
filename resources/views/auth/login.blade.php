@@ -25,10 +25,14 @@
 
             <div class="flex flex-col justify-center items-center">
                 <h1 class="font-bold text-slate-700 text-2xl">LOG IN</h1>
-                <span class="text-sm text-slate-500 p-3">Enter your ID and password.</span>
+                <span class="text-sm text-slate-500 p-3">Enter your Email and password.</span>
             </div>
-
+            
+           
             <div class="w-full">
+                 @error('email')
+                    <p class="mb-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
                 <div class="flex w-full items-center rounded-2xl bg-slate-100 px-6 py-4 ring-1 ring-slate-200">
                     <input  id="email"
                             type="email"
@@ -42,9 +46,7 @@
                     >
                 </div>
 
-                @error('email')
-                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+               
             </div>
 
             <div class="w-full">
