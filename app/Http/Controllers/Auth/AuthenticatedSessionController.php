@@ -22,29 +22,52 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
+   public function store(LoginRequest $request): RedirectResponse {
 
+        $request->authenticate();
         $request->session()->regenerate();
+        session()->forget('url.intended');
         $user = auth()->user();
 
-        if($user->role->id === 4){
-            if ($user->agency->archived_at){
+        if ($user->role->id === 4) {
+
+            if (! $user->agency) {
                 auth()->logout();
 
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
                 return redirect()->route('login')->withErrors([
-                    'email' => 'Your agency is archived'
+                    'email' => 'Your agency does not exist.'
                 ]);
-                
             }
-            return redirect()->intended(route('hrmo.dashboard', absolute: false));
-        } else if (in_array($user->role->id, [1, 2, 3])){
-            return redirect()->intended(route('dashboard', absolute: false));
-        } else {
-            redirect('/');
+
+            if ($user->agency->archived_at) {
+                auth()->logout();
+
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect()->route('login')->withErrors([
+                    'email' => 'Your agency is archived.'
+                ]);
+            }
+
+            return redirect()->route('hrmo.dashboard');
         }
 
+        if (in_array($user->role->id, [1, 2, 3])) {
+            return redirect()->route('dashboard');
+        }
+
+        auth()->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->withErrors([
+            'email' => 'Your role is not allowed.'
+        ]);
     }
 
     /**

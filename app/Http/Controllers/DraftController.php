@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Agency;
 use App\Models\AgencyMechanismPeriod;
+use App\Models\AuditLog;
 use App\Models\Comment;
 use App\Models\Draft;
 use App\Models\Mechanism;
 use App\Models\Status;
 use App\Models\User;
+use App\Notifications\SystemNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Notifications\SystemNotification;
 
 class DraftController extends Controller
 {
@@ -63,6 +64,8 @@ class DraftController extends Controller
             })
             ->where('drafts.mechanism_id', $mechanism->id);
 
+        
+
         if ($search) {
             $drafts->where(function ($query) use ($search) {
                 $query->whereHas('agency', function ($q) use ($search) {
@@ -72,8 +75,14 @@ class DraftController extends Controller
             });
         }
 
-        if ($request->filled('status')) {
+
+
+        if ($request->filled('status') && $request->status !== 'all') {
             $drafts->where('drafts.status_id', $request->status);
+        }
+
+        if ($request->status == 'all') {
+            $drafts->whereIn('status_id', [1,2,3]);
         }
 
         $drafts = $drafts
@@ -86,7 +95,7 @@ class DraftController extends Controller
     }
 
     public function create($mechanism){
-       
+        
         return view('drafts.create', compact('mechanism'));
     }
 
@@ -134,6 +143,12 @@ class DraftController extends Controller
                 )
             );
         }
+        
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'User created the draft ' . $draft?->id,
+        ]);
+       
 
         return redirect()->back()->with('success', 'Draft submitted successfully!');
     }
@@ -169,6 +184,12 @@ class DraftController extends Controller
             )
         );
 
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'User approved the draft ' . $draft?->id,
+        ]);
+       
+
         return redirect()->back()->with('success', 'This draft is now approved!');
     }
     public function revision($id){
@@ -183,6 +204,12 @@ class DraftController extends Controller
                 route('drafts.show', ['id' => $draft->id])
             )
         );
+
+         AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'User rejected the draft ' . $draft?->id,
+        ]);
+       
         
         return redirect()->back()->with('success', 'This draft needs to be revised.');
     }
@@ -199,14 +226,32 @@ class DraftController extends Controller
 
         $path = $request->file('file')->store('drafts', 'public');
 
+
         $draft->update([
             'file_name' => $request->file('file')->getClientOriginalName(),
             'file_path' => $path,
         ]);
 
-        return redirect()
-            ->back()
-            ->with('success', 'Draft file replaced successfully.');
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'User replaced the draft',
+        ]);
+
+        return redirect()->back()->with('success', 'Draft file replaced successfully.');
+    }
+
+    public function index_approved_history(Mechanism $mechanism){
+        $user = auth()->user();
+        $approved_status = Status::where('name', 'Approved')->first();
+        
+        $approved_drafts = Draft::where('agency_id', $user->agency->id)
+                                ->where('status_id', $approved_status->id)
+                                ->where('mechanism_id', $mechanism->id)
+                                ->latest()
+                                ->get();
+        
+        return view('drafts.index-approved-history', compact('approved_drafts'));
+
     }
   
 }

@@ -1,7 +1,6 @@
 <x-app-layout>
     <div class="h-full min-h-0 flex flex-col overflow-hidden">
-        <section class="px-6 pb-5">
-            <x-back-button />
+        <section class="p-6">
             <div class="flex gap-4 items-center rounded-4xl bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">
             <div class="flex-1 text-blue-950 gap-2 justify-between">
                 <p class="text-2xl font-bold ">Announcement Board</p>
@@ -15,16 +14,16 @@
             </div>
         </section>
 
-        <section class="px-6 pt-2 pb-6 flex-1 min-h-0 overflow-y-auto">
+        <section class="px-6 pt-2 pb-6 flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto">
             @forelse ($announcements as $announcement)
             
-                <div class="flex gap-4 items-start rounded-4xl bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">
+                <div class="flex gap-4 items-start rounded-3xl bg-white p-4 shadow-gray-400 ring-1 ring-slate-100">
                     <div class="flex text-blue-950 gap-4 grow">
 
                         <div class="flex-1 gap-4 grow justify-between">
                             <div class="flex-1 gap-8">
                             <div class="flex gap-2">
-                                <h3 class="text-2xl font-bold ">{{ $announcement->title }}</h3>
+                                <h3 class="text-lg font-bold ">{{ $announcement->title }}</h3>
                             </div>
                             <p class="text-gray-500">{{ $announcement->body }}</p>
                             </div>
@@ -33,11 +32,11 @@
                             
                                 <div class="flex">
                                 <p class="text-1xl text-gray-600">Date Posted:
-                                    <span class="text-1xl font-bold text-slate-800">{{ $announcement->created_at->format('M d, Y') }}</span>
+                                    <span class="text-sm font-bold text-slate-800">{{ $announcement->created_at->format('M d, Y') }}</span>
                                 </p>
                                 </div>
                                 <div class="flex">
-                                <p class="text-1xl text-gray-600">Posted By:
+                                <p class="text-sm text-gray-600">Posted By:
                                     <span class="text-1xl font-bold text-slate-800">{{ $announcement->user->name}}</span>
                                 </p>
                                 </div>
@@ -52,7 +51,7 @@
 
                     <x-modals.delete-announcement :announcement="$announcement"/>
                     <button type="button" onclick="openDeleteAnnouncementModal({{ $announcement->id }})" class="flex items-center rounded-2xl transition hover:scale-[1.07] bg-red-100 ring-2 text-red-600 ring-red-300 hover:bg-red-200 hover:ring-red-400 hover:text-red-700">
-                        <span class="font-bold py-2 px-5">Delete</span>
+                        <span class="text-sm py-1 px-3">Delete</span>
                     </button>
 
                     </div>

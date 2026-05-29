@@ -83,7 +83,7 @@
                 <img src="{{ asset('images/book-a.svg') }}" class="h-5 w-5"/>
                 Make Announcement
             </a>
-            <a  class="{{ request()->routeIs('settings') ? $active : $inactive }}" 
+            <a  class="{{ request()->routeIs('admin.settings.mechanisms') ? $active : $inactive }}" 
                 href="{{ route('admin.settings.mechanisms') }}">
                 <img src="{{ asset('images/settings.svg') }}" class="h-5 w-5"/>
                 Mechanism Settings

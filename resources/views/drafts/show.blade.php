@@ -17,23 +17,36 @@
 
                 @if (in_array(auth()->user()->role->id, [1,2]))
                     <div class="flex gap-3">
-                        
+
                         <form action="{{ route('draft.approve', $draft->id) }}" method="POST">
                             @csrf
                             @method('PATCH')
 
-                            <button 
+                            <button
                                 type="submit"
-                                class="rounded-2xl bg-emerald-500 px-6 py-3 font-bold text-white hover:bg-emerald-600">
-                                Approve
+                                onclick="this.disabled=true; this.form.submit();"
+                                @disabled($draft->status->name == 'Approved')
+                                class="rounded-2xl px-6 py-3 font-bold text-white
+                                    {{ $draft->status->name == 'Approved'
+                                        ? 'cursor-not-allowed bg-gray-400'
+                                        : 'bg-emerald-500 hover:bg-emerald-600' }}">
+                                {{ $draft->status->name == 'Approved' ? 'Approved' : 'Approve' }}
                             </button>
                         </form>
 
                         <form action="{{ route('draft.revision', $draft->id) }}" method="POST">
                             @csrf
                             @method('PATCH')
-                            <button  type="submit" class="rounded-2xl bg-red-800 px-6 py-3 font-bold text-white hover:bg-red-900">
-                                Needs Revision
+
+                            <button
+                                type="submit"
+                                onclick="this.disabled=true; this.form.submit();"
+                                @disabled($draft->status->name == 'Needs Revision')
+                                class="rounded-2xl px-6 py-3 font-bold text-white
+                                    {{ $draft->status->name == 'Needs Revision'
+                                        ? 'cursor-not-allowed bg-gray-400'
+                                        : 'bg-red-800 hover:bg-red-900' }}">
+                                {{ $draft->status->name == 'Needs Revision' ? 'Marked for Revision' : 'Needs Revision' }}
                             </button>
                         </form>
 
@@ -155,25 +168,34 @@
                             <div class="flex gap-3">
 
                                 {{-- Profile --}}
-                                @php
-                                    $agency = $comment?->user?->agency;
-                                    $nameParts = collect(explode(' ', $comment?->user?->name ?? ''));
+                               @php
+                                    $nameParts = collect(explode(' ', trim($comment?->user?->name ?? '')))->filter();
+
                                     $initials = strtoupper(
                                         ($nameParts->first()[0] ?? '?') .
-                                        ($nameParts->count() > 1 ? $nameParts->last()[0] : '')
+                                        ($nameParts->last()[0] ?? '')
                                     );
                                 @endphp
 
-                                @if ($agency === null)
-                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-red-700 to-red-900 text-sm font-bold text-white">
+                                @if ($comment->user->role->name == 'HRMO')
+                                    @php
+                                        $agency = $comment?->user?->agency;
+                                    @endphp
+
+                                    @if (!$agency || !$agency->photo)
+                                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-red-700 to-red-900 text-sm font-bold text-white">
+                                            {{ $initials }}
+                                        </div>
+                                    @else
+                                        <div class="flex h-10 w-10 shrink-0 overflow-hidden items-center justify-center rounded-full text-sm font-bold text-white">
+                                            <img src="{{ asset('storage/' . $agency->photo) }}" class="h-full w-full object-cover">
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-700 to-blue-900 text-sm font-bold text-white">
                                         {{ $initials }}
                                     </div>
-                                @else
-                                    <div class="flex h-10 w-10 shrink-0 overflow-hidden items-center justify-center rounded-full text-sm font-bold text-white">
-                                        <img src="{{ asset('storage/' . $agency->photo) }}" class="h-full w-full object-cover">
-                                    </div>
                                 @endif
-                            
                                 
 
                                 {{-- Content --}}

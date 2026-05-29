@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\Comment;
 use App\Models\Draft;
 use App\Notifications\SystemNotification;
@@ -51,6 +52,10 @@ class CommentController extends Controller
                 )
             );
         }
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'User created the comment ' . $comment->id,
+        ]);
 
         return redirect()->back()->with('success', 'Comment posted successfully!');
     }
@@ -64,11 +69,21 @@ class CommentController extends Controller
             'comment' => $request->comment
         ]);
 
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'User updated the comment ' . $comment->id,
+        ]);
+
         return redirect()->back()->with('success', 'Comment updated successfully');
     }
 
     public function destroy(Comment $comment){
         $comment->delete();
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'User deleted the comment ' . $comment->id,
+        ]);
 
         return redirect()->back()->with('success', 'Comment deleted successfully');
     }

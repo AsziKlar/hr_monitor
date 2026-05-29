@@ -44,7 +44,7 @@
 
 
 <body class="flex h-screen overflow-hidden">
-
+<x-modals.force-password-change />
     <div id="page-loader">
         <div class="loader"></div>
     </div>
@@ -53,13 +53,17 @@
 
     <div id="overlay" class="hidden fixed inset-0 bg-black/40 z-40"></div>
 
-    <x-alert />
+    
+    
 
     <div class="flex-1 flex flex-col overflow-hidden w-full main-content lg:ml-64 transition-all duration-300 ease-in-out">
         <x-topbar />
-
+        <x-alert />
+        
         <main class="bg-slate-100 flex-1 min-h-0 overflow-y-auto">
             {{ $slot }}
+
+
         </main>
     </div>
 
