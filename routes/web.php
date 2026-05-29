@@ -38,6 +38,8 @@ Route::middleware(['auth','prevent-back-history'])->group(function () {
     Route::patch('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
+    Route::post('/force-password-change', [UserController::class, 'password_change'])->name('force.password.change');
+
 });
 
 Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group(function () {
