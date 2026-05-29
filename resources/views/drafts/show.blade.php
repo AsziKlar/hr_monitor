@@ -17,23 +17,36 @@
 
                 @if (in_array(auth()->user()->role->id, [1,2]))
                     <div class="flex gap-3">
-                        
+
                         <form action="{{ route('draft.approve', $draft->id) }}" method="POST">
                             @csrf
                             @method('PATCH')
 
-                            <button 
+                            <button
                                 type="submit"
-                                class="rounded-2xl bg-emerald-500 px-6 py-3 font-bold text-white hover:bg-emerald-600">
-                                Approve
+                                onclick="this.disabled=true; this.form.submit();"
+                                @disabled($draft->status->name == 'Approved')
+                                class="rounded-2xl px-6 py-3 font-bold text-white
+                                    {{ $draft->status->name == 'Approved'
+                                        ? 'cursor-not-allowed bg-gray-400'
+                                        : 'bg-emerald-500 hover:bg-emerald-600' }}">
+                                {{ $draft->status->name == 'Approved' ? 'Approved' : 'Approve' }}
                             </button>
                         </form>
 
                         <form action="{{ route('draft.revision', $draft->id) }}" method="POST">
                             @csrf
                             @method('PATCH')
-                            <button  type="submit" class="rounded-2xl bg-red-800 px-6 py-3 font-bold text-white hover:bg-red-900">
-                                Needs Revision
+
+                            <button
+                                type="submit"
+                                onclick="this.disabled=true; this.form.submit();"
+                                @disabled($draft->status->name == 'Needs Revision')
+                                class="rounded-2xl px-6 py-3 font-bold text-white
+                                    {{ $draft->status->name == 'Needs Revision'
+                                        ? 'cursor-not-allowed bg-gray-400'
+                                        : 'bg-red-800 hover:bg-red-900' }}">
+                                {{ $draft->status->name == 'Needs Revision' ? 'Marked for Revision' : 'Needs Revision' }}
                             </button>
                         </form>
 

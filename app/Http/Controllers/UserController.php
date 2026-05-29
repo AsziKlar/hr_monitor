@@ -41,7 +41,8 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'User creation unsuccessful. Active email already exists');
         }
 
-        $password = Str::upper(Str::random(4)) . rand(100, 999) . Str::lower(Str::random(3));
+        // $password = Str::upper(Str::random(4)) . rand(100, 999) . Str::lower(Str::random(3));
+        $password = '123456789';
 
         if ($request->role == 4){
 

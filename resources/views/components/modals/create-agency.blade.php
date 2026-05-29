@@ -20,7 +20,7 @@
                     <input  type="text" 
                             name="name"
                             value="{{ old('name') }}"
-                            placeholder="Choose a field office"
+                            placeholder="e.g. Civil Service Commission"
                             class="mt-2 w-full rounded-2xl border border-slate-300 bg-white p-4 focus:border-blue-500 focus:ring-blue-500"
                             required>
                 </div>
