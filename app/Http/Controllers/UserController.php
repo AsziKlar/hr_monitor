@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agency;
+use App\Models\AuditLog;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\HRMOAccountCreated;
@@ -41,8 +42,7 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'User creation unsuccessful. Active email already exists');
         }
 
-        // $password = Str::upper(Str::random(4)) . rand(100, 999) . Str::lower(Str::random(3));
-        $password = '123456789';
+        $password = Str::upper(Str::random(4)) . rand(100, 999) . Str::lower(Str::random(3));
 
         if ($request->role == 4){
 
@@ -101,6 +101,11 @@ class UserController extends Controller
             new HRMOAccountCreated($password)
         );
 
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'User created the user ' . $request->name,
+        ]);
+
         return redirect()->back()->with('success', 'Successfully created a new user account!');
     }
     
@@ -108,6 +113,12 @@ class UserController extends Controller
         $user->update([
             'archived_at' => now()
         ]);
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'User archived the user ' . $user->name,
+        ]);
+
         return redirect()->back()->with('success', 'Account archived successfully');
     }
 
@@ -142,39 +153,60 @@ class UserController extends Controller
             ]);
 
             $data['password'] = bcrypt($request->password);
+            $user->update($data);
         }
 
         $user->update([
             'name' => $request->name,
             'email' => $request->email
         ]);
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Admin updated profile',
+        ]);
+
+
         return redirect()->back()->with('success', 'Account updated successfully');
     }
 
     public function hrmo_account_update(Request $request) {
         $user = auth()->user();
-       
-        
+
         $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|string|max:100',
-            'password' => 'nullable|min:8'
-        ]);
+            'password' => [
+                    'nullable',
+                    'string',
+                    'min:8',
+                    'max:20',
+                    'regex:/[A-Z]/',
+                    'regex:/[a-z]/',
+                    'regex:/[0-9]/',
+                    'regex:/[@$!%*#?&]/',
+                ], 
+        ],[
+                'password.regex' => 'Password must contain uppercase, lowercase, number, and special character.',
+            ]);
 
         $user->update([
             'name' => $request->name,
             'email' => $request->email
         ]);
 
-        if ($request->password){
+        if ($request->filled('password')) {
             $user->update([
                 'password' => bcrypt($request->password)
             ]);
         }
 
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'HRMO update profile',
+        ]);
+
         return redirect()->back()->with('success', 'Account updated successfully');
-
-
     }
 
     public function edit_acc_by_admin(Request $request, User $user){
@@ -182,8 +214,19 @@ class UserController extends Controller
          $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email|max:100',
-            'password' => 'nullable|min:8'
-        ]);
+            'password' => [
+                    'nullable',
+                    'string',
+                    'min:8',
+                    'max:20',
+                    'regex:/[A-Z]/',
+                    'regex:/[a-z]/',
+                    'regex:/[0-9]/',
+                    'regex:/[@$!%*#?&]/',
+                ],
+        ], [
+                'password.regex' => 'Password must contain uppercase, lowercase, number, and special character.',
+            ]);
 
 
         $user->update([
@@ -202,6 +245,11 @@ class UserController extends Controller
             );
         }
 
+         AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Admin updated profile of ' . $user->name,
+        ]);
+
         return redirect()->back()->with('success', 'Account updated successfully');
 
     }
@@ -219,6 +267,11 @@ class UserController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+         AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'HRMO self-archived account',
+        ]);
 
         return redirect('/');
 
@@ -243,6 +296,11 @@ class UserController extends Controller
         auth()->user()->update([
             'password' => 'bcrypt()',
             'must_change_password' => false,
+        ]);
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'User force changed password' . auth()->user()->name ,
         ]);
 
         return back()->with('success', 'Password changed successfully');

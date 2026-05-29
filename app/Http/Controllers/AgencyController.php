@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Agency;
 use App\Models\AgencyMechanismPeriod;
+use App\Models\AuditLog;
 use App\Models\Draft;
 use App\Models\FieldOffice;
 use App\Models\Mechanism;
@@ -61,7 +62,12 @@ class AgencyController extends Controller
                 'mechanism_id' => $mechanism->id,
                 'current_period' => 1
             ]);
-        }      
+        }
+        
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Admin created Agency',
+        ]);
 
         return redirect()->back()->with('success', 'Agency added successfully');
     }
@@ -149,6 +155,11 @@ class AgencyController extends Controller
 
         $agency->update($data);
 
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Admin updated Agency',
+        ]);
+
         return back()->with('success', 'Agency updated successfully!');
     }
 
@@ -207,6 +218,13 @@ class AgencyController extends Controller
             $data['photo']=$path;
         }
         $agency->update($data);
+
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'HRMO updated agency',
+        ]);
+
         return redirect()->back()->with('success', 'Updated profile successfully');
     }
 
@@ -215,11 +233,21 @@ class AgencyController extends Controller
             'archived_at' => now()
         ]);
 
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Admin archived an agency',
+        ]);
+
         return redirect()->back()->with('success', $agency->name . ' successfully archived!');
     }
     public function unarchive(Agency $agency){
         $agency->update([
             'archived_at' => NULL
+        ]);
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Admin unarchived an agency',
         ]);
 
         return redirect()->back()->with('success', $agency->name . ' successfully unarchived!');

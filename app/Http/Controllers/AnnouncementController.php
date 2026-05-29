@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Agency;
 use App\Models\Announcement;
+use App\Models\AuditLog;
 use App\Models\User;
 use App\Notifications\SystemNotification;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ use Illuminate\Http\Request;
 class AnnouncementController extends Controller
 {
     public function index(){
-        $announcements = Announcement::all();
+        $announcements = Announcement::latest()->get();
 
         return view('announcements', compact('announcements'));
     }
@@ -24,7 +25,7 @@ class AnnouncementController extends Controller
             'body' => 'required|string|max:255'
         ]);
       
-        Announcement::create([
+        $announcement = Announcement::create([
             'title' => $request->title,
             'body' => $request->body,
             'user_id' => $user->id
@@ -40,12 +41,22 @@ class AnnouncementController extends Controller
                 )
             );
         }
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Admin created announcement entitled ' . $announcement->title,
+        ]);
        
         return redirect()->back()->with('success', 'Announcement successfully made!');
     }
 
     public function destroy(Announcement $announcement){
         $announcement->delete();
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Admin deleted announcement entitled ' . $announcement->title,
+        ]);
 
         return redirect()->back()->with('success', 'Announcement deleted successfully.');
     }

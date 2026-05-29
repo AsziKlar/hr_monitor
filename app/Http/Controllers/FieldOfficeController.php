@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agency;
+use App\Models\AuditLog;
 use App\Models\FieldOffice;
 use App\Models\User;
 use App\Notifications\SystemNotification;
@@ -50,6 +51,11 @@ class FieldOfficeController extends Controller
             )
         );
 
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'User changed the FO of ' . $agency->name . ' to ' . $agency->fieldOffice->name,
+        ]);
+
         return redirect()->back()->with('success', 'Field office changed successfully!');
     }
 
@@ -62,6 +68,11 @@ class FieldOfficeController extends Controller
             'name' => $request->field_office_name
         ]);
 
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'User created the FO ' . $request->field_office_name,
+        ]);
+
         return redirect()->back()->with('success', 'Added new field office successfully');
     }
     public function add_agency(Request $request, FieldOffice $fieldOffice){
@@ -70,12 +81,23 @@ class FieldOfficeController extends Controller
         $agency->update([
             'field_office_id' => $fieldOffice->id
         ]);
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'User added the agency ' . $agency->name . ' to FO id ' . $request->field_office_id ,
+        ]);
+
         return redirect()->back()->with('success', 'Successfully assigned');
     }
     public function field_office_destroy(Request $request){
         $fieldOffice = FieldOffice::findOrFail($request->fieldOffice);
 
         $fieldOffice->delete();
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'User deleted the FO ' . $request->fieldOffice ,
+        ]);
 
         return redirect()->back()->with('success', 'Field office removed successfully');
     }

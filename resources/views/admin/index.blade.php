@@ -12,7 +12,7 @@
                             type="text"
                             name="search"
                             value="{{ request('search') }}"
-                            placeholder="Search agency or category..."
+                            placeholder="Search agency or filename"
                             class="w-full bg-transparent outline-none placeholder:text-slate-400"
                         />
                     </div>
@@ -20,10 +20,11 @@
                 </div>
 
             </form>
-
+            
+           
             <form method="GET" action="{{ route('admin.drafts.index', $mechanism) }}">
                 <select name="status" onchange="this.form.submit()" class="select select-bordered rounded-[16px] bg-slate-100 text-1xl min-w-[170px] ring-2 ring-slate-200 p-3">
-                    <option option="">All Agencies</option>
+                    <option value="all"">All Agencies</option>
                     <option value="1" {{ request('status') == 1 ? 'selected' : ''}}>To be Reviewed</option>
                     <option value="2" {{ request('status') == 2 ? 'selected' : ''}}>Needs Revision</option>
                     <option value="3" {{ request('status') == 3 ? 'selected' : ''}}>Approved</option>
