@@ -1,5 +1,6 @@
 <x-app-layout>
-    <section class="p-6">
+    <section class="px-6 pb-6">
+       <x-back-button />
         <div class="flex flex-col gap-4 rounded-4xl bg-white p-6 shadow-gray-400 ring-1 ring-slate-100">
 
             <div class="flex items-center gap-4">
@@ -51,7 +52,7 @@
         </div>
     </section>
   <div class="flex w-full justify-end px-6 pb-2 pl-8">
-      <a href=""
+      <a href="{{route('hrmo.drafts.index.approved', $mechanism)}}"
         class="text-sm font-semibold text-blue-700 transition hover:text-blue-900 hover:underline">
           View Approved Files History
       </a>

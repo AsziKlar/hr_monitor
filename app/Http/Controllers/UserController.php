@@ -41,8 +41,8 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'User creation unsuccessful. Active email already exists');
         }
 
-        $password = '123456789';
         // $password = Str::upper(Str::random(4)) . rand(100, 999) . Str::lower(Str::random(3));
+        $password = '123456789';
 
         if ($request->role == 4){
 
@@ -50,16 +50,16 @@ class UserController extends Controller
                 'name' => 'required',
                 'email' => 'required|email',
                 'role' => 'required',
-                'agency' => 'required'
+                'agency' => 'required',
             ]);
            
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                // 'password' => bcrypt($password),
-                'password' => $password,
+                'password' => bcrypt($password),
                 'role_id' => $request->role,
-                'agency_id' => $request->agency
+                'agency_id' => $request->agency,
+                'must_change_password' => true,
             ]);
 
         } else {
@@ -74,6 +74,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => bcrypt($password),
                 'role_id' => $request->role,
+                'must_change_password' => true,
             ]);
 
         }
@@ -221,6 +222,30 @@ class UserController extends Controller
 
         return redirect('/');
 
+    }
+    public function password_change(Request $request){
+        $request->validate([
+                'password' => [
+                    'required',
+                    'confirmed',
+                    'string',
+                    'min:8',
+                    'max:20',
+                    'regex:/[A-Z]/',
+                    'regex:/[a-z]/',
+                    'regex:/[0-9]/',
+                    'regex:/[@$!%*#?&]/',
+                ],
+            ], [
+                'password.regex' => 'Password must contain uppercase, lowercase, number, and special character.',
+            ]);
+
+        auth()->user()->update([
+            'password' => 'bcrypt()',
+            'must_change_password' => false,
+        ]);
+
+        return back()->with('success', 'Password changed successfully');
     }
 
 }

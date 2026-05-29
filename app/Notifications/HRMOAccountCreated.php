@@ -36,9 +36,14 @@ class HRMOAccountCreated extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        if ($notifiable->role === 'HRMO'){
+            $accountFor = $notifiable?->agency?->name;
+        } else {
+            $accountFor = $notifiable->role->name;
+        }
         return (new MailMessage)
             ->greeting('Hello ' . $notifiable->name . ',')
-            ->line('This is your HR Mechanism Tracker account for **' . $notifiable?->agency?->name . '**')
+            ->line('This is your HR Mechanism Tracker account for **' . $accountFor . '**')
             ->line('The following are your login credentials: ')
             ->line('Email: **' . $notifiable->email . '**')
             ->line('Temporary Password: **' . $this->password . '**')
