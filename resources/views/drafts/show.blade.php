@@ -168,25 +168,34 @@
                             <div class="flex gap-3">
 
                                 {{-- Profile --}}
-                                @php
-                                    $agency = $comment?->user?->agency;
-                                    $nameParts = collect(explode(' ', $comment?->user?->name ?? ''));
+                               @php
+                                    $nameParts = collect(explode(' ', trim($comment?->user?->name ?? '')))->filter();
+
                                     $initials = strtoupper(
                                         ($nameParts->first()[0] ?? '?') .
-                                        ($nameParts->count() > 1 ? $nameParts->last()[0] : '')
+                                        ($nameParts->last()[0] ?? '')
                                     );
                                 @endphp
 
-                                @if ($agency === null)
-                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-red-700 to-red-900 text-sm font-bold text-white">
+                                @if ($comment->user->role->name == 'HRMO')
+                                    @php
+                                        $agency = $comment?->user?->agency;
+                                    @endphp
+
+                                    @if (!$agency || !$agency->photo)
+                                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-red-700 to-red-900 text-sm font-bold text-white">
+                                            {{ $initials }}
+                                        </div>
+                                    @else
+                                        <div class="flex h-10 w-10 shrink-0 overflow-hidden items-center justify-center rounded-full text-sm font-bold text-white">
+                                            <img src="{{ asset('storage/' . $agency->photo) }}" class="h-full w-full object-cover">
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-700 to-blue-900 text-sm font-bold text-white">
                                         {{ $initials }}
                                     </div>
-                                @else
-                                    <div class="flex h-10 w-10 shrink-0 overflow-hidden items-center justify-center rounded-full text-sm font-bold text-white">
-                                        <img src="{{ asset('storage/' . $agency->photo) }}" class="h-full w-full object-cover">
-                                    </div>
                                 @endif
-                            
                                 
 
                                 {{-- Content --}}

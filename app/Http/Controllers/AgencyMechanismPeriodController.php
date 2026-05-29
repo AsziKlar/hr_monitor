@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Agency;
 use App\Models\AgencyMechanismPeriod;
+use App\Models\AuditLog;
 use App\Models\Draft;
 use App\Models\Mechanism;
 use App\Models\Status;
@@ -56,6 +57,10 @@ class AgencyMechanismPeriodController extends Controller
                 route('hrmo.drafts.index', $mechanism)
             )
         );
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Admin reset mechanism '. $mechanism->description .' for ' . $agency->name,
+        ]);
 
         return redirect()->back()->with('success', 'Period updated. New batch of drafts for this mechanism.');
     }
@@ -89,6 +94,10 @@ class AgencyMechanismPeriodController extends Controller
                 );
             }
         }
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Admin reset mechanism '. $mechanism->description .' for all agencies',
+        ]);
 
         return redirect()->back()->with('success', 'Period updated for all agencies. New batch of drafts for all agencies in this mechanism');
     }
