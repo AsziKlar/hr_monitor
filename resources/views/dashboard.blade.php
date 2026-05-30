@@ -186,10 +186,6 @@
                                     <p class="text-sm text-slate-500">{{ $submission->created_at->format('M d, Y') }}</p>
                                 </div>
 
-                                <div class="flex gap-3 text-slate-500">
-                                    <button>✏️</button>
-                                    <button>🗑</button>
-                                </div>
                             </div>
                         </div>
                         @endforeach
