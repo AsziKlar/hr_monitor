@@ -40,6 +40,7 @@ class AgencyController extends Controller
 
         $request->validate([
             'email_address' => 'required|email|unique:agencies,email_address|regex:/^[^@\s]+@[^@\s]+\.[^@\s]+$/',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
        
         if ($path = $request->file('photo')){
