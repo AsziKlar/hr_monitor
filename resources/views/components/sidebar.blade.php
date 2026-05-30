@@ -94,6 +94,12 @@
                 <img src="{{ asset('images/settings.svg') }}" class="h-5 w-5"/>
                 Field Office Settings
             </a>
+
+             <a  class="{{ request()->routeIs('admin.auditlogs') ? $active : $inactive }}" 
+                href="{{ route('admin.auditlogs') }}">
+                <img src="{{ asset('images/settings.svg') }}" class="h-5 w-5"/>
+                Audit Logs
+            </a>
         @endif
     </nav>
     <div class="mt-auto pt-6">
