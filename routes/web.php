@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgencyController;
 use App\Http\Controllers\AgencyMechanismPeriodController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DraftController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\FieldOfficeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Models\AgencyMechanismPeriod;
+use App\Models\AuditLog;
 use App\Models\Draft;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -72,6 +74,7 @@ Route::middleware(['auth', 'prevent-back-history', 'role:Administrator'])->group
 
     Route::delete('/announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
 
+    Route::get('/admin/auditLogs', [AuditLogController::class, 'index'])->name('admin.auditlogs');
 
    
 });

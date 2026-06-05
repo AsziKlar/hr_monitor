@@ -1,6 +1,7 @@
 @if (session('success'))
     <div 
         x-data="{ show: true }"
+        x-init="setTimeout(() => show = false, 5000)"
         x-show="show"
         x-transition
         class="fixed top-6 left-0 right-0 lg:left-64 z-[99999] flex justify-center px-4"
@@ -14,6 +15,7 @@
 @if (session('error'))
     <div 
         x-data="{ show: true }"
+        x-init="setTimeout(() => show = false, 5000)"
         x-show="show"
         x-transition
         class="fixed top-6 left-0 right-0 lg:left-64 z-[99999] flex justify-center px-4"
@@ -27,6 +29,7 @@
 @if ($errors->any())
     <div 
         x-data="{ show: true }"
+        x-init="setTimeout(() => show = false, 5000)"
         x-show="show"
         x-transition
         class="fixed top-6 left-0 right-0 lg:left-64 z-[99999] flex justify-center px-4"

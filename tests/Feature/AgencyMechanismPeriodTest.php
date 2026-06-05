@@ -19,6 +19,8 @@ class AgencyMechanismPeriodTest extends TestCase
     use RefreshDatabase;
 
     public function test_can_increment_agency_mechanism_period(): void {
+        Role::factory()->administrator()->create();
+        Role::factory()->hrmo()->create();
         $admin = User::factory()->administrator()->create();
         $fieldOffice = FieldOffice::factory()->create();
 
